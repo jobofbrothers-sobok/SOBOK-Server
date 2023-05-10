@@ -1,0 +1,20 @@
+{
+  "name": "SOBOK-Server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jobofbrothers-sobok/SOBOK-Server.git",
+  "author": "biiit4894 <ghiesf@naver.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc && node dist"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.1.1",
+    "nodemon": "^2.0.22"
+  }
+}
