@@ -21,4 +21,7 @@ router.post(
   ownerController.createOwner
 );
 
+// 점주 유저 로그인 - POST ~/owner/signin
+router.post("/signin", ownerController.ownerSignIn);
+
 export default router;

@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
+import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 
 const prisma = new PrismaClient();
 
@@ -31,8 +32,31 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
   return data;
 };
 
+// 점주 유저 로그인
+const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
+  try {
+    const user = await prisma.store_Owner.findFirst({
+      where: {
+        loginId: userSignInDTO.loginId,
+      },
+    });
+    if (!user) return null;
+
+    // bcrypt가 DB에 저장된 기존 password와 넘겨 받은 password를 대조하고
+    // match false시 401을 리턴
+    const isMatch = await bcrypt.compare(userSignInDTO.password, user.password);
+    if (!isMatch) return sc.UNAUTHORIZED;
+
+    return user.id;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 const ownerService = {
   createOwner,
+  ownerSignIn,
 };
 
 export default ownerService;
