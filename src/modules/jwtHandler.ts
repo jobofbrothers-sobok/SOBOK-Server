@@ -3,9 +3,9 @@ import jwt from "jsonwebtoken";
 import { tokenType } from "../constants";
 
 //* 받아온 userId를 담는 access token 생성
-const sign = (userId: number) => {
+const sign = (id: number) => {
   const payload = {
-    userId,
+    id,
   };
 
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, {
