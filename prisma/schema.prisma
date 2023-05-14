@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id             Int      @id @default(autoincrement())
+  loginId        String   @db.VarChar(20)
+  password       String   @db.VarChar(20)
+  name           String   @db.VarChar(20)
+  email          String   @db.VarChar(45)
+  phone          String   @db.VarChar(20)
+  termsAgree     Boolean
+  marketingAgree Boolean?
+  storeId        Int
+  Store          Store    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
+}
+
+model Store {
+  id          Int         @id @default(autoincrement())
+  storeName   String?     @db.VarChar(30)
+  ownerId     Int
+  Customer    Customer[]
+  Store_Owner Store_Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
+}
+
+model Store_Owner {
+  id             Int      @id @default(autoincrement())
+  loginId        String   @db.VarChar(20)
+  password       String   @db.VarChar(20)
+  store          String?  @db.VarChar(30)
+  director       String   @db.VarChar(20)
+  phone          String   @db.VarChar(20)
+  email          String   @db.VarChar(45)
+  address        String   @db.VarChar(30)
+  detailAddress  String?  @db.VarChar(30)
+  licenseNumber  String   @db.VarChar(20)
+  licenseImage   String   @db.VarChar(100)
+  authorized     Boolean
+  termsAgree     Boolean
+  marketingAgree Boolean?
+  storeId        Int
+  Store          Store[]
+}
