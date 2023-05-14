@@ -17,4 +17,7 @@ router.post(
   customerController.createCustomer
 );
 
+// 고객 유저 로그인 - POST ~/customer/signin
+router.post("/signin", customerController.customerSignIn);
+
 export default router;
