@@ -17,6 +17,11 @@ const createCustomer = async (req: Request, res: Response) => {
   }
 
   const customerCreateDTO: CustomerCreateDTO = req.body;
+  const termsAgree = req.body.termsAgree;
+
+  if (!termsAgree) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
 
   try {
     const data = await customerService.createCustomer(customerCreateDTO);
