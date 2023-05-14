@@ -43,6 +43,6 @@ model Store_Owner {
   authorized     Boolean
   termsAgree     Boolean
   marketingAgree Boolean?
-  storeId        Int
+  storeId        Int?
   Store          Store[]
 }
