@@ -54,9 +54,20 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
   }
 };
 
+// 점주 유저 회원탈퇴
+const ownerDelete = async (id: number) => {
+  const data = await prisma.store_Owner.delete({
+    where: {
+      id: id,
+    },
+  });
+  return data.id;
+};
+
 const ownerService = {
   createOwner,
   ownerSignIn,
+  ownerDelete,
 };
 
 export default ownerService;

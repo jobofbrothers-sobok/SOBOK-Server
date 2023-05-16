@@ -92,9 +92,27 @@ const ownerSignIn = async (req: Request, res: Response) => {
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
+
+// 고객 유저 회원탈퇴
+const ownerDelete = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const deletedUserId = await ownerService.ownerDelete(+id);
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_USER_SUCCESS, { id: deletedUserId }));
+  } catch (error) {
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const ownerController = {
   createOwner,
   ownerSignIn,
+  ownerDelete,
 };
 
 export default ownerController;
