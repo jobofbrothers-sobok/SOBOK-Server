@@ -92,9 +92,26 @@ const customerSignIn = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 회원탈퇴
+const customerDelete = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const deletedUserId = await customerService.customerDelete(+id);
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_USER_SUCCESS, { id: deletedUserId }));
+  } catch (error) {
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const customerController = {
   createCustomer,
   customerSignIn,
+  customerDelete,
 };
 
 export default customerController;

@@ -48,9 +48,19 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
   }
 };
 
+// 고객 유저 회원탈퇴
+const customerDelete = async (id: number) => {
+  const data = await prisma.customer.delete({
+    where: {
+      id: id,
+    },
+  });
+  return data.id;
+};
 const customerService = {
   createCustomer,
   customerSignIn,
+  customerDelete,
 };
 
 export default customerService;
