@@ -20,4 +20,7 @@ router.post(
 // 고객 유저 로그인 - POST ~/customer/signin
 router.post("/signin", customerController.customerSignIn);
 
+// 고객 유저 회원탈퇴 - DELETE ~/customer/:id
+router.delete("/:id", customerController.customerDelete);
+
 export default router;
