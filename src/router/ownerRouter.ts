@@ -24,4 +24,7 @@ router.post(
 // 점주 유저 로그인 - POST ~/owner/signin
 router.post("/signin", ownerController.ownerSignIn);
 
+// 점주 유저 회원탈퇴 - DELETE ~/customer/:id
+router.delete("/:id", ownerController.ownerDelete);
+
 export default router;
