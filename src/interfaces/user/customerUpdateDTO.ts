@@ -1,4 +1,4 @@
-export interface customerUpdateDTO {
+export interface CustomerUpdateDTO {
   password: string;
   name: string;
   email: string;
