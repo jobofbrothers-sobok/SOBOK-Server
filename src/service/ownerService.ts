@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
+import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 
 const prisma = new PrismaClient();
 
@@ -54,6 +55,29 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
   }
 };
 
+// 점주 유저 회원정보 수정
+const updateOwner = async (id: number, ownerUpdateDTO: OwnerUpdateDTO) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(ownerUpdateDTO.password, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
+  const data = await prisma.store_Owner.update({
+    where: {
+      id,
+    },
+    data: {
+      password,
+      director: ownerUpdateDTO.director,
+      phone: ownerUpdateDTO.phone,
+      email: ownerUpdateDTO.email,
+      address: ownerUpdateDTO.address,
+      detailAddress: ownerUpdateDTO.detailAddress,
+      licenseNumber: ownerUpdateDTO.licenseNumber,
+      licenseImage: ownerUpdateDTO.licenseImage,
+    },
+  });
+  return data.id;
+};
+
 // 점주 유저 회원탈퇴
 const ownerDelete = async (id: number) => {
   const data = await prisma.store_Owner.delete({
@@ -67,6 +91,7 @@ const ownerDelete = async (id: number) => {
 const ownerService = {
   createOwner,
   ownerSignIn,
+  updateOwner,
   ownerDelete,
 };
 
