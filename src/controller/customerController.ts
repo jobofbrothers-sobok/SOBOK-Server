@@ -6,6 +6,7 @@ import { fail, success } from "../constants/response";
 import jwtHandler from "../modules/jwtHandler";
 import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
+import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 
 // 고객 유저 생성
 const createCustomer = async (req: Request, res: Response) => {
@@ -92,6 +93,34 @@ const customerSignIn = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 회원정보 수정
+const updateCustomer = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const customerupdateDTO: CustomerUpdateDTO = req.body;
+  const { id } = req.params;
+
+  try {
+    const updatedUserId = await customerService.updateCustomer(
+      +id,
+      customerupdateDTO
+    );
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 유저 회원탈퇴
 const customerDelete = async (req: Request, res: Response) => {
   try {
@@ -111,6 +140,7 @@ const customerDelete = async (req: Request, res: Response) => {
 const customerController = {
   createCustomer,
   customerSignIn,
+  updateCustomer,
   customerDelete,
 };
 
