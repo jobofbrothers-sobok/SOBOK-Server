@@ -24,7 +24,23 @@ router.post(
 // 점주 유저 로그인 - POST ~/owner/signin
 router.post("/signin", ownerController.ownerSignIn);
 
-// 점주 유저 회원탈퇴 - DELETE ~/customer/:id
+// 점주 유저 회원정보 수정 - POST ~/owner/:id
+router.post(
+  "/:id",
+  [
+    body("password").trim().notEmpty(),
+    body("director").trim().notEmpty(),
+    body("phone").trim().notEmpty(),
+    body("email").trim().notEmpty(),
+    body("address").trim().notEmpty(),
+    body("detailAddress").trim().notEmpty(),
+    body("licenseNumber").trim().notEmpty(),
+    body("licenseImage").trim().notEmpty(),
+  ],
+  ownerController.updateOwner
+);
+
+// 점주 유저 회원탈퇴 - DELETE ~/owner/:id
 router.delete("/:id", ownerController.ownerDelete);
 
 export default router;
