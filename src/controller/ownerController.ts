@@ -6,6 +6,7 @@ import jwtHandler from "../modules/jwtHandler";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import ownerService from "../service/ownerService";
+import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 
 // 점주 유저 생성
 const createOwner = async (req: Request, res: Response) => {
@@ -93,6 +94,29 @@ const ownerSignIn = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 회원정보 수정
+const updateOwner = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const ownerUpdateDTO: OwnerUpdateDTO = req.body;
+  const { id } = req.params;
+
+  try {
+    const updatedUserId = await ownerService.updateOwner(+id, ownerUpdateDTO);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
+  } catch (error) {
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 유저 회원탈퇴
 const ownerDelete = async (req: Request, res: Response) => {
   try {
@@ -112,6 +136,7 @@ const ownerDelete = async (req: Request, res: Response) => {
 const ownerController = {
   createOwner,
   ownerSignIn,
+  updateOwner,
   ownerDelete,
 };
 
