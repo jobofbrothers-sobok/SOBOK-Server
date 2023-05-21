@@ -9,40 +9,42 @@ datasource db {
 
 model Customer {
   id             Int      @id @default(autoincrement())
-  loginId        String   @db.VarChar(20)
+  loginId        String   @unique @db.VarChar(20)
   password       String   @db.VarChar(200)
-  name           String   @db.VarChar(20)
+  name           String   @unique @db.VarChar(20)
   email          String   @db.VarChar(45)
   phone          String   @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
-  storeId        Int?
-  Store          Store?   @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
+  storeId        Int
+  Store          Store    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
 
 model Store {
-  id          Int         @id @default(autoincrement())
-  storeName   String?     @db.VarChar(30)
-  ownerId     Int
-  Customer    Customer[]
-  Store_Owner Store_Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
+  id                                     Int           @id @default(autoincrement())
+  storeName                              String        @db.VarChar(30)
+  ownerId                                Int
+  Customer                               Customer[]
+  Store_Owner                            Store_Owner   @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ownerId")
+  Store_Owner_Store_Owner_storeIdToStore Store_Owner[] @relation("Store_Owner_storeIdToStore")
 }
 
 model Store_Owner {
-  id             Int      @id @default(autoincrement())
-  loginId        String   @db.VarChar(20)
-  password       String   @db.VarChar(200)
-  store          String?  @db.VarChar(30)
-  director       String   @db.VarChar(20)
-  phone          String   @db.VarChar(20)
-  email          String   @db.VarChar(45)
-  address        String   @db.VarChar(30)
-  detailAddress  String?  @db.VarChar(30)
-  licenseNumber  String   @db.VarChar(20)
-  licenseImage   String   @db.VarChar(100)
-  authorized     Boolean
-  termsAgree     Boolean
-  marketingAgree Boolean?
-  storeId        Int?
-  Store          Store[]
+  id                               Int      @id @default(autoincrement())
+  loginId                          String   @unique @db.VarChar(20)
+  password                         String   @db.VarChar(200)
+  store                            String   @db.VarChar(30)
+  director                         String   @db.VarChar(20)
+  phone                            String   @db.VarChar(20)
+  email                            String   @db.VarChar(45)
+  address                          String   @db.VarChar(30)
+  detailAddress                    String   @db.VarChar(30)
+  licenseNumber                    String   @db.VarChar(20)
+  licenseImage                     String   @db.VarChar(200)
+  authorized                       Boolean?
+  termsAgree                       Boolean
+  marketingAgree                   Boolean?
+  storeId                          Int
+  Store                            Store[]
+  Store_Store_Owner_storeIdToStore Store    @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
