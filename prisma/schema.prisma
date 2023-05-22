@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Customer {
-  id             Int      @id @default(autoincrement())
+  id             Int      @id @unique @default(autoincrement())
   loginId        String   @unique @db.VarChar(20)
   password       String   @db.VarChar(200)
   name           String   @unique @db.VarChar(20)
@@ -23,9 +23,9 @@ model Customer {
 model Store {
   id                                     Int           @id @default(autoincrement())
   storeName                              String        @db.VarChar(30)
-  ownerId                                Int
+  ownerId                                Int?
   Customer                               Customer[]
-  Store_Owner                            Store_Owner   @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ownerId")
+  Store_Owner                            Store_Owner?  @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ownerId")
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[] @relation("Store_Owner_storeIdToStore")
 }
 
