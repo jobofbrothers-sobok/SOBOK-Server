@@ -27,6 +27,7 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
       authorized: ownerCreateDTO.authorized,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
+      storeId: 3,
     },
   });
 
