@@ -21,6 +21,7 @@ const createCustomer = async (customerCreateDTO: CustomerCreateDTO) => {
       phone: customerCreateDTO.phone,
       termsAgree: customerCreateDTO.termsAgree,
       marketingAgree: customerCreateDTO.marketingAgree,
+      storeId: 3,
     },
   });
 
