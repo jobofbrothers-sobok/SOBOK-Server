@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import router from "./router";
 import app from "./app";
 
-const PORT = 3000; // 사용할 port를 3000번으로 설정
+const PORT = 5000; // 사용할 port를 3000번으로 설정
 
 app.use(express.json()); // express 에서 request body를 json 으로 받아오겠다.
 
