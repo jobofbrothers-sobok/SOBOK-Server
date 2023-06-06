@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { customerController } from "../controller";
 import { body } from "express-validator";
+import { auth } from "../middlewares";
 
 const router: Router = Router();
 
@@ -33,5 +34,8 @@ router.post(
 
 // 고객 유저 회원탈퇴 - DELETE ~/customer/:id
 router.delete("/:id", customerController.customerDelete);
+
+// 고객 유저 이름 조회 - GET ~/customer/:id
+router.get("/:id", customerController.getCustomerName);
 
 export default router;
