@@ -81,11 +81,23 @@ const customerDelete = async (id: number) => {
   });
   return data.id;
 };
+
+// 고객 유저 이름 조회
+const getCustomerName = async (id: number) => {
+  const data = await prisma.customer.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return data?.name;
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
   updateCustomer,
   customerDelete,
+  getCustomerName,
 };
 
 export default customerService;
