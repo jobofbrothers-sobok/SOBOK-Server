@@ -94,7 +94,7 @@ const ownerSignIn = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 회원정보 수정
+// 점주 유저 회원정보 수정
 const updateOwner = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -111,6 +111,7 @@ const updateOwner = async (req: Request, res: Response) => {
       .status(sc.OK)
       .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
   } catch (error) {
+    console.log(error);
     return res
       .status(sc.INTERNAL_SERVER_ERROR)
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
@@ -127,6 +128,24 @@ const ownerDelete = async (req: Request, res: Response) => {
       .status(sc.OK)
       .send(success(sc.OK, rm.DELETE_USER_SUCCESS, { id: deletedUserId }));
   } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 이름 조회
+const getOwnerName = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const ownerName = await ownerService.getOwnerName(+id);
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_USERNAME_SUCCESS, { name: ownerName }));
+  } catch (error) {
+    console.log(error);
     return res
       .status(sc.INTERNAL_SERVER_ERROR)
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
@@ -138,6 +157,7 @@ const ownerController = {
   ownerSignIn,
   updateOwner,
   ownerDelete,
+  getOwnerName,
 };
 
 export default ownerController;

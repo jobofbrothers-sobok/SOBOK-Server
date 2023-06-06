@@ -43,4 +43,7 @@ router.post(
 // 점주 유저 회원탈퇴 - DELETE ~/owner/:id
 router.delete("/:id", ownerController.ownerDelete);
 
+// 점주 유저 이름 조회 - GET ~/owner/:id
+router.get("/:id", ownerController.getOwnerName);
+
 export default router;
