@@ -89,11 +89,22 @@ const ownerDelete = async (id: number) => {
   return data.id;
 };
 
+// 점주 유저 이름조회
+const getOwnerName = async (id: number) => {
+  const data = await prisma.store_Owner.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return data?.director;
+};
+
 const ownerService = {
   createOwner,
   ownerSignIn,
   updateOwner,
   ownerDelete,
+  getOwnerName,
 };
 
 export default ownerService;
