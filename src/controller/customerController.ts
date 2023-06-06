@@ -137,11 +137,28 @@ const customerDelete = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 이름 조회
+const getCustomerName = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const customerName = await customerService.getCustomerName(+id);
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_USERNAME_SUCCESS, { name: customerName }));
+  } catch (error) {
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const customerController = {
   createCustomer,
   customerSignIn,
   updateCustomer,
   customerDelete,
+  getCustomerName,
 };
 
 export default customerController;
