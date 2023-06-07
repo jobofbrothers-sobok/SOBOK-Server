@@ -3,8 +3,50 @@ import { validationResult } from "express-validator";
 import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import jwtHandler from "../modules/jwtHandler";
+import { ManagerCreateDTO } from "./../interfaces/user/managerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { managerService } from "../service";
+
+// 매니저 회원가입
+const managerSignup = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  const managerCreateDTO: ManagerCreateDTO = req.body;
+
+  try {
+    const data = await managerService.managerSignup(managerCreateDTO);
+
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
+    }
+
+    // jwtHandler 내 sign 함수를 이용해 accessToken 생성
+    const accessToken = jwtHandler.sign(data.id);
+
+    const result = {
+      userId: data.id,
+      loginId: data.loginId,
+      accessToken,
+    };
+
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
+  } catch (error) {
+    console.log(error);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 
 // 매니저 로그인
 const managerSignin = async (req: Request, res: Response) => {
@@ -44,6 +86,7 @@ const managerSignin = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 회원가입 승인
 const grantOwnerSignUp = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -71,6 +114,7 @@ const grantOwnerSignUp = async (req: Request, res: Response) => {
 };
 
 const managerController = {
+  managerSignup,
   managerSignin,
   grantOwnerSignUp,
 };
