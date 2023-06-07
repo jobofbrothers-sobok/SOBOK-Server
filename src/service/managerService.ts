@@ -10,7 +10,7 @@ const managerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
     const user = await prisma.manager.findFirst({
       where: {
-        loginId: userSignInDTO.loginId,
+        password: userSignInDTO.password,
       },
     });
     if (!user) return null;
