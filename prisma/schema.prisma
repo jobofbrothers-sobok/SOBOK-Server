@@ -24,6 +24,12 @@ model Store {
   id                                     Int           @id @default(autoincrement())
   storeName                              String        @db.VarChar(30)
   ownerId                                Int?
+  description                            String?       @db.VarChar(100)
+  officeHour                             String?       @db.VarChar(50)
+  dayOff                                 String?       @db.VarChar(50)
+  homepage                               String?       @db.VarChar(200)
+  image                                  String?       @db.VarChar(200)
+  category                               String[]
   Customer                               Customer[]
   Store_Owner                            Store_Owner?  @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ownerId")
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[] @relation("Store_Owner_storeIdToStore")
