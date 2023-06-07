@@ -53,5 +53,5 @@ model Store_Owner {
 model Manager {
   id       Int    @id @default(autoincrement())
   loginId  String @db.VarChar(20)
-  password String @db.VarChar(30)
+  password String @db.VarChar(200)
 }
