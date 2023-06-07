@@ -44,8 +44,35 @@ const managerSignin = async (req: Request, res: Response) => {
   }
 };
 
+const grantOwnerSignUp = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const { id } = req.params;
+
+  try {
+    const grantOwnerId = await managerService.grantOwnerSignUp(+id);
+
+    return res
+      .status(sc.OK)
+      .send(
+        success(sc.OK, rm.SIGNUP_GRANT_SUCCESS, { grantOwnerId: grantOwnerId })
+      );
+  } catch (error) {
+    console.log(error);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const managerController = {
   managerSignin,
+  grantOwnerSignUp,
 };
 
 export default managerController;

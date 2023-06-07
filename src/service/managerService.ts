@@ -22,8 +22,22 @@ const managerSignIn = async (userSignInDTO: UserSignInDTO) => {
   }
 };
 
+// 점주 회원가입 승인
+const grantOwnerSignUp = async (id: number) => {
+  const data = await prisma.store_Owner.update({
+    where: {
+      id: id,
+    },
+    data: {
+      isGrant: true,
+    },
+  });
+  return data.id;
+};
+
 const managerService = {
   managerSignIn,
+  grantOwnerSignUp,
 };
 
 export default managerService;
