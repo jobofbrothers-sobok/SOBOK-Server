@@ -6,6 +6,7 @@ export default {
 
   // 회원가입 및 로그인
   SIGNUP_SUCCESS: "회원 가입 성공",
+  SIGNUP_GRANT_SUCCESS: "점주 회원가입 승인 성공",
   SIGNUP_FAIL: "회원 가입 실패",
   SIGNIN_SUCCESS: "로그인 성공",
   SIGNIN_FAIL: "로그인 실패",
