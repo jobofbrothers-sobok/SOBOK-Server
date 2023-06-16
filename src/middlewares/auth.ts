@@ -20,10 +20,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
+    console.log("here1");
     if (decoded === tokenType.TOKEN_INVALID)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+    console.log("here2");
 
     //? decode한 후 담겨있는 userId를 꺼내옴
     const userId: number = (decoded as JwtPayload).userId;
@@ -31,6 +33,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+    console.log("here3");
 
     //? 얻어낸 userId 를 Request Body 내 userId 필드에 담고, 다음 미들웨어로 넘김( next() )
     req.body.userId = userId;
