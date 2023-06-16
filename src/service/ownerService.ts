@@ -1,3 +1,4 @@
+import { CreateStoreProductDTO } from "./../interfaces/store/creatseStoreProductDTO";
 import { CreateStoreNoticeDTO } from "./../interfaces/store/createStoreNoticeDTO";
 import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
 import { PrismaClient } from "@prisma/client";
@@ -193,7 +194,26 @@ const createStoreMenu = async (
       title: createStoreMenuDTO.title,
       content: createStoreMenuDTO.content,
       image: createStoreMenuDTO.image,
-      storeId: storeId,
+      storeId,
+    },
+  });
+  return data;
+};
+
+// 점주 스토어 상품 등록
+const createStoreProduct = async (
+  createStoreProductDTO: CreateStoreProductDTO,
+  storeId: number
+) => {
+  const data = await prisma.store_Product.create({
+    data: {
+      category: createStoreProductDTO.category,
+      name: createStoreProductDTO.name,
+      price: createStoreProductDTO.price,
+      discountPrice: createStoreProductDTO.discountPrice,
+      url: createStoreProductDTO.url,
+      image: createStoreProductDTO.image,
+      storeId,
     },
   });
   return data;
@@ -211,6 +231,7 @@ const ownerService = {
   getStorebyOwnerId,
   createStoreNotice,
   createStoreMenu,
+  createStoreProduct,
 };
 
 export default ownerService;

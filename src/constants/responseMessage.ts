@@ -39,4 +39,5 @@ export default {
   UPDATE_STORE_INFO_SUCCESS: "매장 정보 수정 성공",
   CREATE_STORE_NOTICE_SUCCESS: "매장 소식 생성 성공",
   CREATE_STORE_MENU_SUCCESS: "매장 메뉴 생성 성공",
+  CREATE_STORE_PRODUCT_SUCCESS: "매장 스토어 상품 생성 성공",
 };
