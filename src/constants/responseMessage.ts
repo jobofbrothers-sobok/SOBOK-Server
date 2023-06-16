@@ -36,5 +36,6 @@ export default {
 
   // 매장
   CREATE_STORE_INFO_SUCCESS: "매장 정보 생성 성공",
+  UPDATE_STORE_INFO_SUCCESS: "매장 정보 수정 성공",
   CREATE_STORE_NOTICE_SUCCESS: "매장 소식 생성 성공",
 };

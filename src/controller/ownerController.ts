@@ -154,6 +154,7 @@ const getOwnerName = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 유저 매장 정보 등록
 const createStoreInfo = async (req: Request, res: Response) => {
   const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
   const ownerId = req.user.id;
@@ -167,6 +168,28 @@ const createStoreInfo = async (req: Request, res: Response) => {
         storeName: createStore.storeName,
       })
     );
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 매장 정보 수정
+const updateStoreInfo = async (req: Request, res: Response) => {
+  const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
+  // const userId = req.user.id;
+  const storeId = req.params.id;
+  console.log(storeId);
+  try {
+    const updatedStore = await ownerService.updateStoreInfo(
+      +storeId,
+      createStoreInfoDTO
+    );
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, updatedStore));
   } catch (error) {
     console.log(error);
     return res
@@ -202,6 +225,7 @@ const ownerController = {
   ownerDelete,
   getOwnerName,
   createStoreInfo,
+  updateStoreInfo,
   createStoreNotice,
 };
 
