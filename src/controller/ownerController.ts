@@ -1,3 +1,4 @@
+import { CreateStoreProductDTO } from "./../interfaces/store/creatseStoreProductDTO";
 import { CreateStoreMenuDTO } from "./../interfaces/store/createStoreMenuDTO";
 import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
 import { Request, Response } from "express";
@@ -229,12 +230,33 @@ const createStoreMenu = async (req: Request, res: Response) => {
   try {
     const createdMenu = await ownerService.createStoreMenu(
       createStoreMenuDTO,
-      storeId
+      storeId as number
     );
     console.log(storeId);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_STORE_MENU_SUCCESS, createdMenu));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+const createStoreProduct = async (req: Request, res: Response) => {
+  const createStoreProductDTO: CreateStoreProductDTO = req.body;
+  const userId = req.user.id;
+  const storeId = await ownerService.getStorebyOwnerId(userId);
+  console.log(storeId);
+  try {
+    const createdProduct = await ownerService.createStoreProduct(
+      createStoreProductDTO,
+      storeId as number
+    );
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_STORE_PRODUCT_SUCCESS, createdProduct));
   } catch (error) {
     console.log(error);
     return res
@@ -253,6 +275,7 @@ const ownerController = {
   updateStoreInfo,
   createStoreNotice,
   createStoreMenu,
+  createStoreProduct,
 };
 
 export default ownerController;
