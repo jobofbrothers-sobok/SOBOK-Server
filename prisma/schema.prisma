@@ -16,16 +16,22 @@ model Customer {
   phone          String   @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
-  storeId        Int
-  Store          Store    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  storeId        Int?
+  Store          Store?   @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
 
 model Store {
   id                                     Int           @id @default(autoincrement())
   storeName                              String        @db.VarChar(30)
+  description                            String?       @db.VarChar(100)
+  officeHour                             String?       @db.VarChar(50)
+  dayOff                                 String?       @db.VarChar(50)
+  homepage                               String?       @db.VarChar(200)
+  image                                  String?       @db.VarChar(200)
+  category                               String[]
   ownerId                                Int?
   Customer                               Customer[]
-  Store_Owner                            Store_Owner?  @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ownerId")
+  Store_Owner                            Store_Owner?  @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[] @relation("Store_Owner_storeIdToStore")
 }
 
@@ -44,10 +50,10 @@ model Store_Owner {
   authorized                       Boolean?
   termsAgree                       Boolean
   marketingAgree                   Boolean?
-  storeId                          Int
+  storeId                          Int?
   isGrant                          Boolean  @default(false)
   Store                            Store[]
-  Store_Store_Owner_storeIdToStore Store    @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store_Store_Owner_storeIdToStore Store?   @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
 
 model Manager {

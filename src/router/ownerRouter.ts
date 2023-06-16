@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ownerController } from "../controller";
 import { body } from "express-validator";
+import { auth } from "../middlewares";
 
 const router: Router = Router();
 
@@ -45,5 +46,8 @@ router.delete("/:id", ownerController.ownerDelete);
 
 // 점주 유저 이름 조회 - GET ~/owner/:id
 router.get("/:id", ownerController.getOwnerName);
+
+// 점주 매장정보 등록 및 수정
+router.post("/", auth, ownerController.createStoreInfo);
 
 export default router;
