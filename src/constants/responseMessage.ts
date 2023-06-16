@@ -32,4 +32,7 @@ export default {
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
+
+  // 매장
+  CREATE_STORE_INFO_SUCCESS: "매장 정보 생성 성공",
 };
