@@ -32,6 +32,7 @@ model Store {
   ownerId                                Int?
   Customer                               Customer[]
   Store_Owner                            Store_Owner?   @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
+  Store_Menu                             Store_Menu[]
   Store_Notice                           Store_Notice[]
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[]  @relation("Store_Owner_storeIdToStore")
 }
@@ -78,4 +79,6 @@ model Store_Menu {
   title   String? @db.VarChar(30)
   content String? @db.VarChar(300)
   image   String? @db.VarChar(300)
+  storeId Int?
+  Store   Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }

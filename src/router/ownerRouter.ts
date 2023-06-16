@@ -5,14 +5,17 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
+// 점주 매장소식 등록 - POST ~/owner/store/notice
+router.post("/store/notice", auth, ownerController.createStoreNotice);
+
+// 점주 매장메뉴 등록 - POST ~/owner/store/menu
+router.post("/store/menu", auth, ownerController.createStoreMenu);
+
 // 점주 매장정보 수정 - POST ~/owner/store/info/:id
 router.post("/store/:id", auth, ownerController.updateStoreInfo);
 
 // 점주 매장정보 등록 - POST ~/owner/store/info
 router.post("/store", auth, ownerController.createStoreInfo);
-
-// 점주 매장소식 등록 - POST ~/owner/store/notice
-router.post("/store/notice", auth, ownerController.createStoreNotice);
 
 // 점주 유저 생성 - POST ~/owner/signup
 router.post(

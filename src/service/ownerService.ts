@@ -6,6 +6,7 @@ import { sc } from "../constants";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
+import { CreateStoreMenuDTO } from "../interfaces/store/createStoreMenuDTO";
 
 const prisma = new PrismaClient();
 
@@ -156,9 +157,9 @@ const updateStoreInfo = async (
 
 // 점주 매장 조회
 const getStorebyOwnerId = async (id: number) => {
-  const data = await prisma.store.findUnique({
+  const data = await prisma.store.findFirst({
     where: {
-      id: id,
+      ownerId: id,
     },
   });
   return data?.id;
@@ -175,7 +176,24 @@ const createStoreNotice = async (
       title: createStoreNoticeDTO.title,
       content: createStoreNoticeDTO.content,
       image: createStoreNoticeDTO.image,
-      storeId,
+      storeId: storeId,
+    },
+  });
+  console.log(storeId);
+  return data;
+};
+
+// 점주 매장 메뉴 등록
+const createStoreMenu = async (
+  createStoreMenuDTO: CreateStoreMenuDTO,
+  storeId: number
+) => {
+  const data = await prisma.store_Menu.create({
+    data: {
+      title: createStoreMenuDTO.title,
+      content: createStoreMenuDTO.content,
+      image: createStoreMenuDTO.image,
+      storeId: storeId,
     },
   });
   return data;
@@ -192,6 +210,7 @@ const ownerService = {
   updateStoreInfo,
   getStorebyOwnerId,
   createStoreNotice,
+  createStoreMenu,
 };
 
 export default ownerService;
