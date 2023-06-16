@@ -1,3 +1,4 @@
+import { CreateStoreNoticeDTO } from "./../interfaces/store/createStoreNoticeDTO";
 import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -129,6 +130,33 @@ const createStoreInfo = async (
   return data;
 };
 
+// 점주 매장 조회
+const getStorebyOwnerId = async (id: number) => {
+  const data = await prisma.store.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return data?.id;
+};
+
+// 점주 매장 소식 등록
+const createStoreNotice = async (
+  createStoreNoticeDTO: CreateStoreNoticeDTO,
+  storeId: number
+) => {
+  const data = await prisma.store_Notice.create({
+    data: {
+      category: createStoreNoticeDTO.category,
+      title: createStoreNoticeDTO.title,
+      content: createStoreNoticeDTO.content,
+      image: createStoreNoticeDTO.image,
+      storeId,
+    },
+  });
+  return data;
+};
+
 const ownerService = {
   createOwner,
   ownerSignIn,
@@ -137,6 +165,8 @@ const ownerService = {
   getOwnerName,
   findOwnerById,
   createStoreInfo,
+  getStorebyOwnerId,
+  createStoreNotice,
 };
 
 export default ownerService;

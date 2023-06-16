@@ -8,6 +8,7 @@ import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import ownerService from "../service/ownerService";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
+import { CreateStoreNoticeDTO } from "../interfaces/store/createStoreNoticeDTO";
 
 // 점주 유저 생성
 const createOwner = async (req: Request, res: Response) => {
@@ -174,6 +175,26 @@ const createStoreInfo = async (req: Request, res: Response) => {
   }
 };
 
+const createStoreNotice = async (req: Request, res: Response) => {
+  const createStoreNoticeDTO: CreateStoreNoticeDTO = req.body;
+  const userId = req.user.id;
+  const storeId = await ownerService.getStorebyOwnerId(userId);
+  try {
+    const createStoreNotice = await ownerService.createStoreNotice(
+      createStoreNoticeDTO,
+      storeId
+    );
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_STORE_NOTICE_SUCCESS, createStoreNotice));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const ownerController = {
   createOwner,
   ownerSignIn,
@@ -181,6 +202,7 @@ const ownerController = {
   ownerDelete,
   getOwnerName,
   createStoreInfo,
+  createStoreNotice,
 };
 
 export default ownerController;
