@@ -22,10 +22,15 @@ const verify = (token: string) => {
     decoded = jwt.verify(token, process.env.JWT_SECRET as string);
   } catch (error: any) {
     if (error.message === "jwt expired") {
+      console.log("토큰 만료");
       return tokenType.TOKEN_EXPIRED;
     } else if (error.message === "invalid token") {
+      console.log("invalid token");
+      console.log(error);
       return tokenType.TOKEN_INVALID;
     } else {
+      console.log("invalid token");
+      console.log(error);
       return tokenType.TOKEN_INVALID;
     }
   }

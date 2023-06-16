@@ -92,12 +92,23 @@ const getCustomerName = async (id: number) => {
   return data?.name;
 };
 
+// 고객 유저 조회
+const findCustomerById = async (id: number) => {
+  const data = await prisma.customer.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return data;
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
   updateCustomer,
   customerDelete,
   getCustomerName,
+  findCustomerById,
 };
 
 export default customerService;
