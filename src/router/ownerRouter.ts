@@ -11,6 +11,9 @@ router.post("/store/notice", auth, ownerController.createStoreNotice);
 // 점주 매장메뉴 등록 - POST ~/owner/store/menu
 router.post("/store/menu", auth, ownerController.createStoreMenu);
 
+// 점주 매장 스토어 상품 등록 - POST ~/owner/store/product
+router.post("/store/product", auth, ownerController.createStoreProduct);
+
 // 점주 매장정보 수정 - POST ~/owner/store/info/:id
 router.post("/store/:id", auth, ownerController.updateStoreInfo);
 
