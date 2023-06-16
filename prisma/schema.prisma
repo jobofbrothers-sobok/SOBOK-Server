@@ -21,18 +21,19 @@ model Customer {
 }
 
 model Store {
-  id                                     Int           @id @default(autoincrement())
-  storeName                              String        @db.VarChar(30)
-  description                            String?       @db.VarChar(100)
-  officeHour                             String?       @db.VarChar(50)
-  dayOff                                 String?       @db.VarChar(50)
-  homepage                               String?       @db.VarChar(200)
-  image                                  String?       @db.VarChar(200)
+  id                                     Int            @id @default(autoincrement())
+  storeName                              String         @db.VarChar(30)
+  description                            String?        @db.VarChar(100)
+  officeHour                             String?        @db.VarChar(50)
+  dayOff                                 String?        @db.VarChar(50)
+  homepage                               String?        @db.VarChar(200)
+  image                                  String?        @db.VarChar(200)
   category                               String[]
   ownerId                                Int?
   Customer                               Customer[]
-  Store_Owner                            Store_Owner?  @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
-  Store_Owner_Store_Owner_storeIdToStore Store_Owner[] @relation("Store_Owner_storeIdToStore")
+  Store_Owner                            Store_Owner?   @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
+  Store_Notice                           Store_Notice[]
+  Store_Owner_Store_Owner_storeIdToStore Store_Owner[]  @relation("Store_Owner_storeIdToStore")
 }
 
 model Store_Owner {
@@ -60,4 +61,14 @@ model Manager {
   id       Int    @id @default(autoincrement())
   loginId  String @db.VarChar(20)
   password String @db.VarChar(200)
+}
+
+model Store_Notice {
+  id       Int     @id @unique @default(autoincrement())
+  category String? @db.VarChar(30)
+  title    String? @db.VarChar(100)
+  content  String? @db.VarChar(200)
+  image    String? @db.VarChar(300)
+  storeId  Int?
+  Store    Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
