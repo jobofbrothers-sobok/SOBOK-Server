@@ -146,11 +146,13 @@ const createStoreNotice = async (
   storeId: number
 ) => {
   const data = await prisma.store_Notice.create({
-    category: createStoreNoticeDTO.category,
-    title: createStoreNoticeDTO.title,
-    content: createStoreNoticeDTO.content,
-    image: createStoreNoticeDTO.image,
-    storeId,
+    data: {
+      category: createStoreNoticeDTO.category,
+      title: createStoreNoticeDTO.title,
+      content: createStoreNoticeDTO.content,
+      image: createStoreNoticeDTO.image,
+      storeId,
+    },
   });
   return data;
 };
