@@ -5,6 +5,12 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
+// 점주 매장정보 등록 및 수정 - POST ~/owner/store/info
+router.post("/store/info", auth, ownerController.createStoreInfo);
+
+// 점주 매장소식 등록 - POST ~/owner/store/notice
+router.post("/store/notice", auth, ownerController.createStoreNotice);
+
 // 점주 유저 생성 - POST ~/owner/signup
 router.post(
   "/signup",
@@ -46,11 +52,5 @@ router.delete("/:id", ownerController.ownerDelete);
 
 // 점주 유저 이름 조회 - GET ~/owner/:id
 router.get("/:id", ownerController.getOwnerName);
-
-// 점주 매장정보 등록 및 수정
-router.post("/store/info", auth, ownerController.createStoreInfo);
-
-// 점주 매장소식 등록
-router.post("/store/notice", auth, ownerController.createStoreNotice);
 
 export default router;
