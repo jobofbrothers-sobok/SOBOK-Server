@@ -28,15 +28,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     console.log("here2");
 
     //? decode한 후 담겨있는 userId를 꺼내옴
-    const userId: number = (decoded as JwtPayload).userId;
-    if (!userId)
+    const id: number = (decoded as JwtPayload).id;
+    if (!id)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
     console.log("here3");
 
     //? 얻어낸 userId 를 Request Body 내 userId 필드에 담고, 다음 미들웨어로 넘김( next() )
-    req.body.userId = userId;
+    req.body.id = id;
     next();
   } catch (error) {
     console.log(error);

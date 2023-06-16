@@ -155,11 +155,11 @@ const getOwnerName = async (req: Request, res: Response) => {
 
 const createStoreInfo = async (req: Request, res: Response) => {
   const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
-  const ownerId = req.user.id;
+  // const ownerId = req.user.id;
   try {
     const createStore = await ownerService.createStoreInfo(
-      createStoreInfoDTO,
-      ownerId
+      createStoreInfoDTO
+      // ownerId
     );
     return res.status(sc.OK).send(
       success(sc.OK, rm.CREATE_STORE_INFO_SUCCESS, {

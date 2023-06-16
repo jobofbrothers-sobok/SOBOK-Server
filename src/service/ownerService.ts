@@ -102,8 +102,8 @@ const getOwnerName = async (id: number) => {
 
 // 점주 매장정보 등록 및 수정
 const createStoreInfo = async (
-  createStoreInfoDTO: CreateStoreInfoDTO,
-  ownerId: number
+  createStoreInfoDTO: CreateStoreInfoDTO
+  // ownerId: number
 ) => {
   const data = await prisma.store.create({
     data: {
@@ -113,7 +113,7 @@ const createStoreInfo = async (
       dayOff: createStoreInfoDTO.dayOff,
       homepage: createStoreInfoDTO.homepage,
       image: createStoreInfoDTO.image,
-      ownerId: ownerId,
+      ownerId: createStoreInfoDTO.ownerId,
     },
   });
   return data;
