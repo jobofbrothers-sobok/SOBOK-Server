@@ -1,3 +1,4 @@
+import { CreateStoreMenuDTO } from "./../interfaces/store/createStoreMenuDTO";
 import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
@@ -198,6 +199,7 @@ const updateStoreInfo = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 매장소식 등록
 const createStoreNotice = async (req: Request, res: Response) => {
   const createStoreNoticeDTO: CreateStoreNoticeDTO = req.body;
   const userId = req.user.id;
@@ -205,11 +207,34 @@ const createStoreNotice = async (req: Request, res: Response) => {
   try {
     const createStoreNotice = await ownerService.createStoreNotice(
       createStoreNoticeDTO,
-      storeId
+      storeId as number
     );
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_STORE_NOTICE_SUCCESS, createStoreNotice));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 매장메뉴 등록
+const createStoreMenu = async (req: Request, res: Response) => {
+  const createStoreMenuDTO: CreateStoreMenuDTO = req.body;
+  const userId = req.user.id;
+  const storeId = await ownerService.getStorebyOwnerId(userId);
+  console.log(storeId);
+  try {
+    const createdMenu = await ownerService.createStoreMenu(
+      createStoreMenuDTO,
+      storeId
+    );
+    console.log(storeId);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_STORE_MENU_SUCCESS, createdMenu));
   } catch (error) {
     console.log(error);
     return res
@@ -227,6 +252,7 @@ const ownerController = {
   createStoreInfo,
   updateStoreInfo,
   createStoreNotice,
+  createStoreMenu,
 };
 
 export default ownerController;
