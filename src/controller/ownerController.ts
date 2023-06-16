@@ -1,3 +1,4 @@
+import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { rm, sc } from "../constants";
@@ -152,12 +153,34 @@ const getOwnerName = async (req: Request, res: Response) => {
   }
 };
 
+const createStoreInfo = async (req: Request, res: Response) => {
+  const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
+  const ownerId = req.user.id;
+  try {
+    const createStore = await ownerService.createStoreInfo(
+      createStoreInfoDTO,
+      ownerId
+    );
+    return res.status(sc.OK).send(
+      success(sc.OK, rm.CREATE_STORE_INFO_SUCCESS, {
+        storeName: createStore.storeName,
+      })
+    );
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const ownerController = {
   createOwner,
   ownerSignIn,
   updateOwner,
   ownerDelete,
   getOwnerName,
+  createStoreInfo,
 };
 
 export default ownerController;

@@ -12,4 +12,5 @@ export interface OwnerCreateDTO {
   authorized: boolean;
   termsAgree: boolean;
   marketingAgree: boolean;
+  isGrant: boolean;
 }
