@@ -111,7 +111,7 @@ const findOwnerById = async (id: number) => {
   return data;
 };
 
-// 점주 매장정보 등록 및 수정
+// 점주 매장정보 등록
 const createStoreInfo = async (
   createStoreInfoDTO: CreateStoreInfoDTO,
   ownerId: number
@@ -124,7 +124,31 @@ const createStoreInfo = async (
       dayOff: createStoreInfoDTO.dayOff,
       homepage: createStoreInfoDTO.homepage,
       image: createStoreInfoDTO.image,
+      category: createStoreInfoDTO.category,
       ownerId,
+    },
+  });
+  return data;
+};
+
+// 점주 매장정보 수정
+const updateStoreInfo = async (
+  storeId: number,
+  createStoreInfoDTO: CreateStoreInfoDTO
+) => {
+  console.log(storeId);
+  const data = await prisma.store.update({
+    where: {
+      id: storeId,
+    },
+    data: {
+      storeName: createStoreInfoDTO.storeName,
+      description: createStoreInfoDTO.description,
+      officeHour: createStoreInfoDTO.officeHour,
+      dayOff: createStoreInfoDTO.dayOff,
+      homepage: createStoreInfoDTO.homepage,
+      image: createStoreInfoDTO.image,
+      category: createStoreInfoDTO.category,
     },
   });
   return data;
@@ -165,6 +189,7 @@ const ownerService = {
   getOwnerName,
   findOwnerById,
   createStoreInfo,
+  updateStoreInfo,
   getStorebyOwnerId,
   createStoreNotice,
 };
