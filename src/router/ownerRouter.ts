@@ -48,6 +48,6 @@ router.delete("/:id", ownerController.ownerDelete);
 router.get("/:id", ownerController.getOwnerName);
 
 // 점주 매장정보 등록 및 수정
-router.post("/", ownerController.createStoreInfo);
+router.post("/", auth, ownerController.createStoreInfo);
 
 export default router;
