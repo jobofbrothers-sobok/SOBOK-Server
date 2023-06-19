@@ -21,7 +21,6 @@ const createCustomer = async (customerCreateDTO: CustomerCreateDTO) => {
       phone: customerCreateDTO.phone,
       termsAgree: customerCreateDTO.termsAgree,
       marketingAgree: customerCreateDTO.marketingAgree,
-      storeId: 3,
     },
   });
 
@@ -102,6 +101,17 @@ const findCustomerById = async (id: number) => {
   return data;
 };
 
+// 고객 스탬프 적립
+const createStampNumber = async (randNum: string, id: number) => {
+  const data = await prisma.stamp.create({
+    data: {
+      randNum: randNum,
+      customerId: id,
+    },
+  });
+  return data;
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
@@ -109,6 +119,7 @@ const customerService = {
   customerDelete,
   getCustomerName,
   findCustomerById,
+  createStampNumber,
 };
 
 export default customerService;
