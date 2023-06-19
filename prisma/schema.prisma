@@ -104,6 +104,7 @@ model Stamp {
   timestamp  DateTime? @db.Timestamp(6)
   customerId Int?
   storeId    Int?
+  store      String?   @db.VarChar(30)
   Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade, map: "customerId")
   Store      Store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }

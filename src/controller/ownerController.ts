@@ -274,12 +274,13 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
   // 현시각보다 9시간 느려서 가산
   const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
   const date = new Date(now);
-  console.log(date, typeof date);
+  const storeName = await ownerService.getStorebyStoreId(storeId);
   try {
     const data = await customerService.getStampByRandNum(
       randNum,
       date,
-      storeId as number
+      storeId as number,
+      storeName
     );
 
     const result = {

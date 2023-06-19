@@ -116,7 +116,8 @@ const createStampNumber = async (randNum: string, id: number) => {
 const getStampByRandNum = async (
   randNum: string,
   date: EpochTimeStamp,
-  storeId: number
+  storeId: number,
+  storeName: string
 ) => {
   const data = await prisma.stamp.update({
     where: {
@@ -125,6 +126,7 @@ const getStampByRandNum = async (
     data: {
       timestamp: date,
       storeId,
+      store: storeName,
     },
   });
   return data;
