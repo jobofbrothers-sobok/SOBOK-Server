@@ -5,6 +5,9 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
+// 고객 스탬프 적립 - POST ~/customer/stamp
+router.post("/stamp", auth, customerController.createStampNumber);
+
 // 고객 유저 생성 - POST ~/customer/signup
 router.post(
   "/signup",
@@ -21,9 +24,16 @@ router.post(
 // 고객 유저 로그인 - POST ~/customer/signin
 router.post("/signin", customerController.customerSignIn);
 
+// 고객 유저 회원탈퇴 - DELETE ~/customer/:id
+router.delete("/", auth, customerController.customerDelete);
+
+// 고객 유저 이름 조회 - GET ~/customer/:id
+router.get("/", auth, customerController.getCustomerName);
+
 // 고객 유저 회원정보 수정 - POST ~/customer/:id
 router.post(
-  "/:id",
+  "/",
+  auth,
   [
     body("password").trim().notEmpty(),
     body("email").trim().notEmpty(),
@@ -31,11 +41,5 @@ router.post(
   ],
   customerController.updateCustomer
 );
-
-// 고객 유저 회원탈퇴 - DELETE ~/customer/:id
-router.delete("/:id", customerController.customerDelete);
-
-// 고객 유저 이름 조회 - GET ~/customer/:id
-router.get("/:id", customerController.getCustomerName);
 
 export default router;

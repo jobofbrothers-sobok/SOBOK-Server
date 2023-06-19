@@ -8,6 +8,39 @@ import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 
+// 고객 스탬프 적립
+const createStampNumber = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  const generateRandNum = async (num: number) => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+    const charactersLength = characters.length;
+    for (let i = 0; i < num; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
+
+  const randNum = await generateRandNum(7);
+
+  try {
+    const data = customerService.createStampNumber(randNum, id);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.CREATE_RANDNUM_FAIL));
+    }
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.CREATE_RANDNUM_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 유저 생성
 const createCustomer = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
@@ -102,11 +135,11 @@ const updateCustomer = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
   const customerupdateDTO: CustomerUpdateDTO = req.body;
-  const { id } = req.params;
+  const id = req.user.id;
 
   try {
     const updatedUserId = await customerService.updateCustomer(
-      +id,
+      id,
       customerupdateDTO
     );
 
@@ -124,8 +157,8 @@ const updateCustomer = async (req: Request, res: Response) => {
 // 고객 유저 회원탈퇴
 const customerDelete = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const deletedUserId = await customerService.customerDelete(+id);
+    const id = req.user.id;
+    const deletedUserId = await customerService.customerDelete(id);
 
     return res
       .status(sc.OK)
@@ -140,8 +173,8 @@ const customerDelete = async (req: Request, res: Response) => {
 // 고객 유저 이름 조회
 const getCustomerName = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const customerName = await customerService.getCustomerName(+id);
+    const id = req.user.id;
+    const customerName = await customerService.getCustomerName(id);
 
     return res
       .status(sc.OK)
@@ -159,6 +192,7 @@ const customerController = {
   updateCustomer,
   customerDelete,
   getCustomerName,
+  createStampNumber,
 };
 
 export default customerController;
