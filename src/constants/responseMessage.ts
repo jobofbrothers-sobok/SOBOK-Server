@@ -44,4 +44,5 @@ export default {
   // 스탬프
   CREATE_RANDNUM_SUCCESS: "고객 생성 번호 생성 성공",
   CREATE_RANDNUM_FAIL: "고객 생성 번호 생성 실패",
+  GRANT_STAMP_SUCCESS: "스탬프 적립 성공",
 };
