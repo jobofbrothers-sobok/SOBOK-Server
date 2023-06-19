@@ -100,7 +100,7 @@ model Store_Product {
 
 model Stamp {
   id         Int       @id @unique @default(autoincrement())
-  randNum    String?   @db.VarChar(7)
+  randNum    String?   @unique @db.VarChar(7)
   timestamp  DateTime? @db.Timestamp(6)
   customerId Int?
   storeId    Int?

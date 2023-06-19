@@ -112,6 +112,24 @@ const createStampNumber = async (randNum: string, id: number) => {
   return data;
 };
 
+// 고객 스탬프
+const getStampByRandNum = async (
+  randNum: string,
+  date: EpochTimeStamp,
+  storeId: number
+) => {
+  const data = await prisma.stamp.update({
+    where: {
+      randNum: randNum,
+    },
+    data: {
+      timestamp: date,
+      storeId,
+    },
+  });
+  return data;
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
@@ -120,6 +138,7 @@ const customerService = {
   getCustomerName,
   findCustomerById,
   createStampNumber,
+  getStampByRandNum,
 };
 
 export default customerService;
