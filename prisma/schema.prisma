@@ -8,16 +8,17 @@ datasource db {
 }
 
 model Customer {
-  id             Int      @id @unique @default(autoincrement())
-  loginId        String   @unique @db.VarChar(20)
-  password       String   @db.VarChar(200)
-  name           String   @unique @db.VarChar(20)
-  email          String   @db.VarChar(45)
-  phone          String   @db.VarChar(20)
+  id             Int        @id @unique @default(autoincrement())
+  loginId        String     @unique @db.VarChar(20)
+  password       String     @db.VarChar(200)
+  name           String     @unique @db.VarChar(20)
+  email          String     @db.VarChar(45)
+  phone          String     @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
   storeId        Int?
-  Store          Store?   @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store          Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Delivery       Delivery[]
   Stamp          Stamp[]
 }
 
@@ -31,9 +32,11 @@ model Store {
   image                                  String?         @db.VarChar(200)
   category                               String[]
   ownerId                                Int?
+  tourId                                 Int?
   Customer                               Customer[]
   Stamp                                  Stamp[]
   Store_Owner                            Store_Owner?    @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
+  Tour                                   Tour?           @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "tourId")
   Store_Menu                             Store_Menu[]
   Store_Notice                           Store_Notice[]
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[]   @relation("Store_Owner_storeIdToStore")
@@ -105,6 +108,32 @@ model Stamp {
   customerId Int?
   storeId    Int?
   store      String?   @db.VarChar(30)
+  tourId     Int?
+  tour       String?   @db.VarChar(30)
   Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade, map: "customerId")
   Store      Store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Tour       Tour?     @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "tourId")
+}
+
+model Delivery {
+  id            Int       @id @unique @default(autoincrement())
+  reward        String?   @db.VarChar(30)
+  customer      String?   @db.VarChar(30)
+  phone         String?   @db.VarChar(20)
+  address       String?   @db.VarChar(50)
+  detailAddress String?   @db.VarChar(50)
+  message       String?   @db.VarChar(200)
+  isGrant       Int?
+  customerId    Int?
+  Customer      Customer? @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customerId")
+}
+
+model Tour {
+  id      Int     @id @default(autoincrement())
+  keyword String? @db.VarChar(50)
+  title   String? @db.VarChar(50)
+  reward  String? @db.VarChar(50)
+  image   String? @db.VarChar(200)
+  Stamp   Stamp[]
+  Store   Store[]
 }
