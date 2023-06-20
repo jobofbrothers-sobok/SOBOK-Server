@@ -55,10 +55,21 @@ const grantOwnerSignUp = async (id: number) => {
   return data.id;
 };
 
+// 최고관리자 조회
+const findManagerById = async (id: number) => {
+  const data = await prisma.manager.findUnique({
+    where: {
+      id,
+    },
+  });
+  return data;
+};
+
 const managerService = {
   managerSignup,
   managerSignIn,
   grantOwnerSignUp,
+  findManagerById,
 };
 
 export default managerService;
