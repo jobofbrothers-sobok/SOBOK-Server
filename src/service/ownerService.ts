@@ -132,6 +132,19 @@ const createStoreInfo = async (
   return data;
 };
 
+// 점주 매장id 부여
+const createStoreIdForOwner = async (ownerId: number, storeId: number) => {
+  const data = await prisma.store_Owner.update({
+    where: {
+      id: ownerId,
+    },
+    data: {
+      storeId: storeId,
+    },
+  });
+  return data;
+};
+
 // 점주 매장정보 수정
 const updateStoreInfo = async (
   storeId: number,
@@ -236,6 +249,7 @@ const ownerService = {
   getOwnerName,
   findOwnerById,
   createStoreInfo,
+  createStoreIdForOwner,
   updateStoreInfo,
   getStorebyOwnerId,
   getStorebyStoreId,
