@@ -47,4 +47,8 @@ export default {
   GRANT_STAMP_SUCCESS: "스탬프 적립 성공",
   GET_ALL_STAMP_FAIL: "스탬프 적립 내역 전체 조회 실패",
   GET_ALL_STAMP_SUCCESS: "스탬프 적립 내역 전체 조회 성공",
+
+  // 스탬프 배송신청
+  CREATE_DELIVERY_REQUEST_SUCCESS: "고객 스탬프 배송신청 성공",
+  STAMP_COUNT_NOT_ENOUGH: "스탬프가 10개 미만입니다",
 };

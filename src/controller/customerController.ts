@@ -7,10 +7,45 @@ import jwtHandler from "../modules/jwtHandler";
 import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
+import { CreateDeliveryRequestDTO } from "../interfaces/delivery/createDeliveryRequestDTO";
 
 // 고객 스탬프 사용 신청
 const createDeliveryRequest = async (req: Request, res: Response) => {
+  // validation의 결과를 바탕으로 분기 처리
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   const id = req.user.id;
+  const createDeliveryRequestDTO: CreateDeliveryRequestDTO = req.body;
+  const totalStamp = customerService.getAllStamp;
+  const totalStampCount = totalStamp.length;
+  console.log(totalStamp);
+  console.log(totalStampCount);
+
+  try {
+    if (totalStampCount === 10) {
+      const request = customerService.createDeliveryRequest(
+        id,
+        createDeliveryRequestDTO
+      );
+      return res
+        .status(sc.CREATED)
+        .send(success(sc.CREATED, rm.CREATE_DELIVERY_REQUEST_SUCCESS, request));
+    }
+    if (totalStampCount < 10) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.STAMP_COUNT_NOT_ENOUGH));
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
 };
 // 고객 스탬프 적립
 const createStampNumber = async (req: Request, res: Response) => {
