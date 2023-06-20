@@ -291,7 +291,9 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
       storeId: data.storeId,
     };
 
-    return res.status(sc.OK).send(success(sc.OK, rm.GRANT_STAMP_SUCCESS, data));
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GRANT_STAMP_SUCCESS, result));
   } catch (error) {
     console.log(error);
   }
