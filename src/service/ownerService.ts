@@ -156,7 +156,7 @@ const updateStoreInfo = async (
   return data;
 };
 
-// 점주 매장 조회
+// ownerId로 점주 매장 조회
 const getStorebyOwnerId = async (id: number) => {
   const data = await prisma.store.findFirst({
     where: {

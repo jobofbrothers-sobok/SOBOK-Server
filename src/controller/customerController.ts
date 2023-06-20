@@ -8,7 +8,7 @@ import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 
-// 고객 스탬프 적립
+// 고객 스탬프 적립(7자리 번호 생성)
 const createStampNumber = async (req: Request, res: Response) => {
   const id = req.user.id;
   const generateRandNum = async (num: number) => {
