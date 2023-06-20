@@ -1,8 +1,10 @@
+import { CreateTourIdForStoreDTO } from "./../interfaces/manager/createTourIdForStoreDTO";
 import { ManagerCreateDTO } from "./../interfaces/user/managerCreateDTO";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
+import { CreateTourDTO } from "../interfaces/manager/createTourDTO";
 
 const prisma = new PrismaClient();
 
@@ -65,11 +67,41 @@ const findManagerById = async (id: number) => {
   return data;
 };
 
+// 최고관리자 투어 추가
+const createTour = async (createTourDTO: CreateTourDTO) => {
+  const data = await prisma.tour.create({
+    data: {
+      keyword: createTourDTO.keyword,
+      title: createTourDTO.title,
+      reward: createTourDTO.reward,
+      image: createTourDTO.image,
+    },
+  });
+  return data;
+};
+
+// 매장 id를 받아 매장 정보를 투어에 추가
+const createTourIdForStore = async (
+  createTourIdForStoreDTO: CreateTourIdForStoreDTO
+) => {
+  const data = await prisma.store.update({
+    where: {
+      id: createTourIdForStoreDTO.storeId as number,
+    },
+    data: {
+      tourId: createTourIdForStoreDTO.tourId as number,
+    },
+  });
+  return data;
+};
+
 const managerService = {
   managerSignup,
   managerSignIn,
   grantOwnerSignUp,
   findManagerById,
+  createTour,
+  createTourIdForStore,
 };
 
 export default managerService;
