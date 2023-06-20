@@ -12,6 +12,6 @@ router.post("/signup", managerController.managerSignup);
 router.post("/signin", managerController.managerSignin);
 
 // 점주 회원가입 승인
-router.post("/grant/:id", managerController.grantOwnerSignUp);
+router.post("/grant/:id", auth, managerController.grantOwnerSignUp);
 
 export default router;
