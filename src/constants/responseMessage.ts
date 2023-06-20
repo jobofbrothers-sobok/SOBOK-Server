@@ -47,4 +47,10 @@ export default {
   GRANT_STAMP_SUCCESS: "스탬프 적립 성공",
   GET_ALL_STAMP_FAIL: "스탬프 적립 내역 전체 조회 실패",
   GET_ALL_STAMP_SUCCESS: "스탬프 적립 내역 전체 조회 성공",
+
+  // 투어
+  CREATE_TOUR_SUCCESS: "스탬프 투어 생성 성공",
+  CREATE_TOUR_FAIL: "스탬프 투어 생성 실패",
+  CREATE_TOURID_FOR_STORE_SUCCESS: "스탬프 투어에 매장정보 추가 성공",
+  CREATE_TOURID_FOR_STORE_FAIL: "스탬프 투어에 매장정보 추가 실패",
 };
