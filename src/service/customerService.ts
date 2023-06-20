@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Stamp } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
@@ -112,7 +112,7 @@ const createStampNumber = async (randNum: string, id: number) => {
   return data;
 };
 
-// 고객 스탬프
+// 고객 스탬프 조회
 const getStampByRandNum = async (
   randNum: string,
   date: EpochTimeStamp,
@@ -132,6 +132,42 @@ const getStampByRandNum = async (
   return data;
 };
 
+// 고객 스탬프 전체 조회
+const getAllStamp = async (sort: string, id: number) => {
+  if (sort !== "all") {
+    const allStamp = await prisma.stamp.findMany({
+      where: {
+        customerId: id,
+        tour: sort,
+      },
+    });
+
+    return sortAllStamp(allStamp);
+  }
+
+  if (sort === "all") {
+    const allStamp = await prisma.stamp.findMany({
+      where: {
+        customerId: id,
+      },
+    });
+    return sortAllStamp(allStamp);
+  }
+};
+
+const sortAllStamp = (allStamp: Stamp[]) => {
+  return allStamp.map((stamp) => {
+    return {
+      id: stamp.id,
+      randNum: stamp.randNum,
+      timestamp: stamp.timestamp,
+      customerId: stamp.customerId,
+      storeId: stamp.storeId,
+      store: stamp.store,
+    };
+  });
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
@@ -141,6 +177,7 @@ const customerService = {
   findCustomerById,
   createStampNumber,
   getStampByRandNum,
+  getAllStamp,
 };
 
 export default customerService;
