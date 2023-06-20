@@ -8,6 +8,10 @@ import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 
+// 고객 스탬프 사용 신청
+const createDeliveryRequest = async (req: Request, res: Response) => {
+  const id = req.user.id;
+};
 // 고객 스탬프 적립
 const createStampNumber = async (req: Request, res: Response) => {
   const id = req.user.id;
@@ -193,6 +197,7 @@ const customerController = {
   customerDelete,
   getCustomerName,
   createStampNumber,
+  createDeliveryRequest,
 };
 
 export default customerController;

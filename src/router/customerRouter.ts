@@ -5,6 +5,9 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
+// 고객 스탬프 사용신청 = POST ~/customer/delivery
+router.post("/delivery", auth, customerController.createDeliveryRequest);
+
 // 고객 스탬프 적립 - POST ~/customer/stamp
 router.post("/stamp", auth, customerController.createStampNumber);
 
