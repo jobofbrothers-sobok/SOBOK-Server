@@ -11,6 +11,7 @@ import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import ownerService from "../service/ownerService";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import { CreateStoreNoticeDTO } from "../interfaces/store/createStoreNoticeDTO";
+import { customerService } from "../service";
 
 // 점주 유저 생성
 const createOwner = async (req: Request, res: Response) => {
@@ -265,6 +266,37 @@ const createStoreProduct = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 스탬프 적립
+const grantStampByRandNum = async (req: Request, res: Response) => {
+  const userId = req.user.id;
+  const storeId = await ownerService.getStorebyOwnerId(userId);
+  const randNum = req.body.randNum;
+  // 현시각보다 9시간 느려서 가산
+  const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
+  const date = new Date(now);
+  const storeName = await ownerService.getStorebyStoreId(storeId);
+  try {
+    const data = await customerService.getStampByRandNum(
+      randNum,
+      date,
+      storeId as number,
+      storeName
+    );
+
+    const result = {
+      stampId: data.id,
+      randNum: data.randNum,
+      timestamp: data.timestamp,
+      customerId: data.customerId,
+      storeId: data.storeId,
+    };
+
+    return res.status(sc.OK).send(success(sc.OK, rm.GRANT_STAMP_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const ownerController = {
   createOwner,
   ownerSignIn,
@@ -276,6 +308,7 @@ const ownerController = {
   createStoreNotice,
   createStoreMenu,
   createStoreProduct,
+  grantStampByRandNum,
 };
 
 export default ownerController;

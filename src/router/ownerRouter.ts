@@ -20,6 +20,9 @@ router.post("/store/:id", auth, ownerController.updateStoreInfo);
 // 점주 매장정보 등록 - POST ~/owner/store/info
 router.post("/store", auth, ownerController.createStoreInfo);
 
+// 점주 스탬프 적립 - POST ~/owner/stamp
+router.post("/stamp", auth, ownerController.grantStampByRandNum);
+
 // 점주 유저 생성 - POST ~/owner/signup
 router.post(
   "/signup",
