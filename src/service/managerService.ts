@@ -49,7 +49,7 @@ const grantOwnerSignUp = async (id: number) => {
       id: id,
     },
     data: {
-      isGrant: true,
+      authorized: true,
     },
   });
   return data.id;

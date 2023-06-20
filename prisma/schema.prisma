@@ -8,16 +8,17 @@ datasource db {
 }
 
 model Customer {
-  id             Int      @id @unique @default(autoincrement())
-  loginId        String   @unique @db.VarChar(20)
-  password       String   @db.VarChar(200)
-  name           String   @unique @db.VarChar(20)
-  email          String   @db.VarChar(45)
-  phone          String   @db.VarChar(20)
+  id             Int        @id @unique @default(autoincrement())
+  loginId        String     @unique @db.VarChar(20)
+  password       String     @db.VarChar(200)
+  name           String     @unique @db.VarChar(20)
+  email          String     @db.VarChar(45)
+  phone          String     @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
   storeId        Int?
-  Store          Store?   @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store          Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Delivery       Delivery[]
   Stamp          Stamp[]
 }
 
@@ -54,11 +55,10 @@ model Store_Owner {
   detailAddress                    String   @db.VarChar(30)
   licenseNumber                    String   @db.VarChar(20)
   licenseImage                     String   @db.VarChar(200)
-  authorized                       Boolean?
+  authorized                       Boolean? @default(false)
   termsAgree                       Boolean
   marketingAgree                   Boolean?
   storeId                          Int?
-  isGrant                          Boolean  @default(false)
   Store                            Store[]
   Store_Store_Owner_storeIdToStore Store?   @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
@@ -122,4 +122,17 @@ model Tour {
   image   String? @db.VarChar(200)
   Stamp   Stamp[]
   Store   Store[]
+}
+
+model Delivery {
+  id            Int       @id @unique @default(autoincrement())
+  reward        String?   @db.VarChar(30)
+  customer      String?   @db.VarChar(30)
+  phone         String?   @db.VarChar(20)
+  address       String?   @db.VarChar(50)
+  detailAddress String?   @db.VarChar(50)
+  message       String?   @db.VarChar(200)
+  isGrant       Boolean?  @default(false)
+  customerId    Int?
+  Customer      Customer? @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customerId")
 }
