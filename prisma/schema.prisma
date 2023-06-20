@@ -116,9 +116,9 @@ model Stamp {
 
 model Tour {
   id      Int     @id @default(autoincrement())
-  keyword String? @db.VarChar(50)
-  title   String? @db.VarChar(50)
-  reward  String? @db.VarChar(50)
+  keyword String  @db.VarChar(50)
+  title   String  @db.VarChar(50)
+  reward  String  @db.VarChar(50)
   image   String? @db.VarChar(200)
   Stamp   Stamp[]
   Store   Store[]
