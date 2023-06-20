@@ -41,6 +41,56 @@ const createStampNumber = async (req: Request, res: Response) => {
   }
 };
 
+const sortType = {
+  ALL: "all",
+  HOEGI: "hoegi",
+  HALLOWEEN: "halloween",
+  SOOKMYUNG: "sookmyung",
+  XMAS: "xmas",
+};
+
+// 고객 스탬프 적립 내역 전체 조회
+const getAllStamp = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  const sort = req.query.sort as string;
+
+  if (!sort) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  if (
+    sort !== sortType.ALL &&
+    sort !== sortType.HOEGI &&
+    sort !== sortType.SOOKMYUNG &&
+    sort !== sortType.HALLOWEEN &&
+    sort !== sortType.XMAS
+  ) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const allStamp = customerService.getAllStamp(sort, id);
+    if (!allStamp) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_STAMP_FAIL));
+    }
+
+    const data = {
+      allStamp: allStamp,
+    };
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.GET_ALL_STAMP_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 // 고객 유저 생성
 const createCustomer = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
@@ -193,6 +243,7 @@ const customerController = {
   customerDelete,
   getCustomerName,
   createStampNumber,
+  getAllStamp,
 };
 
 export default customerController;
