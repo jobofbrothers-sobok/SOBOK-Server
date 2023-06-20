@@ -31,9 +31,11 @@ model Store {
   image                                  String?         @db.VarChar(200)
   category                               String[]
   ownerId                                Int?
+  tourId                                 Int?
   Customer                               Customer[]
   Stamp                                  Stamp[]
   Store_Owner                            Store_Owner?    @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
+  Tour                                   Tour?           @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "tourId")
   Store_Menu                             Store_Menu[]
   Store_Notice                           Store_Notice[]
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[]   @relation("Store_Owner_storeIdToStore")
@@ -105,6 +107,19 @@ model Stamp {
   customerId Int?
   storeId    Int?
   store      String?   @db.VarChar(30)
+  tourId     Int?
+  tour       String?   @db.VarChar(30)
   Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade, map: "customerId")
   Store      Store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Tour       Tour?     @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "tourId")
+}
+
+model Tour {
+  id      Int     @id @default(autoincrement())
+  keyword String? @db.VarChar(50)
+  title   String? @db.VarChar(50)
+  reward  String? @db.VarChar(50)
+  image   String? @db.VarChar(200)
+  Stamp   Stamp[]
+  Store   Store[]
 }
