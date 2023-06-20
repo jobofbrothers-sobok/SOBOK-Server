@@ -45,4 +45,6 @@ export default {
   CREATE_RANDNUM_SUCCESS: "고객 생성 번호 생성 성공",
   CREATE_RANDNUM_FAIL: "고객 생성 번호 생성 실패",
   GRANT_STAMP_SUCCESS: "스탬프 적립 성공",
+  GET_ALL_STAMP_FAIL: "스탬프 적립 내역 전체 조회 실패",
+  GET_ALL_STAMP_SUCCESS: "스탬프 적립 내역 전체 조회 성공",
 };
