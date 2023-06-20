@@ -40,4 +40,9 @@ export default {
   CREATE_STORE_NOTICE_SUCCESS: "매장 소식 생성 성공",
   CREATE_STORE_MENU_SUCCESS: "매장 메뉴 생성 성공",
   CREATE_STORE_PRODUCT_SUCCESS: "매장 스토어 상품 생성 성공",
+
+  // 스탬프
+  CREATE_RANDNUM_SUCCESS: "고객 생성 번호 생성 성공",
+  CREATE_RANDNUM_FAIL: "고객 생성 번호 생성 실패",
+  GRANT_STAMP_SUCCESS: "스탬프 적립 성공",
 };

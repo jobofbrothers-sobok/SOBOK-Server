@@ -31,7 +31,7 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
       authorized: ownerCreateDTO.authorized,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
-      storeId: 3,
+      storeId: 9,
     },
   });
 
@@ -166,6 +166,16 @@ const getStorebyOwnerId = async (id: number) => {
   return data?.id;
 };
 
+// storeId로 점주 매장 조회
+const getStorebyStoreId = async (storeId: number) => {
+  const data = await prisma.store.findUnique({
+    where: {
+      id: storeId,
+    },
+  });
+  return data?.storeName;
+};
+
 // 점주 매장 소식 등록
 const createStoreNotice = async (
   createStoreNoticeDTO: CreateStoreNoticeDTO,
@@ -229,6 +239,7 @@ const ownerService = {
   createStoreInfo,
   updateStoreInfo,
   getStorebyOwnerId,
+  getStorebyStoreId,
   createStoreNotice,
   createStoreMenu,
   createStoreProduct,
