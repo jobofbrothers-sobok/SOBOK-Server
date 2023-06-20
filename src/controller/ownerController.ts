@@ -123,10 +123,10 @@ const updateOwner = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 회원탈퇴
+// 점주 유저 회원탈퇴
 const ownerDelete = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.user.id;
     const deletedUserId = await ownerService.ownerDelete(+id);
 
     return res
@@ -165,6 +165,11 @@ const createStoreInfo = async (req: Request, res: Response) => {
     const createStore = await ownerService.createStoreInfo(
       createStoreInfoDTO,
       ownerId
+    );
+    const storeId = createStore.id;
+    const createStoreIdForOwner = await ownerService.createStoreIdForOwner(
+      ownerId,
+      storeId
     );
     return res.status(sc.OK).send(
       success(sc.OK, rm.CREATE_STORE_INFO_SUCCESS, {
