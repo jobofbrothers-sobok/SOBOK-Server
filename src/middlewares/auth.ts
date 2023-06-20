@@ -4,7 +4,7 @@ import { rm, sc } from "../constants";
 import { fail } from "../constants/response";
 import tokenType from "../constants/tokenType";
 import jwtHandler from "../modules/jwtHandler";
-import { customerService, ownerService } from "../service";
+import { customerService, managerService, ownerService } from "../service";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ").reverse()[0]; //? Bearer ~~ 에서 토큰만 파싱
@@ -44,6 +44,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
     if (req.originalUrl.includes("/owner")) {
       foundUser = await ownerService.findOwnerById(id);
+    }
+    if (req.originalUrl.includes("/manager")) {
+      foundUser = await managerService.findManagerById(id);
     }
 
     // const foundUser = await ownerService.findOwnerById(id);

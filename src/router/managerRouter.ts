@@ -12,6 +12,21 @@ router.post("/signup", managerController.managerSignup);
 router.post("/signin", managerController.managerSignin);
 
 // 점주 회원가입 승인
-router.post("/grant/:id", managerController.grantOwnerSignUp);
+router.post("/grant/:id", auth, managerController.grantOwnerSignUp);
+
+// 매장정보를 투어에 추가
+router.post("/tour/store", auth, managerController.createTourIdForStore);
+
+// 최고관리자 투어 추가
+router.post(
+  "/tour",
+  auth,
+  [
+    body("keyword").trim().notEmpty(),
+    body("title").trim().notEmpty(),
+    body("reward").trim().notEmpty(),
+  ],
+  managerController.createTour
+);
 
 export default router;
