@@ -235,11 +235,8 @@ const customerService = {
   findCustomerById,
   createStampNumber,
   getAllStamp,
-<<<<<<< HEAD
   createDeliveryRequest,
-=======
   getAllTourStore,
->>>>>>> 28ec09520e2bd29b8731f053bb123a84bd92695f
 };
 
 export default customerService;
