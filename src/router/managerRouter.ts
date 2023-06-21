@@ -29,6 +29,9 @@ router.post(
   managerController.createTour
 );
 
+// 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
+router.get("/tour", auth, managerController.getAllTour);
+
 // 최고관리자 배송신청 리스트 개별 조회
 router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 

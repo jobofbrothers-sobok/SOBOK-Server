@@ -114,6 +114,13 @@ const getDeliveryRequestById = async (deliveryId: number) => {
   });
   return data;
 };
+
+// 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
+const getAllTour = async () => {
+  const data = await prisma.tour.findMany();
+  console.log(data);
+  return data;
+};
 const managerService = {
   managerSignup,
   managerSignIn,
@@ -123,6 +130,7 @@ const managerService = {
   createTourIdForStore,
   getAllDeliveryRequest,
   getDeliveryRequestById,
+  getAllTour,
 };
 
 export default managerService;
