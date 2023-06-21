@@ -87,6 +87,45 @@ const getAllStamp = async (req: Request, res: Response) => {
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
+
+// 고객 스탬프 투어 참여 매장 조회
+const getAllTourStore = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  const sort = req.query.sort as string;
+  if (!sort) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  if (
+    sort !== sortType.ALL &&
+    sort !== sortType.HOEGI &&
+    sort !== sortType.SOOKMYUNG &&
+    sort !== sortType.HALLOWEEN &&
+    sort !== sortType.XMAS
+  ) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const data = await customerService.getAllTourStore(sort);
+    if (!data || data.length === 0) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_TOUR_STORE_FAIL));
+    }
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.GET_ALL_TOUR_STORE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 유저 생성
 const createCustomer = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
@@ -240,6 +279,7 @@ const customerController = {
   getCustomerName,
   createStampNumber,
   getAllStamp,
+  getAllTourStore,
 };
 
 export default customerController;

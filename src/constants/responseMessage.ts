@@ -53,4 +53,6 @@ export default {
   CREATE_TOUR_FAIL: "스탬프 투어 생성 실패",
   CREATE_TOURID_FOR_STORE_SUCCESS: "스탬프 투어에 매장정보 추가 성공",
   CREATE_TOURID_FOR_STORE_FAIL: "스탬프 투어에 매장정보 추가 실패",
+  GET_ALL_TOUR_STORE_SUCCESS: "스탬프 투어 참여 매장 조회 성공",
+  GET_ALL_TOUR_STORE_FAIL: "스탬프 투어 참여 매장 조회 실패",
 };

@@ -251,6 +251,16 @@ const getTourByTourId = async (tourId: number) => {
   return data;
 };
 
+// 투어 제목으로 tourId 조회
+const getTourByTourTitle = async (tour: string) => {
+  const data = await prisma.tour.findFirst({
+    where: {
+      title: tour,
+    },
+  });
+  return data;
+};
+
 // 유저 생성번호로 스탬프 적립 승낙
 const grantStampByRandNum = async (
   randNum: string,
@@ -288,6 +298,7 @@ const ownerService = {
   getStorebyOwnerId,
   getStorebyStoreId,
   getTourByTourId,
+  getTourByTourTitle,
   grantStampByRandNum,
   createStoreNotice,
   createStoreMenu,
