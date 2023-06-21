@@ -68,9 +68,30 @@ const findManagerById = async (id: number) => {
 };
 
 // 최고관리자 담당자(점주) 정보 전체 조회
-const getAllOwner = async () => {
-  const data = await prisma.store_Owner.findMany();
-  return data;
+const getAllOwner = async (sort: string) => {
+  if (sort === "all") {
+    const data = await prisma.store_Owner.findMany();
+    return data;
+  }
+
+  if (sort != "all") {
+    switch (sort) {
+      case "auth":
+        const authorizedOwner = await prisma.store_Owner.findMany({
+          where: {
+            authorized: true,
+          },
+        });
+        return authorizedOwner;
+      case "pending":
+        const pendingOwner = await prisma.store_Owner.findMany({
+          where: {
+            authorized: false,
+          },
+        });
+        return pendingOwner;
+    }
+  }
 };
 
 // 최고관리자 담당자(점주) 정보 개별 조회
