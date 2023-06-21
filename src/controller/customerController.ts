@@ -71,19 +71,15 @@ const getAllStamp = async (req: Request, res: Response) => {
   }
 
   try {
-    const allStamp = customerService.getAllStamp(sort, id);
-    if (!allStamp) {
+    const allStamp = await customerService.getAllStamp(sort, id);
+    if (!allStamp || allStamp.length === 0) {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.GET_ALL_STAMP_FAIL));
     }
-
-    const data = {
-      allStamp: allStamp,
-    };
     return res
       .status(sc.CREATED)
-      .send(success(sc.CREATED, rm.GET_ALL_STAMP_SUCCESS, data));
+      .send(success(sc.CREATED, rm.GET_ALL_STAMP_SUCCESS, allStamp));
   } catch (error) {
     console.log(error);
     res
