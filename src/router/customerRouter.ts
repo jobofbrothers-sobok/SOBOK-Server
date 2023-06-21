@@ -5,8 +5,20 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
-// 고객 스탬프 참여 매장 조회 - GET ~/customer/stamp/store?sort=value
-router.get("/stamp/store", auth, customerController.getAllTourStore);
+// 고객 스탬프 사용신청 = POST ~/customer/delivery
+router.post(
+  "/delivery",
+  auth,
+  [
+    body("reward").trim().notEmpty(),
+    body("customer").trim().notEmpty(),
+    body("phone").trim().notEmpty(),
+    body("address").trim().notEmpty(),
+    body("detailAddress").trim().notEmpty(),
+    body("message").trim().notEmpty(),
+  ],
+  customerController.createDeliveryRequest
+);
 
 // 고객 스탬프 적립 - POST ~/customer/stamp
 router.post("/stamp", auth, customerController.createStampNumber);

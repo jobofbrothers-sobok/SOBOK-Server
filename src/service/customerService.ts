@@ -1,3 +1,4 @@
+import { CreateDeliveryRequestDTO } from "./../interfaces/delivery/createDeliveryRequestDTO";
 import { PrismaClient, Stamp } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
@@ -206,6 +207,25 @@ const getAllTourStore = async (sort: string) => {
   }
 };
 
+// 고객 스탬프 배송 신청
+const createDeliveryRequest = async (
+  id: number,
+  createDeliveryRequestDTO: CreateDeliveryRequestDTO
+) => {
+  const data = await prisma.delivery.create({
+    data: {
+      reward: createDeliveryRequestDTO.reward,
+      customer: createDeliveryRequestDTO.customer,
+      phone: createDeliveryRequestDTO.phone,
+      address: createDeliveryRequestDTO.address,
+      detailAddress: createDeliveryRequestDTO.detailAddress,
+      message: createDeliveryRequestDTO.message,
+      customerId: id,
+    },
+  });
+  return data;
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
@@ -215,6 +235,7 @@ const customerService = {
   findCustomerById,
   createStampNumber,
   getAllStamp,
+  createDeliveryRequest,
   getAllTourStore,
 };
 
