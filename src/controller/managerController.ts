@@ -1,3 +1,4 @@
+import { CreateTourDTO } from "./../interfaces/manager/createTourDTO";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { rm, sc } from "../constants";
@@ -6,6 +7,7 @@ import jwtHandler from "../modules/jwtHandler";
 import { ManagerCreateDTO } from "./../interfaces/user/managerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { managerService } from "../service";
+import { CreateTourIdForStoreDTO } from "../interfaces/manager/createTourIdForStoreDTO";
 
 // 매니저 회원가입
 const managerSignup = async (req: Request, res: Response) => {
@@ -113,10 +115,59 @@ const grantOwnerSignUp = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 투어 추가하기
+const createTour = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  const createTourDTO: CreateTourDTO = req.body;
+  try {
+    const createTour = await managerService.createTour(createTourDTO);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_TOUR_SUCCESS, createTour));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 매장정보를 투어에 추가
+const createTourIdForStore = async (req: Request, res: Response) => {
+  const createTourIdForStoreDTO: CreateTourIdForStoreDTO = req.body;
+  const storeId = createTourIdForStoreDTO.storeId;
+  const tourId = createTourIdForStoreDTO.tourId;
+
+  if (!storeId || !tourId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  try {
+    const data = await managerService.createTourIdForStore(
+      createTourIdForStoreDTO
+    );
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_TOURID_FOR_STORE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 const managerController = {
   managerSignup,
   managerSignin,
   grantOwnerSignUp,
+  createTour,
+  createTourIdForStore,
 };
 
 export default managerController;
