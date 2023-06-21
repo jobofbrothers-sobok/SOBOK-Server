@@ -204,6 +204,25 @@ const getDeliveryRequestById = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
+const getAllTour = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getAllTour();
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_ALL_TOUR_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_TOUR_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 const managerController = {
   managerSignup,
   managerSignin,
@@ -212,6 +231,7 @@ const managerController = {
   createTourIdForStore,
   getAllDeliveryRequest,
   getDeliveryRequestById,
+  getAllTour,
 };
 
 export default managerController;
