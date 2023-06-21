@@ -7,8 +7,36 @@ import jwtHandler from "../modules/jwtHandler";
 import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
+import { CreateDeliveryRequestDTO } from "../interfaces/delivery/createDeliveryRequestDTO";
 
-// 고객 스탬프 적립(7자리 번호 생성)
+// 고객 스탬프 사용 신청
+const createDeliveryRequest = async (req: Request, res: Response) => {
+  // validation의 결과를 바탕으로 분기 처리
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const id = req.user.id;
+  const createDeliveryRequestDTO: CreateDeliveryRequestDTO = req.body;
+
+  try {
+    const request = await customerService.createDeliveryRequest(
+      id,
+      createDeliveryRequestDTO
+    );
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.CREATE_DELIVERY_REQUEST_SUCCESS, request));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+// 고객 스탬프 적립
 const createStampNumber = async (req: Request, res: Response) => {
   const id = req.user.id;
   const generateRandNum = async (num: number) => {
@@ -278,6 +306,7 @@ const customerController = {
   customerDelete,
   getCustomerName,
   createStampNumber,
+  createDeliveryRequest,
   getAllStamp,
   getAllTourStore,
 };
