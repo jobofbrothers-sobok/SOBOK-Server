@@ -11,6 +11,9 @@ router.get("/store/info/:id", auth, customerController.getNearCafeById);
 // 고객 근처 카페 개별 업체 소식 조회
 router.get("/store/notice/:id", auth, customerController.getCafeNoticeById);
 
+// 고객 근처 카페 개별 업체 메뉴 조회
+router.get("/store/menu/:id", auth, customerController.getCafeMenuById);
+
 // 고객 스탬프 사용신청 = POST ~/customer/delivery
 router.post(
   "/delivery",

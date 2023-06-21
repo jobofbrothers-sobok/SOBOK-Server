@@ -53,6 +53,8 @@ export default {
   GET_NEAR_CAFE_FAIL: "고객 근처 개별 업체 정보 조회 실패",
   GET_CAFE_NOTICE_SUCCESS: "고객 근처 개별 업체 소식 조회 성공",
   GET_CAFE_NOTICE_FAIL: "고객 근처 개별 업체 소식 조회 실패",
+  GET_CAFE_MENU_SUCCESS: "고객 근처 개별 업체 메뉴 조회 성공",
+  GET_CAFE_MENU_FAIL: "고객 근처 개별 업체 메뉴 조회 실패",
 
   // 스탬프
   CREATE_RANDNUM_SUCCESS: "고객 생성 번호 생성 성공",
