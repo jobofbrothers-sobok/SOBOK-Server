@@ -95,6 +95,15 @@ const createTourIdForStore = async (
   return data;
 };
 
+// 최고관리자 배송신청 리스트 조회
+const getDeliveryRequest = async () => {
+  const data = await prisma.delivery.findMany({
+    where: {
+      isGrant: false,
+    },
+  });
+  return data;
+};
 const managerService = {
   managerSignup,
   managerSignIn,
@@ -102,6 +111,7 @@ const managerService = {
   findManagerById,
   createTour,
   createTourIdForStore,
+  getDeliveryRequest,
 };
 
 export default managerService;
