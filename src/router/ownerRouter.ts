@@ -23,6 +23,9 @@ router.post("/store", auth, ownerController.createStoreInfo);
 // 점주 스탬프 적립 - POST ~/owner/stamp
 router.post("/stamp", auth, ownerController.grantStampByRandNum);
 
+// // 점주 스탬프 서비스 사용 신청 - POST ~/owner/request
+// router.post("/request", auth, ownerController.requestStampSignIn);
+
 // 점주 유저 생성 - POST ~/owner/signup
 router.post(
   "/signup",
@@ -59,8 +62,8 @@ router.post(
   ownerController.updateOwner
 );
 
-// 점주 유저 회원탈퇴 - DELETE ~/owner/:id
-router.delete("/:id", ownerController.ownerDelete);
+// 점주 유저 회원탈퇴 - DELETE ~/owner
+router.delete("/", auth, ownerController.ownerDelete);
 
 // 점주 유저 이름 조회 - GET ~/owner/:id
 router.get("/:id", ownerController.getOwnerName);

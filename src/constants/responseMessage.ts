@@ -48,7 +48,17 @@ export default {
   GET_ALL_STAMP_FAIL: "스탬프 적립 내역 전체 조회 실패",
   GET_ALL_STAMP_SUCCESS: "스탬프 적립 내역 전체 조회 성공",
 
+<<<<<<< HEAD
   // 스탬프 배송신청
   CREATE_DELIVERY_REQUEST_SUCCESS: "고객 스탬프 배송신청 성공",
   STAMP_COUNT_NOT_ENOUGH: "스탬프가 10개 미만입니다",
+=======
+  // 투어
+  CREATE_TOUR_SUCCESS: "스탬프 투어 생성 성공",
+  CREATE_TOUR_FAIL: "스탬프 투어 생성 실패",
+  CREATE_TOURID_FOR_STORE_SUCCESS: "스탬프 투어에 매장정보 추가 성공",
+  CREATE_TOURID_FOR_STORE_FAIL: "스탬프 투어에 매장정보 추가 실패",
+  GET_ALL_TOUR_STORE_SUCCESS: "스탬프 투어 참여 매장 조회 성공",
+  GET_ALL_TOUR_STORE_FAIL: "스탬프 투어 참여 매장 조회 실패",
+>>>>>>> 28ec09520e2bd29b8731f053bb123a84bd92695f
 };

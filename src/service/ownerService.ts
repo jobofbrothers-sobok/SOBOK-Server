@@ -31,7 +31,6 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
       authorized: ownerCreateDTO.authorized,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
-      storeId: 9,
     },
   });
 
@@ -133,6 +132,19 @@ const createStoreInfo = async (
   return data;
 };
 
+// 점주 매장id 부여
+const createStoreIdForOwner = async (ownerId: number, storeId: number) => {
+  const data = await prisma.store_Owner.update({
+    where: {
+      id: ownerId,
+    },
+    data: {
+      storeId: storeId,
+    },
+  });
+  return data;
+};
+
 // 점주 매장정보 수정
 const updateStoreInfo = async (
   storeId: number,
@@ -156,7 +168,7 @@ const updateStoreInfo = async (
   return data;
 };
 
-// 점주 매장 조회
+// ownerId로 점주 매장 조회
 const getStorebyOwnerId = async (id: number) => {
   const data = await prisma.store.findFirst({
     where: {
@@ -173,7 +185,7 @@ const getStorebyStoreId = async (storeId: number) => {
       id: storeId,
     },
   });
-  return data?.storeName;
+  return data;
 };
 
 // 점주 매장 소식 등록
@@ -229,6 +241,50 @@ const createStoreProduct = async (
   return data;
 };
 
+// tourId로 투어 정보 조회
+const getTourByTourId = async (tourId: number) => {
+  const data = await prisma.tour.findUnique({
+    where: {
+      id: tourId,
+    },
+  });
+  return data;
+};
+
+// 투어 제목으로 tourId 조회
+const getTourByTourTitle = async (tour: string) => {
+  const data = await prisma.tour.findFirst({
+    where: {
+      title: tour,
+    },
+  });
+  return data;
+};
+
+// 유저 생성번호로 스탬프 적립 승낙
+const grantStampByRandNum = async (
+  randNum: string,
+  date: EpochTimeStamp,
+  storeId: number,
+  storeName: string,
+  tourTitle: string,
+  tourId: number
+) => {
+  const data = await prisma.stamp.update({
+    where: {
+      randNum: randNum,
+    },
+    data: {
+      timestamp: date,
+      storeId: storeId,
+      store: storeName,
+      tour: tourTitle,
+      tourId: tourId,
+    },
+  });
+  return data;
+};
+
 const ownerService = {
   createOwner,
   ownerSignIn,
@@ -237,9 +293,13 @@ const ownerService = {
   getOwnerName,
   findOwnerById,
   createStoreInfo,
+  createStoreIdForOwner,
   updateStoreInfo,
   getStorebyOwnerId,
   getStorebyStoreId,
+  getTourByTourId,
+  getTourByTourTitle,
+  grantStampByRandNum,
   createStoreNotice,
   createStoreMenu,
   createStoreProduct,

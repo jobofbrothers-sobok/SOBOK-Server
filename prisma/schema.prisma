@@ -55,11 +55,10 @@ model Store_Owner {
   detailAddress                    String   @db.VarChar(30)
   licenseNumber                    String   @db.VarChar(20)
   licenseImage                     String   @db.VarChar(200)
-  authorized                       Boolean?
+  authorized                       Boolean? @default(false)
   termsAgree                       Boolean
   marketingAgree                   Boolean?
   storeId                          Int?
-  isGrant                          Boolean  @default(false)
   Store                            Store[]
   Store_Store_Owner_storeIdToStore Store?   @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
@@ -130,10 +129,23 @@ model Delivery {
 
 model Tour {
   id      Int     @id @default(autoincrement())
-  keyword String? @db.VarChar(50)
-  title   String? @db.VarChar(50)
-  reward  String? @db.VarChar(50)
+  keyword String  @db.VarChar(50)
+  title   String  @db.VarChar(50)
+  reward  String  @db.VarChar(50)
   image   String? @db.VarChar(200)
   Stamp   Stamp[]
   Store   Store[]
+}
+
+model Delivery {
+  id            Int       @id @unique @default(autoincrement())
+  reward        String?   @db.VarChar(30)
+  customer      String?   @db.VarChar(30)
+  phone         String?   @db.VarChar(20)
+  address       String?   @db.VarChar(50)
+  detailAddress String?   @db.VarChar(50)
+  message       String?   @db.VarChar(200)
+  isGrant       Boolean?  @default(false)
+  customerId    Int?
+  Customer      Customer? @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customerId")
 }

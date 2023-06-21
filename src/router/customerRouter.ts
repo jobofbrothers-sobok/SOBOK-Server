@@ -23,7 +23,7 @@ router.post(
 // 고객 스탬프 적립 - POST ~/customer/stamp
 router.post("/stamp", auth, customerController.createStampNumber);
 
-// 고객 스탬프 적립 내역 확인 - GET ~/customer/stamp
+// 고객 스탬프 적립 내역 확인 - GET ~/customer/stamp?sort=value
 router.get("/stamp", auth, customerController.getAllStamp);
 
 // 고객 유저 생성 - POST ~/customer/signup
