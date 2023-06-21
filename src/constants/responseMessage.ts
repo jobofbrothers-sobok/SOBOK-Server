@@ -51,6 +51,10 @@ export default {
   // 스탬프 배송신청
   CREATE_DELIVERY_REQUEST_SUCCESS: "고객 스탬프 배송신청 성공",
   STAMP_COUNT_NOT_ENOUGH: "스탬프가 10개 미만입니다",
+  GET_ALL_DELIVERY_REQUEST_SUCCESS: "스탬프 배송신청 리스트 전체 조회 성공",
+  GET_ALL_DELIVERY_REQUEST_FAIL: "스탬프 배송신청 리스트 전체 조회 실패",
+  GET_DELIVERY_REQUEST_SUCCESS: "스탬프 배송신청 리스트 개별 조회 성공",
+  GET_DELIVERY_REQUEST_FAIL: "스탬프 배송신청 리스트 개별 조회 실패",
 
   // 투어
   CREATE_TOUR_SUCCESS: "스탬프 투어 생성 성공",

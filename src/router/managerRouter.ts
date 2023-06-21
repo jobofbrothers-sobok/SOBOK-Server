@@ -29,4 +29,10 @@ router.post(
   managerController.createTour
 );
 
+// 최고관리자 배송신청 리스트 개별 조회
+router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
+
+// 최고관리자 배송신청 리스트 전체 조회
+router.get("/delivery", auth, managerController.getAllDeliveryRequest);
+
 export default router;
