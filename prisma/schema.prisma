@@ -8,18 +8,19 @@ datasource db {
 }
 
 model Customer {
-  id             Int        @id @unique @default(autoincrement())
-  loginId        String     @unique @db.VarChar(20)
-  password       String     @db.VarChar(200)
-  name           String     @unique @db.VarChar(20)
-  email          String     @db.VarChar(45)
-  phone          String     @db.VarChar(20)
+  id             Int           @id @unique @default(autoincrement())
+  loginId        String        @unique @db.VarChar(20)
+  password       String        @db.VarChar(200)
+  name           String        @unique @db.VarChar(20)
+  email          String        @db.VarChar(45)
+  phone          String        @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
   storeId        Int?
-  Store          Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store          Store?        @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
   Delivery       Delivery[]
   Stamp          Stamp[]
+  Store_Review   Store_Review?
 }
 
 model Delivery {
@@ -136,4 +137,14 @@ model Tour {
   image   String? @db.VarChar(200)
   Stamp   Stamp[]
   Store   Store[]
+}
+
+model Store_Review {
+  id        Int      @unique @default(autoincrement())
+  title     String?  @db.VarChar(100)
+  content   String   @db.VarChar(200)
+  image     String?  @db.VarChar(300)
+  timestamp DateTime @db.Timestamp(6)
+  writerId  Int      @id @default(autoincrement())
+  Customer  Customer @relation(fields: [writerId], references: [id], onDelete: Cascade, map: "wrtierId")
 }
