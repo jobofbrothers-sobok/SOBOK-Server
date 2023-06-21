@@ -14,6 +14,9 @@ router.post("/signin", managerController.managerSignin);
 // 점주 회원가입 승인
 router.post("/grant/:id", auth, managerController.grantOwnerSignUp);
 
+// 최고관리자 담당자(점주) 정보 개별 조회
+router.get("/owner/:id", auth, managerController.getOwnerById);
+
 // 최고관리자 담당자(점주) 정보 전체 조회
 router.get("/owner", auth, managerController.getAllOwner);
 
