@@ -151,3 +151,11 @@ model Store_Review {
   Store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
   Customer  Customer @relation(fields: [writerId], references: [id], onDelete: Cascade, map: "wrtierId")
 }
+
+model Notice {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(100)
+  content   String   @db.VarChar(500)
+  image     String?  @db.VarChar(300)
+  timestamp DateTime @db.Timestamp(6)
+}
