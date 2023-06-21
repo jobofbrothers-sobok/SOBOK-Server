@@ -103,46 +103,6 @@ const findCustomerById = async (id: number) => {
   return data;
 };
 
-// 고객근처 카페 개별 업체 정보 조회
-const getNearCafeById = async (storeId: number) => {
-  const data = await prisma.store.findUnique({
-    where: {
-      id: storeId,
-    },
-  });
-  return data;
-};
-
-// 고객 근처 카페 개별 업체 소식 조회
-const getCafeNoticeById = async (id: number) => {
-  const data = await prisma.store_Notice.findMany({
-    where: {
-      storeId: id,
-    },
-  });
-  return data;
-};
-
-// 고객 근처 카페 개별 업체 메뉴 조회
-const getCafeMenuById = async (storeId: number) => {
-  const data = await prisma.store_Menu.findFirst({
-    where: {
-      storeId: storeId,
-    },
-  });
-  return data;
-};
-
-// 고객 근처 카페 개별 업체 피드 조회
-const getCafeReviewById = async (storeId: number) => {
-  const data = await prisma.store_Review.findMany({
-    where: {
-      storeId: storeId,
-    },
-  });
-  return data;
-};
-
 // 고객 스탬프 적립
 const createStampNumber = async (id: number, randNum: string) => {
   const data = await prisma.stamp.create({
@@ -273,10 +233,6 @@ const customerService = {
   customerDelete,
   getCustomerName,
   findCustomerById,
-  getNearCafeById,
-  getCafeNoticeById,
-  getCafeMenuById,
-  getCafeReviewById,
   createStampNumber,
   getAllStamp,
   createDeliveryRequest,
