@@ -22,6 +22,15 @@ export default {
   NO_USER: "탈퇴했거나 가입하지 않은 유저입니다.",
   GET_USERNAME_SUCCESS: "유저 이름 조회 성공",
   NOT_EXISITING_USER: "존재하지 않는 유저입니다.",
+  GET_ALL_OWNER_SUCCESS: "전체 담당자 정보 조회 성공",
+  GET_ALL_OWNER_FAIL: "전체 담당자 정보 조회 실패",
+  GET_OWNER_SUCCESS: "개별 담당자 정보 조회 성공",
+  GET_OWNER_FAIL: "개별 담당자 정보 조회 실패",
+  NO_OWNER_YET: "아직 해당 분류의 개별 담당자 정보가 없습니다.",
+  GET_ALL_CUSTOMER_SUCCESS: "전체 고객 정보 조회 성공",
+  GET_ALL_CUSTOMER_FAIL: "전체 고객 정보 조회 실패",
+  GET_CUSTOMER_SUCCESS: "개별 고객 정보 조회 성공",
+  GET_CUSTOMER_FAIL: "개별 고객 정보 조회 실패",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
