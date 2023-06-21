@@ -29,4 +29,7 @@ router.post(
   managerController.createTour
 );
 
+// 최고관리자 배송신청 리스트 조회
+router.get("/delivery", auth, managerController.getDeliveryRequest);
+
 export default router;

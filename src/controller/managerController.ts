@@ -162,12 +162,34 @@ const createTourIdForStore = async (req: Request, res: Response) => {
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
+
+// 최고관리자 배송신청 리스트 조회
+const getDeliveryRequest = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getDeliveryRequest();
+    if (!data || data.length === 0) {
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.GET_ALL_DELIVERY_REQUEST_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_DELIVERY_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const managerController = {
   managerSignup,
   managerSignin,
   grantOwnerSignUp,
   createTour,
   createTourIdForStore,
+  getDeliveryRequest,
 };
 
 export default managerController;
