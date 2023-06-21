@@ -39,7 +39,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     //? 얻어낸 userId 를 Request Body 내 userId 필드에 담고, 다음 미들웨어로 넘김( next() )
     req.body.id = id;
     let foundUser;
-    if (req.originalUrl.includes("/customer")) {
+    if (req.originalUrl.includes("/main")) {
       foundUser = await customerService.findCustomerById(id);
     }
     if (req.originalUrl.includes("/owner")) {
