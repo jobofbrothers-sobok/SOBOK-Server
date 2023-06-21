@@ -73,6 +73,16 @@ const getAllOwner = async () => {
   return data;
 };
 
+// 최고관리자 담당자(점주) 정보 개별 조회
+const getOwnerById = async (ownerId: number) => {
+  const data = await prisma.store_Owner.findUnique({
+    where: {
+      id: ownerId,
+    },
+  });
+  return data;
+};
+
 // 최고관리자 투어 추가
 const createTour = async (createTourDTO: CreateTourDTO) => {
   const data = await prisma.tour.create({
@@ -137,6 +147,7 @@ const managerService = {
   getDeliveryRequestById,
   getAllTour,
   getAllOwner,
+  getOwnerById,
 };
 
 export default managerService;
