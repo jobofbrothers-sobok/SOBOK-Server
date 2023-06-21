@@ -86,13 +86,14 @@ model Store_Menu {
 }
 
 model Store_Notice {
-  id       Int     @id @unique @default(autoincrement())
-  category String? @db.VarChar(30)
-  title    String? @db.VarChar(100)
-  content  String? @db.VarChar(200)
-  image    String? @db.VarChar(300)
-  storeId  Int?
-  Store    Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  id          Int       @id @unique @default(autoincrement())
+  category    String?   @db.VarChar(30)
+  title       String?   @db.VarChar(100)
+  content     String?   @db.VarChar(200)
+  image       String?   @db.VarChar(300)
+  storeId     Int?
+  createdTime DateTime? @db.Timestamp(6)
+  Store       Store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
 }
 
 model Store_Owner {
