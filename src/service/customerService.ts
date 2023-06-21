@@ -133,6 +133,16 @@ const getCafeMenuById = async (storeId: number) => {
   return data;
 };
 
+// 고객 근처 카페 개별 업체 피드 조회
+const getCafeReviewById = async (storeId: number) => {
+  const data = await prisma.store_Review.findMany({
+    where: {
+      storeId: storeId,
+    },
+  });
+  return data;
+};
+
 // 고객 스탬프 적립
 const createStampNumber = async (id: number, randNum: string) => {
   const data = await prisma.stamp.create({
@@ -266,6 +276,7 @@ const customerService = {
   getNearCafeById,
   getCafeNoticeById,
   getCafeMenuById,
+  getCafeReviewById,
   createStampNumber,
   getAllStamp,
   createDeliveryRequest,
