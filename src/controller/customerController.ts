@@ -9,6 +9,30 @@ import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 import { CreateDeliveryRequestDTO } from "../interfaces/delivery/createDeliveryRequestDTO";
 
+// 고객 내 근처 카페 개별 업체 정보 조회
+const getNearCafeById = async (req: Request, res: Response) => {
+  const storeId = req.params.id;
+  if (!storeId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await customerService.getNearCafeById(+storeId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_NEAR_CAFE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_NEAR_CAFE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 스탬프 사용 신청
 const createDeliveryRequest = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
@@ -305,6 +329,7 @@ const customerController = {
   updateCustomer,
   customerDelete,
   getCustomerName,
+  getNearCafeById,
   createStampNumber,
   createDeliveryRequest,
   getAllStamp,

@@ -49,6 +49,8 @@ export default {
   CREATE_STORE_NOTICE_SUCCESS: "매장 소식 생성 성공",
   CREATE_STORE_MENU_SUCCESS: "매장 메뉴 생성 성공",
   CREATE_STORE_PRODUCT_SUCCESS: "매장 스토어 상품 생성 성공",
+  GET_NEAR_CAFE_SUCCESS: "고객 근처 개별 업체 정보 조회 성공",
+  GET_NEAR_CAFE_FAIL: "고객 근처 개별 업체 정보 조회 실패",
 
   // 스탬프
   CREATE_RANDNUM_SUCCESS: "고객 생성 번호 생성 성공",
