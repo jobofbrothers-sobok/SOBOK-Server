@@ -20,26 +20,15 @@ const createDeliveryRequest = async (req: Request, res: Response) => {
   }
   const id = req.user.id;
   const createDeliveryRequestDTO: CreateDeliveryRequestDTO = req.body;
-  const totalStamp = customerService.getAllStamp;
-  const totalStampCount = totalStamp.length;
-  console.log(totalStamp);
-  console.log(totalStampCount);
 
   try {
-    if (totalStampCount === 10) {
-      const request = customerService.createDeliveryRequest(
-        id,
-        createDeliveryRequestDTO
-      );
-      return res
-        .status(sc.CREATED)
-        .send(success(sc.CREATED, rm.CREATE_DELIVERY_REQUEST_SUCCESS, request));
-    }
-    if (totalStampCount < 10) {
-      return res
-        .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.STAMP_COUNT_NOT_ENOUGH));
-    }
+    const request = await customerService.createDeliveryRequest(
+      id,
+      createDeliveryRequestDTO
+    );
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.CREATE_DELIVERY_REQUEST_SUCCESS, request));
   } catch (error) {
     console.log(error);
     res
