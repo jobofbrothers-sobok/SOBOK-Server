@@ -153,8 +153,8 @@ const createTourIdForStore = async (req: Request, res: Response) => {
       createTourIdForStoreDTO
     );
     return res
-      .status(sc.OK)
-      .send(success(sc.OK, rm.CREATE_TOURID_FOR_STORE_SUCCESS, data));
+      .status(sc.NOT_FOUND)
+      .send(success(sc.NOT_FOUND, rm.CREATE_TOURID_FOR_STORE_SUCCESS, data));
   } catch (error) {
     console.log(error);
     return res
@@ -163,18 +163,39 @@ const createTourIdForStore = async (req: Request, res: Response) => {
   }
 };
 
-// 최고관리자 배송신청 리스트 조회
-const getDeliveryRequest = async (req: Request, res: Response) => {
+// 최고관리자 배송신청 리스트 전체 조회
+const getAllDeliveryRequest = async (req: Request, res: Response) => {
   try {
-    const data = await managerService.getDeliveryRequest();
+    const data = await managerService.getAllDeliveryRequest();
     if (!data || data.length === 0) {
       return res
-        .status(sc.OK)
-        .send(success(sc.OK, rm.GET_ALL_DELIVERY_REQUEST_FAIL, data));
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_ALL_DELIVERY_REQUEST_FAIL, data));
     }
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.GET_ALL_DELIVERY_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 최고관리자 배송신청 리스트 개별 조회
+const getDeliveryRequestById = async (req: Request, res: Response) => {
+  const deliveryId = req.params.id;
+  try {
+    const data = await managerService.getDeliveryRequestById(+deliveryId);
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_DELIVERY_REQUEST_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_DELIVERY_REQUEST_SUCCESS, data));
   } catch (error) {
     console.log(error);
     return res
@@ -189,7 +210,8 @@ const managerController = {
   grantOwnerSignUp,
   createTour,
   createTourIdForStore,
-  getDeliveryRequest,
+  getAllDeliveryRequest,
+  getDeliveryRequestById,
 };
 
 export default managerController;
