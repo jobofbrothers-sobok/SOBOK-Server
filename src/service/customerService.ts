@@ -4,6 +4,7 @@ import { sc } from "../constants";
 import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "./../interfaces/user/customerUpdateDTO";
+import ownerService from "./ownerService";
 
 const prisma = new PrismaClient();
 
@@ -162,6 +163,49 @@ const getAllStamp = async (sort: string, id: number) => {
   }
 };
 
+// 고객 스탬프 투어 참여 매장 조회
+const getAllTourStore = async (sort: string) => {
+  let tourTitle;
+  switch (sort) {
+    case "hoegi":
+      tourTitle = "경희대학교 카페 투어";
+      const hoegiTour = await ownerService.getTourByTourTitle(tourTitle);
+      const hoegi = await prisma.store.findMany({
+        where: {
+          tourId: hoegiTour?.id,
+        },
+      });
+      return hoegi;
+    case "sookmyung":
+      tourTitle = "숙대입구 카페 투어";
+      const sookTour = await ownerService.getTourByTourTitle(tourTitle);
+      const sookmyung = await prisma.store.findMany({
+        where: {
+          tourId: sookTour?.id,
+        },
+      });
+      return sookmyung;
+    case "halloween":
+      tourTitle = "할로윈 특집 카페 투어";
+      const halloweenTour = await ownerService.getTourByTourTitle(tourTitle);
+      const halloween = await prisma.store.findMany({
+        where: {
+          tourId: halloweenTour?.id,
+        },
+      });
+      return halloween;
+    case "xmas":
+      tourTitle = "크리스마스 특집 카페 투어";
+      const xmasTour = await ownerService.getTourByTourTitle(tourTitle);
+      const xmas = await prisma.store.findMany({
+        where: {
+          tourId: xmasTour?.id,
+        },
+      });
+      return xmas;
+  }
+};
+
 const customerService = {
   createCustomer,
   customerSignIn,
@@ -171,6 +215,7 @@ const customerService = {
   findCustomerById,
   createStampNumber,
   getAllStamp,
+  getAllTourStore,
 };
 
 export default customerService;
