@@ -5,8 +5,11 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
-// 고객 내 근처 카페 개별 업체 정보 조회
-router.get("/store/:id", auth, customerController.getNearCafeById);
+// 고객 근처 카페 개별 업체 정보 조회
+router.get("/store/info/:id", auth, customerController.getNearCafeById);
+
+// 고객 근처 카페 개별 업체 소식 조회
+router.get("/store/notice/:id", auth, customerController.getCafeNoticeById);
 
 // 고객 스탬프 사용신청 = POST ~/customer/delivery
 router.post(

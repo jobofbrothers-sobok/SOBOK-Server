@@ -103,11 +103,21 @@ const findCustomerById = async (id: number) => {
   return data;
 };
 
-// 고객 내 근처 카페 개별 업체 정보 조회
+// 고객근처 카페 개별 업체 정보 조회
 const getNearCafeById = async (storeId: number) => {
   const data = await prisma.store.findUnique({
     where: {
       id: storeId,
+    },
+  });
+  return data;
+};
+
+// 고객 근처 카페 개별 업체 소식 조회
+const getCafeNoticeById = async (id: number) => {
+  const data = await prisma.store_Notice.findMany({
+    where: {
+      storeId: id,
     },
   });
   return data;
@@ -244,6 +254,7 @@ const customerService = {
   getCustomerName,
   findCustomerById,
   getNearCafeById,
+  getCafeNoticeById,
   createStampNumber,
   getAllStamp,
   createDeliveryRequest,
