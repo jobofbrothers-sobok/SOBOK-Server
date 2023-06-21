@@ -5,10 +5,13 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
+// 고객 스탬프 참여 매장 조회 - GET ~/customer/stamp/store?sort=value
+router.get("/stamp/store", auth, customerController.getAllTourStore);
+
 // 고객 스탬프 적립 - POST ~/customer/stamp
 router.post("/stamp", auth, customerController.createStampNumber);
 
-// 고객 스탬프 적립 내역 확인 - GET ~/customer/stamp
+// 고객 스탬프 적립 내역 확인 - GET ~/customer/stamp?sort=value
 router.get("/stamp", auth, customerController.getAllStamp);
 
 // 고객 유저 생성 - POST ~/customer/signup
