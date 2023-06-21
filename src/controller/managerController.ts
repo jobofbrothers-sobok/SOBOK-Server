@@ -180,6 +180,50 @@ const getOwnerById = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 고객 정보 전체 조회
+const getAllCustomer = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getAllCustomer();
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_ALL_CUSTOMER_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_CUSTOMER_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 최고관리자 고객 정보 개별 조회
+const getCustomerById = async (req: Request, res: Response) => {
+  const customerId = req.params.id;
+  if (!customerId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await managerService.getCustomerById(+customerId);
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_CUSTOMER_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_CUSTOMER_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 투어 추가하기
 const createTour = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -299,6 +343,8 @@ const managerController = {
   getAllTour,
   getAllOwner,
   getOwnerById,
+  getAllCustomer,
+  getCustomerById,
 };
 
 export default managerController;
