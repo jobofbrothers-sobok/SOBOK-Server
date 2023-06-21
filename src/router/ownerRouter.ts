@@ -23,6 +23,9 @@ router.post("/store", auth, ownerController.createStoreInfo);
 // 점주 스탬프 적립 - POST ~/owner/stamp
 router.post("/stamp", auth, ownerController.grantStampByRandNum);
 
+// // 점주 스탬프 서비스 사용 신청 - POST ~/owner/request
+// router.post("/request", auth, ownerController.requestStampSignIn);
+
 // 점주 유저 생성 - POST ~/owner/signup
 router.post(
   "/signup",

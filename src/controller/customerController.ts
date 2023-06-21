@@ -24,7 +24,7 @@ const createStampNumber = async (req: Request, res: Response) => {
   const randNum = await generateRandNum(7);
 
   try {
-    const data = customerService.createStampNumber(randNum, id);
+    const data = await customerService.createStampNumber(id, randNum);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)

@@ -102,7 +102,7 @@ const findCustomerById = async (id: number) => {
 };
 
 // 고객 스탬프 적립
-const createStampNumber = async (randNum: string, id: number) => {
+const createStampNumber = async (id: number, randNum: string) => {
   const data = await prisma.stamp.create({
     data: {
       randNum: randNum,
