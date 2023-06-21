@@ -9,7 +9,6 @@ import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 import { CreateDeliveryRequestDTO } from "../interfaces/delivery/createDeliveryRequestDTO";
 
-<<<<<<< HEAD
 // 고객 스탬프 사용 신청
 const createDeliveryRequest = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
@@ -49,9 +48,6 @@ const createDeliveryRequest = async (req: Request, res: Response) => {
   }
 };
 // 고객 스탬프 적립
-=======
-// 고객 스탬프 적립(7자리 번호 생성)
->>>>>>> 28ec09520e2bd29b8731f053bb123a84bd92695f
 const createStampNumber = async (req: Request, res: Response) => {
   const id = req.user.id;
   const generateRandNum = async (num: number) => {
