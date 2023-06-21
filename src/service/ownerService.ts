@@ -185,7 +185,7 @@ const getStorebyStoreId = async (storeId: number) => {
       id: storeId,
     },
   });
-  return data?.storeName;
+  return data;
 };
 
 // 점주 매장 소식 등록
@@ -241,6 +241,40 @@ const createStoreProduct = async (
   return data;
 };
 
+// tourId로 투어 정보 조회
+const getTourByTourId = async (tourId: number) => {
+  const data = await prisma.tour.findUnique({
+    where: {
+      id: tourId,
+    },
+  });
+  return data;
+};
+
+// 유저 생성번호로 스탬프 적립 승낙
+const grantStampByRandNum = async (
+  randNum: string,
+  date: EpochTimeStamp,
+  storeId: number,
+  storeName: string,
+  tourTitle: string,
+  tourId: number
+) => {
+  const data = await prisma.stamp.update({
+    where: {
+      randNum: randNum,
+    },
+    data: {
+      timestamp: date,
+      storeId: storeId,
+      store: storeName,
+      tour: tourTitle,
+      tourId: tourId,
+    },
+  });
+  return data;
+};
+
 const ownerService = {
   createOwner,
   ownerSignIn,
@@ -253,6 +287,8 @@ const ownerService = {
   updateStoreInfo,
   getStorebyOwnerId,
   getStorebyStoreId,
+  getTourByTourId,
+  grantStampByRandNum,
   createStoreNotice,
   createStoreMenu,
   createStoreProduct,

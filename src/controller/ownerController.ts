@@ -271,7 +271,7 @@ const createStoreProduct = async (req: Request, res: Response) => {
   }
 };
 
-// 점주 스탬프 적립
+// 점주 고객 스탬프 적립 승낙
 const grantStampByRandNum = async (req: Request, res: Response) => {
   const userId = req.user.id;
   const storeId = await ownerService.getStorebyOwnerId(userId);
@@ -279,13 +279,19 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
   // 현시각보다 9시간 느려서 가산
   const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
   const date = new Date(now);
-  const storeName = await ownerService.getStorebyStoreId(storeId);
+  const store = await ownerService.getStorebyStoreId(storeId as number);
+  const storeName = store?.storeName;
+  const tourId = store?.tourId;
+  const tour = await ownerService.getTourByTourId(tourId as number);
+  const tourTitle = tour?.title;
   try {
-    const data = await customerService.getStampByRandNum(
+    const data = await ownerService.grantStampByRandNum(
       randNum,
       date,
       storeId as number,
-      storeName
+      storeName,
+      tourTitle,
+      tourId
     );
 
     const result = {
