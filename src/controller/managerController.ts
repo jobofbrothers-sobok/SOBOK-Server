@@ -115,14 +115,37 @@ const grantOwnerSignUp = async (req: Request, res: Response) => {
   }
 };
 
+const sortType = {
+  ALL: "all",
+  AUTH: "auth",
+  NOT_AUTH: "pending",
+};
+
 // 최고관리자 담당자(점주) 정보 전체 조회
 const getAllOwner = async (req: Request, res: Response) => {
+  const sort = req.query.sort as string;
+  if (!sort) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  if (
+    sort !== sortType.ALL &&
+    sort !== sortType.AUTH &&
+    sort !== sortType.NOT_AUTH
+  ) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   try {
-    const data = await managerService.getAllOwner();
+    const data = await managerService.getAllOwner(sort);
     if (!data) {
       return res
         .status(sc.NOT_FOUND)
         .send(success(sc.NOT_FOUND, rm.GET_ALL_OWNER_FAIL, data));
+    }
+
+    if (data.length === 0 && data != null) {
+      return res.status(sc.OK).send(success(sc.OK, rm.NO_OWNER_YET, data));
     }
     return res
       .status(sc.OK)

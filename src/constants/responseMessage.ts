@@ -26,6 +26,7 @@ export default {
   GET_ALL_OWNER_FAIL: "전체 담당자 정보 조회 실패",
   GET_OWNER_SUCCESS: "개별 담당자 정보 조회 성공",
   GET_OWNER_FAIL: "개별 담당자 정보 조회 실패",
+  NO_OWNER_YET: "아직 해당 분류의 개별 담당자 정보가 없습니다.",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
