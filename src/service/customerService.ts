@@ -112,60 +112,54 @@ const createStampNumber = async (id: number, randNum: string) => {
   return data;
 };
 
-// 고객 스탬프 조회
-const getStampByRandNum = async (
-  randNum: string,
-  date: EpochTimeStamp,
-  storeId: number,
-  storeName: string
-) => {
-  const data = await prisma.stamp.update({
-    where: {
-      randNum: randNum,
-    },
-    data: {
-      timestamp: date,
-      storeId,
-      store: storeName,
-    },
-  });
-  return data;
-};
-
 // 고객 스탬프 전체 조회
 const getAllStamp = async (sort: string, id: number) => {
   if (sort !== "all") {
-    const allStamp = await prisma.stamp.findMany({
-      where: {
-        customerId: id,
-        tour: sort,
-      },
-    });
-
-    return sortAllStamp(allStamp);
+    switch (sort) {
+      case "hoegi":
+        const hoegi = await prisma.stamp.findMany({
+          where: {
+            customerId: id,
+            tour: "경희대학교 카페 투어",
+          },
+        });
+        return hoegi;
+      case "sookmyung":
+        const sookmyung = await prisma.stamp.findMany({
+          where: {
+            customerId: id,
+            tour: "숙대입구 카페 투어",
+          },
+        });
+        return sookmyung;
+      case "halloween":
+        const halloween = await prisma.stamp.findMany({
+          where: {
+            customerId: id,
+            tour: "할로윈 특집 카페 투어",
+          },
+        });
+        console.log(halloween);
+        return halloween;
+      case "xmas":
+        const xmas = await prisma.stamp.findMany({
+          where: {
+            customerId: id,
+            tour: "크리스마스 특집 카페 투어",
+          },
+        });
+        return xmas;
+    }
   }
 
   if (sort === "all") {
-    const allStamp = await prisma.stamp.findMany({
+    const data = await prisma.stamp.findMany({
       where: {
         customerId: id,
       },
     });
-    return sortAllStamp(allStamp);
+    return data;
   }
-};
-
-const sortAllStamp = (allStamp: Stamp[]) => {
-  return allStamp.map((stamp) => {
-    return {
-      id: stamp.id,
-      randNum: stamp.randNum,
-      timestamp: stamp.timestamp,
-      customerId: stamp.customerId,
-      storeId: stamp.storeId,
-      store: stamp.store,
-    };
-  });
 };
 
 const customerService = {
@@ -176,7 +170,6 @@ const customerService = {
   getCustomerName,
   findCustomerById,
   createStampNumber,
-  getStampByRandNum,
   getAllStamp,
 };
 
