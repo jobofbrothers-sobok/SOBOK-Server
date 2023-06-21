@@ -8,19 +8,19 @@ datasource db {
 }
 
 model Customer {
-  id             Int           @id @unique @default(autoincrement())
-  loginId        String        @unique @db.VarChar(20)
-  password       String        @db.VarChar(200)
-  name           String        @unique @db.VarChar(20)
-  email          String        @db.VarChar(45)
-  phone          String        @db.VarChar(20)
+  id             Int            @id @unique @default(autoincrement())
+  loginId        String         @unique @db.VarChar(20)
+  password       String         @db.VarChar(200)
+  name           String         @unique @db.VarChar(20)
+  email          String         @db.VarChar(45)
+  phone          String         @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
   storeId        Int?
-  Store          Store?        @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store          Store?         @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
   Delivery       Delivery[]
   Stamp          Stamp[]
-  Store_Review   Store_Review?
+  Store_Review   Store_Review[]
 }
 
 model Delivery {
@@ -75,6 +75,7 @@ model Store {
   Store_Notice                           Store_Notice[]
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[]   @relation("Store_Owner_storeIdToStore")
   Store_Product                          Store_Product[]
+  Store_Review                           Store_Review?
 }
 
 model Store_Menu {
@@ -145,6 +146,8 @@ model Store_Review {
   content   String   @db.VarChar(200)
   image     String?  @db.VarChar(300)
   timestamp DateTime @db.Timestamp(6)
-  writerId  Int      @id @default(autoincrement())
+  writerId  Int      @default(autoincrement())
+  storeId   Int      @id @unique @default(autoincrement())
+  Store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
   Customer  Customer @relation(fields: [writerId], references: [id], onDelete: Cascade, map: "wrtierId")
 }
