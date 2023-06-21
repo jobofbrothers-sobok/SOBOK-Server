@@ -115,6 +115,26 @@ const grantOwnerSignUp = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 담당자(점주) 정보 전체 조회
+const getAllOwner = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getAllOwner();
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_ALL_OWNER_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_OWNER_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 투어 추가하기
 const createTour = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -232,6 +252,7 @@ const managerController = {
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,
+  getAllOwner,
 };
 
 export default managerController;
