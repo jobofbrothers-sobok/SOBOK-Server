@@ -6,6 +6,7 @@ import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "./../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
+import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 
 const prisma = new PrismaClient();
 
@@ -98,11 +99,66 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
     throw error;
   }
 };
+
+// 고객 유저 회원정보 수정
+const customerUpdate = async (
+  id: number,
+  customerUpdateDTO: CustomerUpdateDTO,
+  path: string
+) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(customerUpdateDTO.password, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
+  const data = await prisma.customer.update({
+    where: {
+      id,
+    },
+    data: {
+      password: password,
+      name: customerUpdateDTO.name,
+      email: customerUpdateDTO.email,
+      phone: customerUpdateDTO.phone,
+      image: path,
+    },
+  });
+  return data.id;
+};
+
+// 점주 유저 회원정보 수정
+const ownerUpdate = async (
+  id: number,
+  ownerUpdateDTO: OwnerUpdateDTO,
+  path: string
+) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(ownerUpdateDTO.password, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
+  const data = await prisma.store_Owner.update({
+    where: {
+      id,
+    },
+    data: {
+      password,
+      director: ownerUpdateDTO.director,
+      phone: ownerUpdateDTO.phone,
+      email: ownerUpdateDTO.email,
+      address: ownerUpdateDTO.address,
+      detailAddress: ownerUpdateDTO.detailAddress,
+      licenseNumber: ownerUpdateDTO.licenseNumber,
+      licenseImage: path,
+    },
+  });
+  console.log(data);
+  return data.id;
+};
+
 const authService = {
   createCustomer,
   createOwner,
   customerSignIn,
   ownerSignIn,
+  customerUpdate,
+  ownerUpdate,
 };
 
 export default authService;
