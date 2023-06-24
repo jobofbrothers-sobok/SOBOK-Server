@@ -5,6 +5,9 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
+// 최고관리자 공지글 작성
+router.post("/", auth, managerController.createNotice);
+
 // 최고관리자 회원가입
 router.post("/signup", managerController.managerSignup);
 

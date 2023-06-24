@@ -1,3 +1,4 @@
+import { CreateNoticeDTO } from "./../interfaces/manager/createNoticeDTO";
 import { CreateTourDTO } from "./../interfaces/manager/createTourDTO";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
@@ -332,6 +333,30 @@ const getAllTour = async (req: Request, res: Response) => {
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
+
+// 최고관리자 공지사항 작성
+const createNotice = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
+  const date = new Date(now);
+  const createNoticeDTO: CreateNoticeDTO = req.body;
+  try {
+    const data = await managerService.createNotice(createNoticeDTO, date);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_NOTICE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 const managerController = {
   managerSignup,
   managerSignin,
@@ -345,6 +370,7 @@ const managerController = {
   getOwnerById,
   getAllCustomer,
   getCustomerById,
+  createNotice,
 };
 
 export default managerController;

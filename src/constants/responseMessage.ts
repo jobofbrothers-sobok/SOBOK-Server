@@ -82,4 +82,10 @@ export default {
   GET_ALL_TOUR_STORE_FAIL: "스탬프 투어 참여 매장 조회 실패",
   GET_ALL_TOUR_SUCCESS: "스탬프 투어 정보 리스트 조회 성공",
   GET_ALL_TOUR_FAIL: "스탬프 투어 정보 리스트 조회 실패",
+
+  // 공지사항, 문의사항
+  CREATE_NOTICE_SUCCESS: "공지사항 생성 성공",
+  cREATE_NOTICE_FAIL: "공지사항 생성 실패",
+  CREATE_INQUIRY_SUCCESS: "공지사항 생성 성공",
+  cREATE_INQUIRY_FAIL: "공지사항 생성 실패",
 };
