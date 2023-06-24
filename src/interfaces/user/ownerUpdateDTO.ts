@@ -6,5 +6,4 @@ export interface OwnerUpdateDTO {
   address: string;
   detailAddress: string;
   licenseNumber: string;
-  licenseImage: string;
 }

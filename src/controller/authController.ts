@@ -8,6 +8,7 @@ import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
+import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 
 const sortType = {
   CUSTOMER: "customer",
@@ -199,9 +200,75 @@ const userSignIn = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 회원정보 수정
+const customerUpdate = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const customerupdateDTO: CustomerUpdateDTO = req.body;
+  const id = req.user.id;
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+  try {
+    const updatedUserId = await authService.customerUpdate(
+      id,
+      customerupdateDTO,
+      path
+    );
+    if (!updatedUserId) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 회원정보 수정
+const ownerUpdate = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const ownerUpdateDTO: OwnerUpdateDTO = req.body;
+  const id = req.user.id;
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+
+  try {
+    const updatedUserId = await authService.ownerUpdate(
+      +id,
+      ownerUpdateDTO,
+      path
+    );
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const authController = {
   userSignUp,
   userSignIn,
+  customerUpdate,
+  ownerUpdate,
 };
 
 export default authController;
