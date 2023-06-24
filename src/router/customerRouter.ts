@@ -2,8 +2,10 @@ import { Router } from "express";
 import { customerController } from "../controller";
 import { body } from "express-validator";
 import { auth } from "../middlewares";
+import multer from "multer";
 
 const router: Router = Router();
+const upload = multer({ dest: "uploads/customer/" });
 
 // 고객 스탬프 사용신청 = POST ~/customer/delivery
 router.post(
@@ -50,8 +52,9 @@ router.get("/", auth, customerController.getCustomerName);
 
 // 고객 유저 회원정보 수정 - POST ~/customer/:id
 router.post(
-  "/",
+  "/:id",
   auth,
+  upload.single("file"),
   [
     body("password").trim().notEmpty(),
     body("email").trim().notEmpty(),
