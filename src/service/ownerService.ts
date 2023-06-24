@@ -150,7 +150,6 @@ const updateStoreInfo = async (
   storeId: number,
   createStoreInfoDTO: CreateStoreInfoDTO
 ) => {
-  console.log(storeId);
   const data = await prisma.store.update({
     where: {
       id: storeId,
@@ -202,7 +201,6 @@ const createStoreNotice = async (
       storeId: storeId,
     },
   });
-  console.log(storeId);
   return data;
 };
 

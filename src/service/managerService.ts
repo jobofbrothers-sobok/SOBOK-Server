@@ -1,3 +1,4 @@
+import { CreateNoticeDTO } from "./../interfaces/manager/createNoticeDTO";
 import { CreateTourIdForStoreDTO } from "./../interfaces/manager/createTourIdForStoreDTO";
 import { ManagerCreateDTO } from "./../interfaces/user/managerCreateDTO";
 import { PrismaClient } from "@prisma/client";
@@ -173,6 +174,22 @@ const getAllTour = async () => {
   const data = await prisma.tour.findMany();
   return data;
 };
+
+// 최고관리자 공지사항 작성
+const createNotice = async (
+  createNoticeDTO: CreateNoticeDTO,
+  date: EpochTimeStamp
+) => {
+  const data = await prisma.notice.create({
+    data: {
+      title: createNoticeDTO.title,
+      content: createNoticeDTO.content,
+      image: createNoticeDTO.image,
+      timestamp: date,
+    },
+  });
+  return data;
+};
 const managerService = {
   managerSignup,
   managerSignIn,
@@ -187,6 +204,7 @@ const managerService = {
   getOwnerById,
   getAllCustomer,
   getCustomerById,
+  createNotice,
 };
 
 export default managerService;

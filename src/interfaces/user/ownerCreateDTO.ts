@@ -8,7 +8,6 @@ export interface OwnerCreateDTO {
   address: string;
   detailAddress: string;
   licenseNumber: string;
-  licenseImage: string;
   authorized: boolean;
   termsAgree: boolean;
   marketingAgree: boolean;
