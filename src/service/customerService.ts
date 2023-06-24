@@ -54,7 +54,8 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
 // 고객 유저 회원정보 수정
 const updateCustomer = async (
   id: number,
-  customerUpdateDTO: CustomerUpdateDTO
+  customerUpdateDTO: CustomerUpdateDTO,
+  path: string
 ) => {
   // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
   const salt = await bcrypt.genSalt(10);
@@ -68,6 +69,7 @@ const updateCustomer = async (
       name: customerUpdateDTO.name,
       email: customerUpdateDTO.email,
       phone: customerUpdateDTO.phone,
+      image: path,
     },
   });
   return data.id;
