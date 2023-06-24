@@ -30,11 +30,6 @@ app.use(
   router
 );
 
-app.use(
-  cors({
-    origin: "https://",
-  })
-);
 app.listen(PORT, () => {
   console.log(`
         #############################################
