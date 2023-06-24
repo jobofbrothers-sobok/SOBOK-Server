@@ -15,8 +15,8 @@ const sortType = {
   OWNER: "owner",
 };
 
-// 유저 회원가입
-const userSignUp = async (req: Request, res: Response) => {
+// 고객 유저 회원가입
+const createCustomer = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -25,96 +25,93 @@ const userSignUp = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
 
-  const sort = req.query.sort as string;
+  const customerCreateDTO: CustomerCreateDTO = req.body;
+  const termsAgree = req.body.termsAgree;
 
-  if (!sort) {
+  if (!termsAgree) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
 
-  if (sort !== sortType.CUSTOMER && sort !== sortType.OWNER) {
+  try {
+    const data = await authService.createCustomer(customerCreateDTO);
+
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
+    }
+
+    // jwtHandler 내 sign 함수를 이용해 accessToken 생성
+    const accessToken = jwtHandler.sign(data.id);
+
+    const result = {
+      userId: data.id,
+      name: data.name,
+      accessToken,
+    };
+
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
+  } catch (e) {
+    console.log(e);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 회원가입
+const createOwner = async (req: Request, res: Response) => {
+  // validation의 결과를 바탕으로 분기 처리
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    console.log(error);
     return res
       .status(sc.BAD_REQUEST)
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
 
-  if (sort === sortType.CUSTOMER) {
-    const customerCreateDTO: CustomerCreateDTO = req.body;
-    const termsAgree = req.body.termsAgree;
-
-    if (!termsAgree) {
-      return res
-        .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-    }
-
-    try {
-      const data = await authService.createCustomer(customerCreateDTO);
-
-      if (!data) {
-        return res
-          .status(sc.BAD_REQUEST)
-          .send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
-      }
-
-      // jwtHandler 내 sign 함수를 이용해 accessToken 생성
-      const accessToken = jwtHandler.sign(data.id);
-
-      const result = {
-        userId: data.id,
-        name: data.name,
-        accessToken,
-      };
-
-      return res
-        .status(sc.CREATED)
-        .send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
-    } catch (e) {
-      console.log(e);
-      // 서버 내부에서 오류 발생
-      res
-        .status(sc.INTERNAL_SERVER_ERROR)
-        .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-    }
-  }
-
-  if (sort === sortType.OWNER) {
+  try {
+    const image: Express.Multer.File = req.file as Express.Multer.File;
+    const path = image.path;
+    console.log(path);
     const ownerCreateDTO: OwnerCreateDTO = req.body;
     const termsAgree = req.body.termsAgree;
+    // if (!termsAgree) {
+    //   console.log("no terms");
+    //   return res
+    //     .status(sc.BAD_REQUEST)
+    //     .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    // }
+    console.log("create");
+    const data = await authService.createOwner(ownerCreateDTO, path);
 
-    if (!termsAgree) {
+    if (!data) {
       return res
         .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+        .send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
     }
 
-    try {
-      const data = await authService.createOwner(ownerCreateDTO);
+    // jwtHandler 내 sign 함수를 이용해 accessToken 생성
+    const accessToken = jwtHandler.sign(data.id);
 
-      if (!data) {
-        return res
-          .status(sc.BAD_REQUEST)
-          .send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
-      }
+    const result = {
+      userId: data.id,
+      name: data.store,
+      accessToken,
+    };
 
-      // jwtHandler 내 sign 함수를 이용해 accessToken 생성
-      const accessToken = jwtHandler.sign(data.id);
-
-      const result = {
-        userId: data.id,
-        name: data.store,
-        accessToken,
-      };
-
-      return res
-        .status(sc.CREATED)
-        .send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
-    } catch (e) {
-      console.log(e);
-      // 서버 내부에서 오류 발생
-      res
-        .status(sc.INTERNAL_SERVER_ERROR)
-        .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-    }
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
+  } catch (e) {
+    console.log(e);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
@@ -265,7 +262,8 @@ const ownerUpdate = async (req: Request, res: Response) => {
 };
 
 const authController = {
-  userSignUp,
+  createCustomer,
+  createOwner,
   userSignIn,
   customerUpdate,
   ownerUpdate,
