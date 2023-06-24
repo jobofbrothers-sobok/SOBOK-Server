@@ -42,6 +42,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (req.originalUrl.includes("/main")) {
       foundUser = await customerService.findCustomerById(id);
     }
+
+    if (req.originalUrl.includes("/customer")) {
+      foundUser = await customerService.findCustomerById(id);
+    }
     if (req.originalUrl.includes("/owner")) {
       foundUser = await ownerService.findOwnerById(id);
     }

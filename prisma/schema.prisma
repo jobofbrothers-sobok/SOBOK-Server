@@ -17,6 +17,7 @@ model Customer {
   termsAgree     Boolean
   marketingAgree Boolean?
   storeId        Int?
+  image          String?        @db.VarChar(800)
   Store          Store?         @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
   Delivery       Delivery[]
   Stamp          Stamp[]
