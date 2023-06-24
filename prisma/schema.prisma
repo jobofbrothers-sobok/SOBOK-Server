@@ -112,7 +112,7 @@ model Store_Owner {
   licenseNumber                    String   @db.VarChar(20)
   licenseImage                     String   @db.VarChar(200)
   authorized                       Boolean? @default(false)
-  termsAgree                       Boolean
+  termsAgree                       Boolean?
   marketingAgree                   Boolean?
   storeId                          Int?
   stampAuthorized                  Boolean? @default(false)

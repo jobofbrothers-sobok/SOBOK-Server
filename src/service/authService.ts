@@ -31,7 +31,7 @@ const createCustomer = async (customerCreateDTO: CustomerCreateDTO) => {
 };
 
 // 점주 유저 회원가입
-const createOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
+const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
   // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
   const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
   const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
@@ -46,7 +46,7 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
       address: ownerCreateDTO.address,
       detailAddress: ownerCreateDTO.detailAddress,
       licenseNumber: ownerCreateDTO.licenseNumber,
-      licenseImage: ownerCreateDTO.licenseImage,
+      licenseImage: path,
       authorized: ownerCreateDTO.authorized,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
@@ -148,7 +148,7 @@ const ownerUpdate = async (
       licenseImage: path,
     },
   });
-  console.log(data);
+  // console.log(data);
   return data.id;
 };
 

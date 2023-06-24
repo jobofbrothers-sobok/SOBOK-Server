@@ -189,7 +189,6 @@ const updateStoreInfo = async (req: Request, res: Response) => {
   const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
   // const userId = req.user.id;
   const storeId = req.params.id;
-  console.log(storeId);
   try {
     const updatedStore = await ownerService.updateStoreInfo(
       +storeId,
@@ -254,7 +253,6 @@ const createStoreProduct = async (req: Request, res: Response) => {
   const createStoreProductDTO: CreateStoreProductDTO = req.body;
   const userId = req.user.id;
   const storeId = await ownerService.getStorebyOwnerId(userId);
-  console.log(storeId);
   try {
     const createdProduct = await ownerService.createStoreProduct(
       createStoreProductDTO,
