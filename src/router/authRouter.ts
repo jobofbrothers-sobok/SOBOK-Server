@@ -33,7 +33,6 @@ router.post(
   //   body("email").trim().notEmpty(),
   //   body("address").trim().notEmpty(),
   //   body("licenseNumber").trim().notEmpty(),
-  //   body("licenseImage").trim().notEmpty(),
   // ],
   ownerUpload.single("file"),
   authController.createOwner
@@ -72,5 +71,11 @@ router.post(
 
 // 유저 로그인
 router.post("/signin", authController.userSignIn);
+
+// 고객 유저 회원탈퇴
+router.delete("/customer/:id", auth, authController.customerDelete);
+
+// 점주 유저 회원탈퇴
+router.delete("/owner/:id", auth, authController.ownerDelete);
 
 export default router;

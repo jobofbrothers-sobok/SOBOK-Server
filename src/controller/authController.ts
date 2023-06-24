@@ -261,12 +261,49 @@ const ownerUpdate = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 탈퇴
+const customerDelete = async (req: Request, res: Response) => {
+  try {
+    const id = req.user.id;
+    const deletedUserId = await authService.customerDelete(id);
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_USER_SUCCESS, { id: deletedUserId }));
+  } catch (error) {
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 회원탈퇴
+const ownerDelete = async (req: Request, res: Response) => {
+  try {
+    const id = req.user.id;
+    const deletedUserId = await authService.ownerDelete(+id);
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_USER_SUCCESS, { id: deletedUserId }));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 탈퇴
+
 const authController = {
   createCustomer,
   createOwner,
   userSignIn,
   customerUpdate,
   ownerUpdate,
+  customerDelete,
+  ownerDelete,
 };
 
 export default authController;
