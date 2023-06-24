@@ -249,13 +249,19 @@ const updateCustomer = async (req: Request, res: Response) => {
   }
   const customerupdateDTO: CustomerUpdateDTO = req.body;
   const id = req.user.id;
-
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
   try {
     const updatedUserId = await customerService.updateCustomer(
       id,
-      customerupdateDTO
+      customerupdateDTO,
+      path
     );
-
+    if (!updatedUserId) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
