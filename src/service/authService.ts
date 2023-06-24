@@ -152,6 +152,26 @@ const ownerUpdate = async (
   return data.id;
 };
 
+// 고객 유저 회원탈퇴
+const customerDelete = async (id: number) => {
+  const data = await prisma.customer.delete({
+    where: {
+      id: id,
+    },
+  });
+  return data.id;
+};
+
+// 점주 유저 회원탈퇴
+const ownerDelete = async (id: number) => {
+  const data = await prisma.store_Owner.delete({
+    where: {
+      id: id,
+    },
+  });
+  return data.id;
+};
+
 const authService = {
   createCustomer,
   createOwner,
@@ -159,6 +179,8 @@ const authService = {
   ownerSignIn,
   customerUpdate,
   ownerUpdate,
+  customerDelete,
+  ownerDelete,
 };
 
 export default authService;
