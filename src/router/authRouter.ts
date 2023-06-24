@@ -69,8 +69,11 @@ router.post(
   authController.ownerUpdate
 );
 
-// 유저 로그인
-router.post("/signin", authController.userSignIn);
+// 고객 유저 로그인
+router.post("/signin/customer", authController.customerSignIn);
+
+// 점주 유저 로그인
+router.post("/signin/owner", authController.ownerSignIn);
 
 // 고객 유저 회원탈퇴
 router.delete("/customer/:id", auth, authController.customerDelete);

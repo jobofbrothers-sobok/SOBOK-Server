@@ -115,8 +115,8 @@ const createOwner = async (req: Request, res: Response) => {
   }
 };
 
-// 유저 로그인
-const userSignIn = async (req: Request, res: Response) => {
+// 고객 유저 로그인
+const customerSignIn = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return res
@@ -124,76 +124,70 @@ const userSignIn = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
 
-  const sort = req.query.sort as string;
+  const userSigninDTO: UserSignInDTO = req.body;
 
-  if (!sort) {
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  try {
+    const userId = await authService.customerSignIn(userSigninDTO);
+
+    if (!userId)
+      return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
+    else if (userId === sc.UNAUTHORIZED)
+      return res
+        .status(sc.UNAUTHORIZED)
+        .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
+
+    const accessToken = jwtHandler.sign(userId);
+
+    const result = {
+      userId: userId,
+      accessToken,
+    };
+
+    res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
+  } catch (e) {
+    console.log(error);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
+};
 
-  if (sort !== sortType.CUSTOMER && sort !== sortType.OWNER) {
+// 점주 유저 로그인
+const ownerSignIn = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
     return res
       .status(sc.BAD_REQUEST)
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
 
-  if (sort === sortType.CUSTOMER) {
-    const userSigninDTO: UserSignInDTO = req.body;
+  const userSigninDTO: UserSignInDTO = req.body;
 
-    try {
-      const userId = await authService.customerSignIn(userSigninDTO);
+  try {
+    const userId = await authService.ownerSignIn(userSigninDTO);
 
-      if (!userId)
-        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-      else if (userId === sc.UNAUTHORIZED)
-        return res
-          .status(sc.UNAUTHORIZED)
-          .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
+    if (!userId)
+      return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
+    else if (userId === sc.UNAUTHORIZED)
+      return res
+        .status(sc.UNAUTHORIZED)
+        .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-      const accessToken = jwtHandler.sign(userId);
+    const accessToken = jwtHandler.sign(userId);
 
-      const result = {
-        userId: userId,
-        accessToken,
-      };
+    const result = {
+      userId: userId,
+      accessToken,
+    };
 
-      res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
-    } catch (e) {
-      console.log(error);
-      // 서버 내부에서 오류 발생
-      res
-        .status(sc.INTERNAL_SERVER_ERROR)
-        .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-    }
-  }
-
-  if (sort === sortType.OWNER) {
-    const userSigninDTO: UserSignInDTO = req.body;
-
-    try {
-      const userId = await authService.ownerSignIn(userSigninDTO);
-
-      if (!userId)
-        return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-      else if (userId === sc.UNAUTHORIZED)
-        return res
-          .status(sc.UNAUTHORIZED)
-          .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
-
-      const accessToken = jwtHandler.sign(userId);
-
-      const result = {
-        userId: userId,
-        accessToken,
-      };
-
-      res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
-    } catch (e) {
-      console.log(error);
-      // 서버 내부에서 오류 발생
-      res
-        .status(sc.INTERNAL_SERVER_ERROR)
-        .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-    }
+    res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
+  } catch (e) {
+    console.log(error);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
@@ -299,7 +293,8 @@ const ownerDelete = async (req: Request, res: Response) => {
 const authController = {
   createCustomer,
   createOwner,
-  userSignIn,
+  customerSignIn,
+  ownerSignIn,
   customerUpdate,
   ownerUpdate,
   customerDelete,
