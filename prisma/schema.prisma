@@ -125,8 +125,8 @@ model Store_Product {
   id            Int     @id @default(autoincrement())
   category      String? @db.VarChar(30)
   name          String? @db.VarChar(30)
-  price         Int?
-  discountPrice Int?
+  price         String? @db.VarChar(30)
+  discountPrice String? @db.VarChar(30)
   url           String? @db.VarChar(300)
   image         String? @db.VarChar(300)
   storeId       Int?
