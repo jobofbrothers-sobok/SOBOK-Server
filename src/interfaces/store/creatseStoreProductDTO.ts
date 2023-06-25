@@ -1,8 +1,8 @@
 export interface CreateStoreProductDTO {
   category: string;
   name: string;
-  price: number;
-  discountPrice: number;
+  price: string;
+  discountPrice: string;
   url: string;
   image: string;
 }

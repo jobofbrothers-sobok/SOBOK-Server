@@ -171,6 +171,7 @@ const createStoreMenu = async (
 // 점주 스토어 상품 등록
 const createStoreProduct = async (
   createStoreProductDTO: CreateStoreProductDTO,
+  path: string,
   storeId: number
 ) => {
   const data = await prisma.store_Product.create({
@@ -180,7 +181,7 @@ const createStoreProduct = async (
       price: createStoreProductDTO.price,
       discountPrice: createStoreProductDTO.discountPrice,
       url: createStoreProductDTO.url,
-      image: createStoreProductDTO.image,
+      image: path,
       storeId,
     },
   });
