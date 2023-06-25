@@ -9,11 +9,7 @@ import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
-
-const sortType = {
-  CUSTOMER: "customer",
-  OWNER: "owner",
-};
+import session from "express-session";
 
 // 고객 유저 회원가입
 const createCustomer = async (req: Request, res: Response) => {
@@ -127,19 +123,20 @@ const customerSignIn = async (req: Request, res: Response) => {
   const userSigninDTO: UserSignInDTO = req.body;
 
   try {
-    const userId = await authService.customerSignIn(userSigninDTO);
+    const user = await authService.customerSignIn(userSigninDTO);
 
-    if (!userId)
+    if (!user)
       return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-    else if (userId === sc.UNAUTHORIZED)
+    else if (user === sc.UNAUTHORIZED)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const accessToken = jwtHandler.sign(userId);
-
+    const accessToken = jwtHandler.sign(user.id);
+    req.session.loginId = user.loginId;
+    console.log(req.session.loginId);
     const result = {
-      userId: userId,
+      userId: user.id,
       accessToken,
     };
 
@@ -188,6 +185,21 @@ const ownerSignIn = async (req: Request, res: Response) => {
     res
       .status(sc.INTERNAL_SERVER_ERROR)
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 고객 유저 로그아웃
+const customerSignOut = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  console.log(req.session);
+  console.log(req.session.loginId);
+
+  if (!req.session.loginId) {
+    res.status(400).send({ data: null, message: "not authorized" });
+  } else {
+    req.session.destroy();
+    const destroy = req.session.loginId;
+    res.json({ data: null, message: "ok", destroy });
   }
 };
 
@@ -295,6 +307,7 @@ const authController = {
   createOwner,
   customerSignIn,
   ownerSignIn,
+  customerSignOut,
   customerUpdate,
   ownerUpdate,
   customerDelete,

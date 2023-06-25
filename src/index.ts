@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import router from "./router";
 import app from "./app";
 import session from "express-session";
+import fileStore from "session-file-store";
 import cors from "cors";
 
 const PORT = 5000; // 사용할 port를 3000번으로 설정
@@ -13,20 +14,21 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("Server listening");
 });
 
+// const filestore = new fileStore();
 app.use(
-  session({
-    secret: "",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      domain: "localhost",
-      path: "/",
-      maxAge: 24 * 6 * 60 * 10000,
-      sameSite: "none",
-      httpOnly: true,
-      secure: true,
-    },
-  }),
+  // session({
+  //   secret: "@sobok",
+  //   resave: false,
+  //   saveUninitialized: true,
+  //   cookie: {
+  //     domain: "localhost",
+  //     httpOnly: true,
+  //     secure: true,
+  //   },
+
+  //   store: fileStore,
+  // }),
+  "/",
   router
 );
 

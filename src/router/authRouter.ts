@@ -75,10 +75,13 @@ router.post("/signin/customer", authController.customerSignIn);
 // 점주 유저 로그인
 router.post("/signin/owner", authController.ownerSignIn);
 
+// 고객 유저 로그아웃
+router.get("/signout/customer", auth, authController.customerSignOut);
+
 // 고객 유저 회원탈퇴
-router.delete("/customer/:id", auth, authController.customerDelete);
+router.delete("/customer", auth, authController.customerDelete);
 
 // 점주 유저 회원탈퇴
-router.delete("/owner/:id", auth, authController.ownerDelete);
+router.delete("/owner", auth, authController.ownerDelete);
 
 export default router;

@@ -1,3 +1,4 @@
+import { session } from "express-session";
 import { CreateDeliveryRequestDTO } from "./../interfaces/delivery/createDeliveryRequestDTO";
 import { PrismaClient, Stamp } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -7,6 +8,7 @@ import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CustomerUpdateDTO } from "./../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
+import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
@@ -47,7 +49,6 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
       detailAddress: ownerCreateDTO.detailAddress,
       licenseNumber: ownerCreateDTO.licenseNumber,
       licenseImage: path,
-      authorized: ownerCreateDTO.authorized,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
     },
@@ -71,7 +72,7 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
     const isMatch = await bcrypt.compare(userSignInDTO.password, user.password);
     if (!isMatch) return sc.UNAUTHORIZED;
 
-    return user.id;
+    return user;
   } catch (error) {
     console.log(error);
     throw error;
