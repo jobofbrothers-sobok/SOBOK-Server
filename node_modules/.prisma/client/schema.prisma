@@ -39,7 +39,7 @@ model Delivery {
 
 model Manager {
   id       Int    @id @default(autoincrement())
-  loginId  String @db.VarChar(20)
+  loginId  String @unique @db.VarChar(20)
   password String @db.VarChar(200)
 }
 
