@@ -13,6 +13,11 @@ router.post(
   "/store/notice/:id",
   auth,
   noticeUpload.single("file"),
+  [
+    body("category").trim().notEmpty(),
+    body("title").trim().notEmpty(),
+    body("content").trim().notEmpty(),
+  ],
   ownerController.createStoreNotice
 );
 
