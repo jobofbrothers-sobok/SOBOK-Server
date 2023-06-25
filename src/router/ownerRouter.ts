@@ -8,6 +8,7 @@ const router: Router = Router();
 const storeUpload = multer({ dest: "uploads/owner/store/" });
 const noticeUpload = multer({ dest: "uploads/owner/store/notice/" });
 const menuUpload = multer({ dest: "uploads/owner/store/menu/" });
+const productUpload = multer({ dest: "uploads/owner/store/product/" });
 
 // 점주 매장소식 등록 - POST ~/owner/store/notice
 router.post(
@@ -32,7 +33,17 @@ router.post(
 );
 
 // 점주 매장 스토어 상품 등록 - POST ~/owner/store/product
-router.post("/store/product", auth, ownerController.createStoreProduct);
+router.post(
+  "/store/product/:id",
+  auth,
+  productUpload.single("file"),
+  [
+    body("category").trim().notEmpty(),
+    body("name").trim().notEmpty(),
+    body("price").trim().notEmpty(),
+  ],
+  ownerController.createStoreProduct
+);
 
 // 점주 매장정보 수정 - POST ~/owner/store/info/:id
 router.post(

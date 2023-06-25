@@ -121,7 +121,7 @@ const createStoreNotice = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
   const createStoreNoticeDTO: CreateStoreNoticeDTO = req.body;
-  const userId = req.user.id;
+
   const storeId = req.params.id;
 
   const image: Express.Multer.File = req.file as Express.Multer.File;
@@ -180,14 +180,30 @@ const createStoreMenu = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 매장 스토어 상품 등록
 const createStoreProduct = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   const createStoreProductDTO: CreateStoreProductDTO = req.body;
-  const userId = req.user.id;
-  const storeId = await ownerService.getStorebyOwnerId(userId);
+
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+
+  const storeId = req.params.id;
+
+  if (!storeId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
   try {
     const createdProduct = await ownerService.createStoreProduct(
       createStoreProductDTO,
-      storeId as number
+      path,
+      +storeId
     );
     return res
       .status(sc.OK)
