@@ -114,6 +114,12 @@ const updateStoreInfo = async (req: Request, res: Response) => {
 
 // 점주 매장소식 등록
 const createStoreNotice = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   const createStoreNoticeDTO: CreateStoreNoticeDTO = req.body;
   const userId = req.user.id;
   const storeId = req.params.id;
