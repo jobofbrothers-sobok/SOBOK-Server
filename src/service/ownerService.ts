@@ -154,13 +154,14 @@ const createStoreNotice = async (
 // 점주 매장 메뉴 등록
 const createStoreMenu = async (
   createStoreMenuDTO: CreateStoreMenuDTO,
+  path: string,
   storeId: number
 ) => {
   const data = await prisma.store_Menu.create({
     data: {
       title: createStoreMenuDTO.title,
       content: createStoreMenuDTO.content,
-      image: createStoreMenuDTO.image,
+      image: path,
       storeId,
     },
   });

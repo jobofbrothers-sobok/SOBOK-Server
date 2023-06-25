@@ -6,7 +6,8 @@ import multer from "multer";
 
 const router: Router = Router();
 const storeUpload = multer({ dest: "uploads/owner/store/" });
-const noticeUpload = multer({ dest: "uploads/owner/store/notice" });
+const noticeUpload = multer({ dest: "uploads/owner/store/notice/" });
+const menuUpload = multer({ dest: "uploads/owner/store/menu/" });
 
 // 점주 매장소식 등록 - POST ~/owner/store/notice
 router.post(
@@ -22,7 +23,13 @@ router.post(
 );
 
 // 점주 매장메뉴 등록 - POST ~/owner/store/menu
-router.post("/store/menu", auth, ownerController.createStoreMenu);
+router.post(
+  "/store/menu/:id",
+  auth,
+  menuUpload.single("file"),
+  [body("title").trim().notEmpty(), body("content").trim().notEmpty()],
+  ownerController.createStoreMenu
+);
 
 // 점주 매장 스토어 상품 등록 - POST ~/owner/store/product
 router.post("/store/product", auth, ownerController.createStoreProduct);
