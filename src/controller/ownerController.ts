@@ -116,11 +116,21 @@ const updateStoreInfo = async (req: Request, res: Response) => {
 const createStoreNotice = async (req: Request, res: Response) => {
   const createStoreNoticeDTO: CreateStoreNoticeDTO = req.body;
   const userId = req.user.id;
-  const storeId = await ownerService.getStorebyOwnerId(userId);
+  const storeId = req.params.id;
+
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+
+  // 현시각보다 9시간 느려서 가산
+  const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
+  const date = new Date(now);
+
   try {
     const createStoreNotice = await ownerService.createStoreNotice(
       createStoreNoticeDTO,
-      storeId as number
+      path,
+      +storeId,
+      date
     );
     return res
       .status(sc.OK)

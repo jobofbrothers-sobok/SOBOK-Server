@@ -134,15 +134,18 @@ const getStorebyStoreId = async (storeId: number) => {
 // 점주 매장 소식 등록
 const createStoreNotice = async (
   createStoreNoticeDTO: CreateStoreNoticeDTO,
-  storeId: number
+  path: string,
+  storeId: number,
+  date: EpochTimeStamp
 ) => {
   const data = await prisma.store_Notice.create({
     data: {
       category: createStoreNoticeDTO.category,
       title: createStoreNoticeDTO.title,
       content: createStoreNoticeDTO.content,
-      image: createStoreNoticeDTO.image,
+      image: path,
       storeId: storeId,
+      createdTime: date,
     },
   });
   return data;
