@@ -27,9 +27,9 @@ const createOwner = async (req: Request, res: Response) => {
   const ownerCreateDTO: OwnerCreateDTO = req.body;
   const termsAgree = req.body.termsAgree;
 
-  if (!termsAgree) {
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-  }
+  // if (!termsAgree) {
+  //   return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  // }
 
   try {
     const data = await ownerService.createOwner(ownerCreateDTO);
