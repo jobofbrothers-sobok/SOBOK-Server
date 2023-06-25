@@ -263,14 +263,38 @@ const ownerUpdate = async (req: Request, res: Response) => {
   }
   const ownerUpdateDTO: OwnerUpdateDTO = req.body;
   const id = req.user.id;
-  const image: Express.Multer.File = req.file as Express.Multer.File;
-  const path = image.path;
+  const image = req.files;
+  console.log(image.file1[0].path);
+  console.log(image.file2[0].path);
+
+  const path1 = image.file1[0].path;
+  const path2 = image.file2[0].path;
+
+  const password = ownerUpdateDTO.password;
+  const director = ownerUpdateDTO.director;
+  const phone = ownerUpdateDTO.phone;
+  const email = ownerUpdateDTO.email;
+  const address = ownerUpdateDTO.address;
+  const licenseNumber = ownerUpdateDTO.licenseNumber;
 
   try {
+    if (
+      !password ||
+      !director ||
+      !phone ||
+      !email ||
+      !address ||
+      !licenseNumber
+    ) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
     const updatedUserId = await authService.ownerUpdate(
       +id,
       ownerUpdateDTO,
-      path
+      path1,
+      path2
     );
     return res
       .status(sc.OK)

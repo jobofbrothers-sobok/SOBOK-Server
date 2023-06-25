@@ -129,7 +129,8 @@ const customerUpdate = async (
 const ownerUpdate = async (
   id: number,
   ownerUpdateDTO: OwnerUpdateDTO,
-  path: string
+  path1: string,
+  path2: string
 ) => {
   // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
   const salt = await bcrypt.genSalt(10);
@@ -146,7 +147,8 @@ const ownerUpdate = async (
       address: ownerUpdateDTO.address,
       detailAddress: ownerUpdateDTO.detailAddress,
       licenseNumber: ownerUpdateDTO.licenseNumber,
-      licenseImage: path,
+      licenseImage: path1,
+      profileImage: path2,
     },
   });
   // console.log(data);
