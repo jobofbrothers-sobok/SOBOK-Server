@@ -25,14 +25,14 @@ router.post(
 router.post(
   "/signup/owner",
   // [
-  //   body("loginId").trim().notEmpty(),
-  //   body("password").trim().notEmpty(),
-  //   body("store").trim().notEmpty(),
-  //   body("director").trim().notEmpty(),
-  //   body("phone").trim().notEmpty(),
-  //   body("email").trim().notEmpty(),
-  //   body("address").trim().notEmpty(),
-  //   body("licenseNumber").trim().notEmpty(),
+  //   body("loginId").notEmpty(),
+  //   body("password").notEmpty(),
+  //   body("store").notEmpty(),
+  //   body("director").notEmpty(),
+  //   body("phone").notEmpty(),
+  //   body("email").notEmpty(),
+  //   body("address").notEmpty(),
+  //   body("licenseNumber").notEmpty(),
   // ],
   ownerUpload.single("file"),
   authController.createOwner

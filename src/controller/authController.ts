@@ -74,13 +74,29 @@ const createOwner = async (req: Request, res: Response) => {
     const path = image.path;
     console.log(path);
     const ownerCreateDTO: OwnerCreateDTO = req.body;
+    const loginId = ownerCreateDTO.loginId;
+    const password = ownerCreateDTO.password;
+    const store = ownerCreateDTO.store;
+    const director = ownerCreateDTO.director;
+    const phone = ownerCreateDTO.phone;
+    const email = ownerCreateDTO.email;
+    const address = ownerCreateDTO.address;
+    const licenseNumber = ownerCreateDTO.licenseNumber;
     const termsAgree = req.body.termsAgree;
-    // if (!termsAgree) {
-    //   console.log("no terms");
-    //   return res
-    //     .status(sc.BAD_REQUEST)
-    //     .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-    // }
+    if (
+      !loginId ||
+      !password ||
+      !store ||
+      !director ||
+      !phone ||
+      !email ||
+      !address ||
+      !licenseNumber
+    ) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
     console.log("create");
     const data = await authService.createOwner(ownerCreateDTO, path);
 
