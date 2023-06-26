@@ -1,3 +1,4 @@
+import { OwnerCreateAlimRequestDTO } from "./../interfaces/user/ownerCreateAlimRequestDTO";
 import { CreateStoreProductDTO } from "./../interfaces/store/creatseStoreProductDTO";
 import { CreateStoreNoticeDTO } from "./../interfaces/store/createStoreNoticeDTO";
 import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
@@ -188,6 +189,23 @@ const createStoreProduct = async (
   return data;
 };
 
+// 점주 소복 매니저 서비스 사용 신청
+const createAlimRequest = async (
+  ownerCreateAlimRequestDTO: OwnerCreateAlimRequestDTO,
+  userId: number
+) => {
+  const data = await prisma.alim_Request.create({
+    data: {
+      category: ownerCreateAlimRequestDTO.category,
+      content: ownerCreateAlimRequestDTO.content,
+      isMessage: ownerCreateAlimRequestDTO.isMessage,
+      isKakao: ownerCreateAlimRequestDTO.isKakao,
+      writerId: userId,
+    },
+  });
+  return data;
+};
+
 // tourId로 투어 정보 조회
 const getTourByTourId = async (tourId: number) => {
   const data = await prisma.tour.findUnique({
@@ -247,6 +265,7 @@ const ownerService = {
   createStoreNotice,
   createStoreMenu,
   createStoreProduct,
+  createAlimRequest,
 };
 
 export default ownerService;
