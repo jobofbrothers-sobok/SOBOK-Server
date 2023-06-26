@@ -1,3 +1,4 @@
+import { OwnerCreateAlimRequestDTO } from "./../interfaces/user/ownerCreateAlimRequestDTO";
 import { CreateStoreProductDTO } from "./../interfaces/store/creatseStoreProductDTO";
 import { CreateStoreMenuDTO } from "./../interfaces/store/createStoreMenuDTO";
 import { CreateStoreInfoDTO } from "./../interfaces/store/createStoreInfoDTO";
@@ -216,6 +217,33 @@ const createStoreProduct = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 소복 매니저 서비스 사용 신청
+const createAlimRequest = async (req: Request, res: Response) => {
+  const ownerCreateAlimRequestDTO: OwnerCreateAlimRequestDTO = req.body;
+  const userId = req.user.id;
+  const error = validationResult(req);
+  if (!error.isEmpty() || !userId) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const data = await ownerService.createAlimRequest(
+      ownerCreateAlimRequestDTO,
+      userId
+    );
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_ALIM_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 점주 고객 스탬프 적립 승낙
 const grantStampByRandNum = async (req: Request, res: Response) => {
   const userId = req.user.id;
@@ -263,6 +291,7 @@ const ownerController = {
   createStoreNotice,
   createStoreMenu,
   createStoreProduct,
+  createAlimRequest,
   grantStampByRandNum,
 };
 
