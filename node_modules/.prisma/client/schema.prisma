@@ -12,7 +12,7 @@ model Customer {
   loginId        String          @unique @db.VarChar(20)
   password       String          @db.VarChar(200)
   name           String          @unique @db.VarChar(20)
-  email          String          @db.VarChar(45)
+  email          String          @unique @db.VarChar(45)
   phone          String          @db.VarChar(20)
   termsAgree     Boolean
   marketingAgree Boolean?
@@ -107,7 +107,7 @@ model Store_Owner {
   store                            String         @db.VarChar(30)
   director                         String         @db.VarChar(20)
   phone                            String         @db.VarChar(20)
-  email                            String         @db.VarChar(45)
+  email                            String         @unique @db.VarChar(45)
   address                          String         @db.VarChar(30)
   detailAddress                    String         @db.VarChar(30)
   licenseNumber                    String         @db.VarChar(20)
