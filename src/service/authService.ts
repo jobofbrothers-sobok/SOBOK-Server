@@ -129,7 +129,8 @@ const customerUpdate = async (
 const ownerUpdate = async (
   id: number,
   ownerUpdateDTO: OwnerUpdateDTO,
-  path: string
+  path1: string,
+  path2: string
 ) => {
   // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
   const salt = await bcrypt.genSalt(10);
@@ -146,11 +147,35 @@ const ownerUpdate = async (
       address: ownerUpdateDTO.address,
       detailAddress: ownerUpdateDTO.detailAddress,
       licenseNumber: ownerUpdateDTO.licenseNumber,
-      licenseImage: path,
+      licenseImage: path1,
+      profileImage: path2,
     },
   });
   // console.log(data);
   return data.id;
+};
+
+// 고객 유저 회원정보 찾기
+const findCustomerByEmail = async (email: string) => {
+  const data = await prisma.customer.findFirst({
+    where: {
+      email: email,
+    },
+  });
+  return data;
+};
+
+// 고객 유저 비밀번호 재설정
+const resetCustomerPw = async (id: number, token: string) => {
+  const data = await prisma.customer.update({
+    where: {
+      id: id,
+    },
+    data: {
+      password: token,
+    },
+  });
+  return data;
 };
 
 // 고객 유저 회원탈퇴
@@ -180,6 +205,8 @@ const authService = {
   ownerSignIn,
   customerUpdate,
   ownerUpdate,
+  findCustomerByEmail,
+  resetCustomerPw,
   customerDelete,
   ownerDelete,
 };
