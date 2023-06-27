@@ -10,6 +10,10 @@ import { CustomerUpdateDTO } from "../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import session from "express-session";
+import { auth } from "../middlewares";
+import router from "../router";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 // 고객 유저 회원가입
 const createCustomer = async (req: Request, res: Response) => {
@@ -149,8 +153,14 @@ const customerSignIn = async (req: Request, res: Response) => {
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
     const accessToken = jwtHandler.sign(user.id);
-    req.session.loginId = user.loginId;
-    console.log(req.session.loginId);
+
+    req.session.save(function () {
+      req.session.loginId = user.loginId;
+      router.get("/signout/customer", auth);
+    });
+
+    // 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
+
     const result = {
       userId: user.id,
       accessToken,
@@ -208,7 +218,7 @@ const ownerSignIn = async (req: Request, res: Response) => {
 const customerSignOut = async (req: Request, res: Response) => {
   const id = req.user.id;
   console.log(req.session);
-  console.log(req.session.loginId);
+  console.log(req.session.loginId); // undefined 출력
 
   if (!req.session.loginId) {
     res.status(400).send({ data: null, message: "not authorized" });
@@ -307,6 +317,55 @@ const ownerUpdate = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 유저 회원정보 찾기
+const findCustomerByEmail = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  if (!email || email === "") {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  const customer = await authService.findCustomerByEmail(email);
+  if (customer) {
+    const token = crypto.randomBytes(20).toString("hex");
+    const data = {
+      token,
+      customerId: customer.id,
+      ttl: 300, // Time To Live 5분
+    };
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.GMAIL_ID,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+    });
+    const emailOptions = {
+      from: process.env.GMAIL_ID,
+      to: email,
+      subject: "SOBOK 비밀번호 초기화 메일",
+      html:
+        `<p>비밀번호 초기화를 위해 아래의 URL을 클릭하여 주세요.</p>` +
+        `<a href="http://localhost/reset/${token}">비밀번호 재설정 링크</a>`,
+    };
+    transporter.sendMail(emailOptions);
+
+    // 비밀번호 재설정
+    const resetPassword = await authService.resetCustomerPw(customer.id, token);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.SEND_EMAIL_SUCCESS, resetPassword));
+  } else {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+  }
+};
+
+// 고객 유저 비밀번호 재설정
+// const customerPasswordReset = async (req: Request, res: Response) => {
+//   const resetPassword =
+// };
 // 고객 유저 탈퇴
 const customerDelete = async (req: Request, res: Response) => {
   try {
@@ -350,6 +409,8 @@ const authController = {
   customerSignOut,
   customerUpdate,
   ownerUpdate,
+  findCustomerByEmail,
+  // customerPasswordReset,
   customerDelete,
   ownerDelete,
 };

@@ -31,6 +31,8 @@ export default {
   GET_ALL_CUSTOMER_FAIL: "전체 고객 정보 조회 실패",
   GET_CUSTOMER_SUCCESS: "개별 고객 정보 조회 성공",
   GET_CUSTOMER_FAIL: "개별 고객 정보 조회 실패",
+  GET_CUSTOMER_BY_EMAIL_FAIL: "이메일을 통한 고객 조회 실패",
+  SEND_EMAIL_SUCCESS: "비밀번호 초기화 이메일 전송 성공",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",

@@ -155,6 +155,29 @@ const ownerUpdate = async (
   return data.id;
 };
 
+// 고객 유저 회원정보 찾기
+const findCustomerByEmail = async (email: string) => {
+  const data = await prisma.customer.findFirst({
+    where: {
+      email: email,
+    },
+  });
+  return data;
+};
+
+// 고객 유저 비밀번호 재설정
+const resetCustomerPw = async (id: number, token: string) => {
+  const data = await prisma.customer.update({
+    where: {
+      id: id,
+    },
+    data: {
+      password: token,
+    },
+  });
+  return data;
+};
+
 // 고객 유저 회원탈퇴
 const customerDelete = async (id: number) => {
   const data = await prisma.customer.delete({
@@ -182,6 +205,8 @@ const authService = {
   ownerSignIn,
   customerUpdate,
   ownerUpdate,
+  findCustomerByEmail,
+  resetCustomerPw,
   customerDelete,
   ownerDelete,
 };
