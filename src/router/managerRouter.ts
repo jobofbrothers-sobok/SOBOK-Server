@@ -28,6 +28,12 @@ router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 
 // 최고관리자 배송신청 리스트 전체 조회
 router.get("/delivery", auth, managerController.getAllDeliveryRequest);
+
+// 최고관리자 소복 매니저 신청 리스트 개별 조회
+// router.get("/alim/:id", auth, managerController.getAlimRequestById);
+
+// 최고관리자 소복 매니저 신청 리스트 전체 조회
+
 // 최고관리자 투어 추가
 router.post(
   "/tour",
