@@ -334,6 +334,24 @@ const getAllTour = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 소복 매니저 신청 리스트 개별 조회
+// const getAlimRequestById = async (req: Request, res: Response) => {
+//   const id = req.query.id;
+//   if (!id) {
+//     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+//   }
+
+//   const data = await managerService.getAlimRequestById(+id);
+
+//   try {
+//   } catch (error) {
+//     return res
+//       .status(sc.INTERNAL_SERVER_ERROR)
+//       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+//     console.log(error);
+//   }
+// };
+
 // 최고관리자 공지사항 작성
 const createNotice = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -370,6 +388,7 @@ const managerController = {
   getOwnerById,
   getAllCustomer,
   getCustomerById,
+  //getAlimRequestById,
   createNotice,
 };
 
