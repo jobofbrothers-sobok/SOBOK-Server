@@ -25,14 +25,14 @@ router.post(
 router.post(
   "/signup/owner",
   // [
-  //   body("loginId").trim().notEmpty(),
-  //   body("password").trim().notEmpty(),
-  //   body("store").trim().notEmpty(),
-  //   body("director").trim().notEmpty(),
-  //   body("phone").trim().notEmpty(),
-  //   body("email").trim().notEmpty(),
-  //   body("address").trim().notEmpty(),
-  //   body("licenseNumber").trim().notEmpty(),
+  //   body("loginId").notEmpty(),
+  //   body("password").notEmpty(),
+  //   body("store").notEmpty(),
+  //   body("director").notEmpty(),
+  //   body("phone").notEmpty(),
+  //   body("email").notEmpty(),
+  //   body("address").notEmpty(),
+  //   body("licenseNumber").notEmpty(),
   // ],
   ownerUpload.single("file"),
   authController.createOwner
@@ -55,17 +55,17 @@ router.post(
 router.post(
   "/update/owner",
   auth,
-  ownerUpload.single("file"),
-  [
-    body("password").trim().notEmpty(),
-    body("director").trim().notEmpty(),
-    body("phone").trim().notEmpty(),
-    body("email").trim().notEmpty(),
-    body("address").trim().notEmpty(),
-    body("detailAddress").trim().notEmpty(),
-    body("licenseNumber").trim().notEmpty(),
-    body("licenseImage").trim().notEmpty(),
-  ],
+  ownerUpload.fields([{ name: "file1" }, { name: "file2" }]),
+  // [
+  //   body("password").trim().notEmpty(),
+  //   body("director").trim().notEmpty(),
+  //   body("phone").trim().notEmpty(),
+  //   body("email").trim().notEmpty(),
+  //   body("address").trim().notEmpty(),
+  //   body("detailAddress").trim().notEmpty(),
+  //   body("licenseNumber").trim().notEmpty(),
+  //   body("licenseImage").trim().notEmpty(),
+  // ],
   authController.ownerUpdate
 );
 
@@ -77,6 +77,14 @@ router.post("/signin/owner", authController.ownerSignIn);
 
 // 고객 유저 로그아웃
 router.get("/signout/customer", auth, authController.customerSignOut);
+
+// 고객 유저 회원정보 찾기
+router.post("/find/customer", authController.findCustomerByEmail);
+
+// 고객 유저 비밀번호 재설정
+// router.post("/reset/customer", authController.customerPasswordReset);
+
+// 점주 유저 회원정보 찾기
 
 // 고객 유저 회원탈퇴
 router.delete("/customer", auth, authController.customerDelete);

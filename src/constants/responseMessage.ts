@@ -31,6 +31,8 @@ export default {
   GET_ALL_CUSTOMER_FAIL: "전체 고객 정보 조회 실패",
   GET_CUSTOMER_SUCCESS: "개별 고객 정보 조회 성공",
   GET_CUSTOMER_FAIL: "개별 고객 정보 조회 실패",
+  GET_CUSTOMER_BY_EMAIL_FAIL: "이메일을 통한 고객 조회 실패",
+  SEND_EMAIL_SUCCESS: "비밀번호 초기화 이메일 전송 성공",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
@@ -82,6 +84,10 @@ export default {
   GET_ALL_TOUR_STORE_FAIL: "스탬프 투어 참여 매장 조회 실패",
   GET_ALL_TOUR_SUCCESS: "스탬프 투어 정보 리스트 조회 성공",
   GET_ALL_TOUR_FAIL: "스탬프 투어 정보 리스트 조회 실패",
+
+  // 소복 매니저
+  CREATE_ALIM_REQUEST_SUCCESS: "소복 스탬프 서비스 사용신청 성공",
+  CREATE_ALIM_REQUEST_FAIL: "소복 스탬프 서비스 사용신청 실패",
 
   // 공지사항, 문의사항
   CREATE_NOTICE_SUCCESS: "공지사항 생성 성공",
