@@ -78,6 +78,14 @@ router.post("/signin/owner", authController.ownerSignIn);
 // 고객 유저 로그아웃
 router.get("/signout/customer", auth, authController.customerSignOut);
 
+// 고객 유저 회원정보 찾기
+router.post("/find/customer", authController.findCustomerByEmail);
+
+// 고객 유저 비밀번호 재설정
+// router.post("/reset/customer", authController.customerPasswordReset);
+
+// 점주 유저 회원정보 찾기
+
 // 고객 유저 회원탈퇴
 router.delete("/customer", auth, authController.customerDelete);
 
