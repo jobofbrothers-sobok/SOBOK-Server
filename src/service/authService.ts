@@ -1,4 +1,4 @@
-import { session } from "express-session";
+// import { session } from "express-session";
 import { CreateDeliveryRequestDTO } from "./../interfaces/delivery/createDeliveryRequestDTO";
 import { PrismaClient, Stamp } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -72,7 +72,7 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
     const isMatch = await bcrypt.compare(userSignInDTO.password, user.password);
     if (!isMatch) return sc.UNAUTHORIZED;
 
-    return user;
+    return user.id;
   } catch (error) {
     console.log(error);
     throw error;
@@ -91,7 +91,10 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
 
     // bcrypt가 DB에 저장된 기존 password와 넘겨 받은 password를 대조하고
     // match false시 401을 리턴
-    const isMatch = await bcrypt.compare(userSignInDTO.password, user.password);
+    const isMatch = await bcrypt.compare(
+      userSignInDTO.password,
+      user.password as string
+    );
     if (!isMatch) return sc.UNAUTHORIZED;
 
     return user.id;

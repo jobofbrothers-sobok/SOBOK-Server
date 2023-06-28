@@ -14,29 +14,29 @@ import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import { CreateStoreNoticeDTO } from "../interfaces/store/createStoreNoticeDTO";
 import { customerService } from "../service";
 
-// 점주 유저 회원정보 수정
-const updateOwner = async (req: Request, res: Response) => {
-  const error = validationResult(req);
-  if (!error.isEmpty()) {
-    return res
-      .status(sc.BAD_REQUEST)
-      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-  }
-  const ownerUpdateDTO: OwnerUpdateDTO = req.body;
-  const { id } = req.params;
+// // 점주 유저 회원정보 수정
+// const updateOwner = async (req: Request, res: Response) => {
+//   const error = validationResult(req);
+//   if (!error.isEmpty()) {
+//     return res
+//       .status(sc.BAD_REQUEST)
+//       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+//   }
+//   const ownerUpdateDTO: OwnerUpdateDTO = req.body;
+//   const { id } = req.params;
 
-  try {
-    const updatedUserId = await ownerService.updateOwner(+id, ownerUpdateDTO);
-    return res
-      .status(sc.OK)
-      .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(sc.INTERNAL_SERVER_ERROR)
-      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-  }
-};
+//   try {
+//     const updatedUserId = await ownerService.updateOwner(+id, ownerUpdateDTO);
+//     return res
+//       .status(sc.OK)
+//       .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
+//   } catch (error) {
+//     console.log(error);
+//     return res
+//       .status(sc.INTERNAL_SERVER_ERROR)
+//       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+//   }
+// };
 
 // 점주 유저 이름 조회
 const getOwnerName = async (req: Request, res: Response) => {
@@ -262,9 +262,9 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
       randNum,
       date,
       storeId as number,
-      storeName,
-      tourTitle,
-      tourId
+      storeName as string,
+      tourTitle as string,
+      tourId as number
     );
 
     const result = {
@@ -284,7 +284,7 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
 };
 
 const ownerController = {
-  updateOwner,
+  // updateOwner,
   getOwnerName,
   createStoreInfo,
   updateStoreInfo,

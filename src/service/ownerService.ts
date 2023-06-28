@@ -12,28 +12,28 @@ import { CreateStoreMenuDTO } from "../interfaces/store/createStoreMenuDTO";
 
 const prisma = new PrismaClient();
 
-// 점주 유저 회원정보 수정
-const updateOwner = async (id: number, ownerUpdateDTO: OwnerUpdateDTO) => {
-  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
-  const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash(ownerUpdateDTO.password, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
-  const data = await prisma.store_Owner.update({
-    where: {
-      id,
-    },
-    data: {
-      password,
-      director: ownerUpdateDTO.director,
-      phone: ownerUpdateDTO.phone,
-      email: ownerUpdateDTO.email,
-      address: ownerUpdateDTO.address,
-      detailAddress: ownerUpdateDTO.detailAddress,
-      licenseNumber: ownerUpdateDTO.licenseNumber,
-      licenseImage: ownerUpdateDTO.licenseImage,
-    },
-  });
-  return data.id;
-};
+// // 점주 유저 회원정보 수정
+// const updateOwner = async (id: number, ownerUpdateDTO: OwnerUpdateDTO) => {
+//   // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+//   const salt = await bcrypt.genSalt(10);
+//   const password = await bcrypt.hash(ownerUpdateDTO.password, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
+//   const data = await prisma.store_Owner.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       password,
+//       director: ownerUpdateDTO.director,
+//       phone: ownerUpdateDTO.phone,
+//       email: ownerUpdateDTO.email,
+//       address: ownerUpdateDTO.address,
+//       detailAddress: ownerUpdateDTO.detailAddress,
+//       licenseNumber: ownerUpdateDTO.licenseNumber,
+//       licenseImage: ownerUpdateDTO.licenseImage,
+//     },
+//   });
+//   return data.id;
+// };
 
 // 점주 유저 이름조회
 const getOwnerName = async (id: number) => {
@@ -137,7 +137,7 @@ const createStoreNotice = async (
   createStoreNoticeDTO: CreateStoreNoticeDTO,
   path: string,
   storeId: number,
-  date: EpochTimeStamp
+  date: Date
 ) => {
   const data = await prisma.store_Notice.create({
     data: {
@@ -229,7 +229,7 @@ const getTourByTourTitle = async (tour: string) => {
 // 유저 생성번호로 스탬프 적립 승낙
 const grantStampByRandNum = async (
   randNum: string,
-  date: EpochTimeStamp,
+  date: Date,
   storeId: number,
   storeName: string,
   tourTitle: string,
@@ -251,7 +251,7 @@ const grantStampByRandNum = async (
 };
 
 const ownerService = {
-  updateOwner,
+  // updateOwner,
   getOwnerName,
   findOwnerById,
   createStoreInfo,

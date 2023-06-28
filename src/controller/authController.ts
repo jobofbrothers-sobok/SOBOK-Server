@@ -143,26 +143,26 @@ const customerSignIn = async (req: Request, res: Response) => {
   const userSigninDTO: UserSignInDTO = req.body;
 
   try {
-    const user = await authService.customerSignIn(userSigninDTO);
+    const userId = await authService.customerSignIn(userSigninDTO);
 
-    if (!user)
+    if (!userId)
       return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-    else if (user === sc.UNAUTHORIZED)
+    else if (userId === sc.UNAUTHORIZED)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const accessToken = jwtHandler.sign(user.id);
+    const accessToken = jwtHandler.sign(userId);
 
-    req.session.save(function () {
-      req.session.loginId = user.loginId;
-      router.get("/signout/customer", auth);
-    });
+    // req.session.save(function () {
+    //   req.session.loginId = user.loginId;
+    //   router.get("/signout/customer", auth);
+    // });
 
     // 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
 
     const result = {
-      userId: user.id,
+      userId,
       accessToken,
     };
 
@@ -214,20 +214,20 @@ const ownerSignIn = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 로그아웃
-const customerSignOut = async (req: Request, res: Response) => {
-  const id = req.user.id;
-  console.log(req.session);
-  console.log(req.session.loginId); // undefined 출력
+// // 고객 유저 로그아웃
+// const customerSignOut = async (req: Request, res: Response) => {
+//   const id = req.user.id;
+//   console.log(req.session);
+//   console.log(req.session.loginId); // undefined 출력
 
-  if (!req.session.loginId) {
-    res.status(400).send({ data: null, message: "not authorized" });
-  } else {
-    req.session.destroy();
-    const destroy = req.session.loginId;
-    res.json({ data: null, message: "ok", destroy });
-  }
-};
+//   if (!req.session.loginId) {
+//     res.status(400).send({ data: null, message: "not authorized" });
+//   } else {
+//     req.session.destroy();
+//     const destroy = req.session.loginId;
+//     res.json({ data: null, message: "ok", destroy });
+//   }
+// };
 
 // 고객 유저 회원정보 수정
 const customerUpdate = async (req: Request, res: Response) => {
@@ -274,11 +274,9 @@ const ownerUpdate = async (req: Request, res: Response) => {
   const ownerUpdateDTO: OwnerUpdateDTO = req.body;
   const id = req.user.id;
   const image = req.files;
-  console.log(image.file1[0].path);
-  console.log(image.file2[0].path);
 
-  const path1 = image.file1[0].path;
-  const path2 = image.file2[0].path;
+  const path1 = image?.file1[0].path;
+  const path2 = image?.file2[0].path;
 
   const password = ownerUpdateDTO.password;
   const director = ownerUpdateDTO.director;
@@ -406,7 +404,7 @@ const authController = {
   createOwner,
   customerSignIn,
   ownerSignIn,
-  customerSignOut,
+  // customerSignOut,
   customerUpdate,
   ownerUpdate,
   findCustomerByEmail,
