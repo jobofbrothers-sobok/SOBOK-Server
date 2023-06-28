@@ -32,15 +32,46 @@ const createCustomer = async (customerCreateDTO: CustomerCreateDTO) => {
   return data;
 };
 
-// 점주 유저 회원가입
+// 점주 유저 회원가입 1
 const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
-  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
-  const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
-  const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
+  // // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  // const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
+  // const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
   const data = await prisma.store_Owner.create({
     data: {
       loginId: ownerCreateDTO.loginId,
-      password,
+      // password,
+      // store: ownerCreateDTO.store,
+      // director: ownerCreateDTO.director,
+      // phone: ownerCreateDTO.phone,
+      // email: ownerCreateDTO.email,
+      // address: ownerCreateDTO.address,
+      // detailAddress: ownerCreateDTO.detailAddress,
+      // licenseNumber: ownerCreateDTO.licenseNumber,
+      licenseImage: path,
+      // termsAgree: ownerCreateDTO.termsAgree,
+      // marketingAgree: ownerCreateDTO.marketingAgree,
+    },
+  });
+  const result = {
+    userId: data.id,
+    loginId: data.loginId,
+    licenseImage: data.licenseImage,
+  };
+  return result;
+};
+
+// 점주 유저 회원가입 2
+const patchOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
+  const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
+  const data = await prisma.store_Owner.update({
+    where: {
+      loginId: ownerCreateDTO.loginId,
+    },
+    data: {
+      password: password,
       store: ownerCreateDTO.store,
       director: ownerCreateDTO.director,
       phone: ownerCreateDTO.phone,
@@ -48,7 +79,6 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
       address: ownerCreateDTO.address,
       detailAddress: ownerCreateDTO.detailAddress,
       licenseNumber: ownerCreateDTO.licenseNumber,
-      licenseImage: path,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
     },
@@ -166,16 +196,22 @@ const findCustomerByEmail = async (email: string) => {
 };
 
 // 고객 유저 비밀번호 재설정
-const resetCustomerPw = async (id: number, token: string) => {
+const resetCustomerPw = async (cid: number, token: string) => {
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(token, salt);
   const data = await prisma.customer.update({
     where: {
-      id: id,
+      id: cid,
     },
     data: {
-      password: token,
+      password: password,
     },
   });
-  return data;
+  const result = {
+    customerId: data.id,
+    loginId: data.loginId,
+  };
+  return result;
 };
 
 // 고객 유저 회원탈퇴
@@ -201,6 +237,7 @@ const ownerDelete = async (id: number) => {
 const authService = {
   createCustomer,
   createOwner,
+  patchOwner,
   customerSignIn,
   ownerSignIn,
   customerUpdate,
