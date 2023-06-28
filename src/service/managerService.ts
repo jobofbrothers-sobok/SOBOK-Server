@@ -176,10 +176,7 @@ const getAllTour = async () => {
 };
 
 // 최고관리자 공지사항 작성
-const createNotice = async (
-  createNoticeDTO: CreateNoticeDTO,
-  date: EpochTimeStamp
-) => {
+const createNotice = async (createNoticeDTO: CreateNoticeDTO, date: Date) => {
   const data = await prisma.notice.create({
     data: {
       title: createNoticeDTO.title,
