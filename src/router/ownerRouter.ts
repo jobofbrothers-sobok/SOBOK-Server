@@ -70,21 +70,21 @@ router.post("/stamp", auth, ownerController.grantStampByRandNum);
 // // 점주 스탬프 서비스 사용 신청 - POST ~/owner/request
 // router.post("/request", auth, ownerController.requestStampSignIn);
 
-// 점주 유저 회원정보 수정 - POST ~/owner/:id
-router.post(
-  "/:id",
-  [
-    body("password").trim().notEmpty(),
-    body("director").trim().notEmpty(),
-    body("phone").trim().notEmpty(),
-    body("email").trim().notEmpty(),
-    body("address").trim().notEmpty(),
-    body("detailAddress").trim().notEmpty(),
-    body("licenseNumber").trim().notEmpty(),
-    body("licenseImage").trim().notEmpty(),
-  ],
-  ownerController.updateOwner
-);
+// // 점주 유저 회원정보 수정 - POST ~/owner/:id
+// router.post(
+//   "/:id",
+//   [
+//     body("password").trim().notEmpty(),
+//     body("director").trim().notEmpty(),
+//     body("phone").trim().notEmpty(),
+//     body("email").trim().notEmpty(),
+//     body("address").trim().notEmpty(),
+//     body("detailAddress").trim().notEmpty(),
+//     body("licenseNumber").trim().notEmpty(),
+//     body("licenseImage").trim().notEmpty(),
+//   ],
+//   ownerController.updateOwner
+// );
 
 // 점주 유저 이름 조회 - GET ~/owner/:id
 router.get("/:id", ownerController.getOwnerName);
