@@ -82,8 +82,8 @@ router.post("/signin/customer", authController.customerSignIn);
 // 점주 유저 로그인
 router.post("/signin/owner", authController.ownerSignIn);
 
-// // 고객 유저 로그아웃
-// router.get("/signout/customer", auth, authController.customerSignOut);
+// 고객 유저 로그아웃
+router.get("/signout/customer", auth, authController.customerSignOut);
 
 // 고객 유저 회원정보 찾기 및 비밀번호 재설정
 router.post("/find/customer", authController.findCustomerByEmail);

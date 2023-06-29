@@ -1,14 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import router from "./router";
 import app from "./app";
-import expressSession from "express-session";
 import fileStore from "session-file-store";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 
 const PORT = 5000; // 사용할 port를 3000번으로 설정
-
-app.use(express.json()); // express 에서 request body를 json 으로 받아오겠다.
 
 //* HTTP method - GET
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -19,18 +17,21 @@ app.use(cookieParser());
 
 // const filestore = new fileStore();
 app.use(
-  expressSession({
+  session({
     secret: "@sobok",
     resave: true,
     saveUninitialized: true,
-    // cookie: {
-    //   domain: "localhost",
-    //   path: "/",
-    //   httpOnly: true,
-    //   secure: true,
-    // },
+    cookie: {
+      domain: "localhost",
+      path: "/",
+      httpOnly: true,
+      secure: true,
+    },
+    // store
   })
 );
+
+app.use(express.json()); // express 에서 request body를 json 으로 받아오겠다.
 
 app.use("/", router);
 

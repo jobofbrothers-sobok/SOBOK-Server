@@ -215,19 +215,20 @@ const customerSignIn = async (req: Request, res: Response) => {
 
     const accessToken = jwtHandler.sign(userId);
 
-    // req.session.save(function () {
-    //   req.session.loginId = user.loginId;
-    //   router.get("/signout/customer", auth);
-    // });
-
-    // 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
-
     const result = {
       userId,
       accessToken,
     };
 
     res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
+
+    // req.session의 customerId property에 로그인한 고객 유저의 id(pk)를 저장
+    req.session.save(function () {
+      req.session.customerId = userId;
+      console.log(req.session);
+    });
+
+    // - 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
   } catch (e) {
     console.log(error);
     // 서버 내부에서 오류 발생
@@ -275,20 +276,26 @@ const ownerSignIn = async (req: Request, res: Response) => {
   }
 };
 
-// // 고객 유저 로그아웃
-// const customerSignOut = async (req: Request, res: Response) => {
-//   const id = req.user.id;
-//   console.log(req.session);
-//   console.log(req.session.loginId); // undefined 출력
+// 고객 유저 로그아웃
+const customerSignOut = async (req: Request, res: Response) => {
+  // const id = req.user.id;
+  console.log(req.session);
+  console.log(req.session.customerId); // undefined 출력
 
-//   if (!req.session.loginId) {
-//     res.status(400).send({ data: null, message: "not authorized" });
-//   } else {
-//     req.session.destroy();
-//     const destroy = req.session.loginId;
-//     res.json({ data: null, message: "ok", destroy });
-//   }
-// };
+  if (!req.session.customerId) {
+    res.status(400).send({ data: null, message: "not authorized" });
+  } else {
+    req.session.destroy(function (err) {
+      if (err) {
+        console.log("세션 삭제시 에러");
+        return;
+      }
+      console.log("세션 삭제 성공");
+    });
+    const destroyResult = req.session;
+    res.json({ data: null, message: "ok", destroyResult });
+  }
+};
 
 // 고객 유저 회원정보 수정
 const customerUpdate = async (req: Request, res: Response) => {
@@ -538,7 +545,7 @@ const authController = {
   patchOwner,
   customerSignIn,
   ownerSignIn,
-  // customerSignOut,
+  customerSignOut,
   customerUpdate,
   ownerUpdate,
   findCustomerByEmail,
