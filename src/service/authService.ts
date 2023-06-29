@@ -233,7 +233,7 @@ const resetOwnerPw = async (id: number, token: string) => {
   // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
   const salt = await bcrypt.genSalt(10);
   const resetPassword = await bcrypt.hash(token, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
-  const data = await prisma.customer.update({
+  const data = await prisma.store_Owner.update({
     where: {
       id: id,
     },
