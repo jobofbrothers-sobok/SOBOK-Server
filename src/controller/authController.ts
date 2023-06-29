@@ -378,7 +378,7 @@ const ownerUpdate = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 회원정보 찾기
+// 고객 유저 회원정보 찾기 및 비밀번호 재설정
 const findCustomerByEmail = async (req: Request, res: Response) => {
   const email = req.body.email;
   if (!email || email === "") {
@@ -386,7 +386,8 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
   }
   const customer = await authService.findCustomerByEmail(email);
   if (customer) {
-    const token = crypto.randomBytes(20).toString("hex");
+    // 10글자 string
+    const token = crypto.randomBytes(5).toString("hex");
     const data = {
       token,
       customerId: customer.id,
@@ -401,17 +402,26 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
         pass: process.env.GMAIL_PASSWORD,
       },
     });
+    const name = customer.name;
+    const loginId = customer.loginId;
     const emailOptions = {
       from: process.env.GMAIL_ID,
       to: email,
-      subject: "SOBOK 비밀번호 초기화 메일",
+      subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
       html:
-        `<p>비밀번호 초기화를 위해 아래의 URL을 클릭하여 주세요.</p>` +
-        `<a href="http://localhost:5000/reset/customer?cid=${customer.id}&reset=${token}">비밀번호 재설정 링크</a>`,
+        `<p>안녕하세요, SOBOK입니다.</p>` +
+        `<p>'${name}'님의 아이디 : ${loginId} </p>` +
+        `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+        `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+        `<p>감사합니다. </p>`,
     };
     transporter.sendMail(emailOptions);
 
-    return res.status(sc.OK).send(success(sc.OK, rm.SEND_EMAIL_SUCCESS));
+    // 비밀번호 재설정
+    const resetPassword = await authService.resetCustomerPw(customer.id, token);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
   } else {
     return res
       .status(sc.BAD_REQUEST)
@@ -419,15 +429,55 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 비밀번호 재설정
-const customerPasswordReset = async (req: Request, res: Response) => {
-  const cid = req.query.cid as string;
-  const token = req.query.token as string;
-  // 비밀번호 재설정
-  const resetPassword = await authService.resetCustomerPw(+cid, token);
-  return res
-    .status(sc.OK)
-    .send(success(sc.OK, rm.RESET_PW_SUCCESS, resetPassword));
+// 점주 유저 회원정보 찾기 및 비밀번호 재설정
+const findOwnerByEmail = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  if (!email || email === "") {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  const owner = await authService.findOwnerByEmail(email);
+  if (owner) {
+    // 10글자 string
+    const token = crypto.randomBytes(5).toString("hex");
+    const data = {
+      token,
+      ownerId: owner.id,
+      ttl: 300, // Time To Live 5분
+    };
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.GMAIL_ID,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+    });
+    const name = owner.director;
+    const loginId = owner.loginId;
+    const emailOptions = {
+      from: process.env.GMAIL_ID,
+      to: email,
+      subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
+      html:
+        `<p>안녕하세요, SOBOK입니다.</p>` +
+        `<p>'${name}' 담당자님의 아이디 : <b>${loginId}</b> </p>` +
+        `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+        `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+        `<p>감사합니다. </p>`,
+    };
+    transporter.sendMail(emailOptions);
+
+    // 비밀번호 재설정
+    const resetPassword = await authService.resetOwnerPw(owner.id, token);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
+  } else {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+  }
 };
 
 // 고객 유저 탈퇴
@@ -475,7 +525,7 @@ const authController = {
   customerUpdate,
   ownerUpdate,
   findCustomerByEmail,
-  customerPasswordReset,
+  findOwnerByEmail,
   customerDelete,
   ownerDelete,
 };

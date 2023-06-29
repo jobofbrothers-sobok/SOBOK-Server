@@ -199,19 +199,50 @@ const findCustomerByEmail = async (email: string) => {
 };
 
 // 고객 유저 비밀번호 재설정
-const resetCustomerPw = async (cid: number, token: string) => {
+const resetCustomerPw = async (id: number, token: string) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
   const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash(token, salt);
+  const resetPassword = await bcrypt.hash(token, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
   const data = await prisma.customer.update({
     where: {
-      id: cid,
+      id: id,
     },
     data: {
-      password: password,
+      password: resetPassword,
     },
   });
   const result = {
     customerId: data.id,
+    loginId: data.loginId,
+  };
+  return result;
+};
+
+// 점주 유저 회원정보 찾기
+const findOwnerByEmail = async (email: string) => {
+  const data = await prisma.store_Owner.findUnique({
+    where: {
+      email: email,
+    },
+  });
+  return data;
+};
+
+// 점주 유저 비밀번호 재설정
+const resetOwnerPw = async (id: number, token: string) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const resetPassword = await bcrypt.hash(token, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
+  const data = await prisma.store_Owner.update({
+    where: {
+      id: id,
+    },
+    data: {
+      password: resetPassword,
+    },
+  });
+  const result = {
+    ownerId: data.id,
     loginId: data.loginId,
   };
   return result;
@@ -247,6 +278,8 @@ const authService = {
   ownerUpdate,
   findCustomerByEmail,
   resetCustomerPw,
+  findOwnerByEmail,
+  resetOwnerPw,
   customerDelete,
   ownerDelete,
 };

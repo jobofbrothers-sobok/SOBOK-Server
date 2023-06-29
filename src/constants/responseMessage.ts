@@ -36,6 +36,7 @@ export default {
   GET_CUSTOMER_SUCCESS: "개별 고객 정보 조회 성공",
   GET_CUSTOMER_FAIL: "개별 고객 정보 조회 실패",
   GET_CUSTOMER_BY_EMAIL_FAIL: "이메일을 통한 고객 조회 실패",
+  SEND_EMAIL_RESET_PW_SUCCESS: "비밀번호 초기화 및 회원정보 이메일 전송 성공",
   SEND_EMAIL_SUCCESS: "비밀번호 초기화 이메일 전송 성공",
   RESET_PW_SUCCESS: "비밀번호 초기화 성공",
   RESET_PW_FAIL: "비밀번호 초기화 실패",
