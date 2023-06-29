@@ -8,6 +8,10 @@ export default {
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_GRANT_SUCCESS: "점주 회원가입 승인 성공",
   SIGNUP_FAIL: "회원 가입 실패",
+  OWNER_SIGNUP_1_SUCCESS: "점주 회원가입 1 성공",
+  OWNER_SIGNUP_1_FAIL: "점주 회원가입 1 실패",
+  OWNER_SIGNUP_2_SUCCESS: "점주 회원가입 2 성공",
+  OWNER_SIGNUP_2_FAIL: "점주 회원가입 2 실패",
   SIGNIN_SUCCESS: "로그인 성공",
   SIGNIN_FAIL: "로그인 실패",
   ALREADY_NICKNAME: "이미 사용중인 닉네임입니다.",
@@ -33,6 +37,9 @@ export default {
   GET_CUSTOMER_FAIL: "개별 고객 정보 조회 실패",
   GET_CUSTOMER_BY_EMAIL_FAIL: "이메일을 통한 고객 조회 실패",
   SEND_EMAIL_RESET_PW_SUCCESS: "비밀번호 초기화 및 회원정보 이메일 전송 성공",
+  SEND_EMAIL_SUCCESS: "비밀번호 초기화 이메일 전송 성공",
+  RESET_PW_SUCCESS: "비밀번호 초기화 성공",
+  RESET_PW_FAIL: "비밀번호 초기화 실패",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
