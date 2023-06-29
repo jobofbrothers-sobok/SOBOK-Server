@@ -386,7 +386,8 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
   }
   const customer = await authService.findCustomerByEmail(email);
   if (customer) {
-    const token = crypto.randomBytes(20).toString("hex");
+    // 10글자 string
+    const token = crypto.randomBytes(5).toString("hex");
     const data = {
       token,
       customerId: customer.id,
@@ -409,7 +410,7 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
       subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
       html:
         `<p>안녕하세요, SOBOK입니다.</p>` +
-        `<p>${name}님의 아이디 : ${loginId} </p>` +
+        `<p>'${name}'님의 아이디 : ${loginId} </p>` +
         `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
         `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
         `<p>감사합니다. </p>`,
@@ -436,7 +437,8 @@ const findOwnerByEmail = async (req: Request, res: Response) => {
   }
   const owner = await authService.findOwnerByEmail(email);
   if (owner) {
-    const token = crypto.randomBytes(20).toString("hex");
+    // 10글자 string
+    const token = crypto.randomBytes(5).toString("hex");
     const data = {
       token,
       ownerId: owner.id,
@@ -459,7 +461,7 @@ const findOwnerByEmail = async (req: Request, res: Response) => {
       subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
       html:
         `<p>안녕하세요, SOBOK입니다.</p>` +
-        `<p>${name} 담당자님의 아이디 : ${loginId} </p>` +
+        `<p>'${name}' 담당자님의 아이디 : <b>${loginId}</b> </p>` +
         `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
         `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
         `<p>감사합니다. </p>`,
