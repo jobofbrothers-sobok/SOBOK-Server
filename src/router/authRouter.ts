@@ -21,21 +21,28 @@ router.post(
   authController.createCustomer
 );
 
-// 점주 유저 회원가입
+// 점주 유저 회원가입 1 (loginId, 사진)
 router.post(
   "/signup/owner",
-  // [
-  //   body("loginId").notEmpty(),
-  //   body("password").notEmpty(),
-  //   body("store").notEmpty(),
-  //   body("director").notEmpty(),
-  //   body("phone").notEmpty(),
-  //   body("email").notEmpty(),
-  //   body("address").notEmpty(),
-  //   body("licenseNumber").notEmpty(),
-  // ],
+  // [body("loginId").notEmpty()],
   ownerUpload.single("file"),
   authController.createOwner
+);
+
+// 점주 유저 회원가입 2(loginId, 나머지 필드)
+router.patch(
+  "/signup/owner",
+  [
+    body("loginId").notEmpty(),
+    body("password").notEmpty(),
+    body("store").notEmpty(),
+    body("director").notEmpty(),
+    body("phone").notEmpty(),
+    body("email").notEmpty(),
+    body("address").notEmpty(),
+    body("licenseNumber").notEmpty(),
+  ],
+  authController.patchOwner
 );
 
 // 고객 유저 회원정보 수정
@@ -82,7 +89,7 @@ router.post("/signin/owner", authController.ownerSignIn);
 router.post("/find/customer", authController.findCustomerByEmail);
 
 // 고객 유저 비밀번호 재설정
-// router.post("/reset/customer", authController.customerPasswordReset);
+router.patch("/reset/customer", authController.customerPasswordReset);
 
 // 점주 유저 회원정보 찾기
 
