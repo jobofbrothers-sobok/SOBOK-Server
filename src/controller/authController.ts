@@ -384,48 +384,58 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
   if (!email || email === "") {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
-  const customer = await authService.findCustomerByEmail(email);
-  if (customer) {
-    // 10글자 string
-    const token = crypto.randomBytes(5).toString("hex");
-    const data = {
-      token,
-      customerId: customer.id,
-      ttl: 300, // Time To Live 5분
-    };
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.GMAIL_ID,
-        pass: process.env.GMAIL_PASSWORD,
-      },
-    });
-    const name = customer.name;
-    const loginId = customer.loginId;
-    const emailOptions = {
-      from: process.env.GMAIL_ID,
-      to: email,
-      subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
-      html:
-        `<p>안녕하세요, SOBOK입니다.</p>` +
-        `<p>'${name}'님의 아이디 : ${loginId} </p>` +
-        `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
-        `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
-        `<p>감사합니다. </p>`,
-    };
-    transporter.sendMail(emailOptions);
+  try {
+    const customer = await authService.findCustomerByEmail(email);
+    if (customer) {
+      // 10글자 string
+      const token = crypto.randomBytes(5).toString("hex");
+      const data = {
+        token,
+        customerId: customer.id,
+        ttl: 300, // Time To Live 5분
+      };
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.GMAIL_ID,
+          pass: process.env.GMAIL_PASSWORD,
+        },
+      });
+      const name = customer.name;
+      const loginId = customer.loginId;
+      const emailOptions = {
+        from: process.env.GMAIL_ID,
+        to: email,
+        subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
+        html:
+          `<p>안녕하세요, SOBOK입니다.</p>` +
+          `<p>'${name}'님의 아이디 : ${loginId} </p>` +
+          `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+          `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+          `<p>감사합니다. </p>`,
+      };
+      transporter.sendMail(emailOptions);
 
-    // 비밀번호 재설정
-    const resetPassword = await authService.resetCustomerPw(customer.id, token);
+      // 비밀번호 재설정
+      const resetPassword = await authService.resetCustomerPw(
+        customer.id,
+        token
+      );
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
+    } else {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+    }
+  } catch (error) {
+    console.log(error);
     return res
-      .status(sc.OK)
-      .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
-  } else {
-    return res
-      .status(sc.BAD_REQUEST)
-      .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
@@ -435,48 +445,55 @@ const findOwnerByEmail = async (req: Request, res: Response) => {
   if (!email || email === "") {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
-  const owner = await authService.findOwnerByEmail(email);
-  if (owner) {
-    // 10글자 string
-    const token = crypto.randomBytes(5).toString("hex");
-    const data = {
-      token,
-      ownerId: owner.id,
-      ttl: 300, // Time To Live 5분
-    };
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.GMAIL_ID,
-        pass: process.env.GMAIL_PASSWORD,
-      },
-    });
-    const name = owner.director;
-    const loginId = owner.loginId;
-    const emailOptions = {
-      from: process.env.GMAIL_ID,
-      to: email,
-      subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
-      html:
-        `<p>안녕하세요, SOBOK입니다.</p>` +
-        `<p>'${name}' 담당자님의 아이디 : <b>${loginId}</b> </p>` +
-        `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
-        `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
-        `<p>감사합니다. </p>`,
-    };
-    transporter.sendMail(emailOptions);
+  try {
+    const owner = await authService.findOwnerByEmail(email);
+    if (owner) {
+      // 10글자 string
+      const token = crypto.randomBytes(5).toString("hex");
+      const data = {
+        token,
+        ownerId: owner.id,
+        ttl: 300, // Time To Live 5분
+      };
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.GMAIL_ID,
+          pass: process.env.GMAIL_PASSWORD,
+        },
+      });
+      const name = owner.director;
+      const loginId = owner.loginId;
+      const emailOptions = {
+        from: process.env.GMAIL_ID,
+        to: email,
+        subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
+        html:
+          `<p>안녕하세요, SOBOK입니다.</p>` +
+          `<p>'${name}' 담당자님의 아이디 : <b>${loginId}</b> </p>` +
+          `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+          `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+          `<p>감사합니다. </p>`,
+      };
+      transporter.sendMail(emailOptions);
 
-    // 비밀번호 재설정
-    const resetPassword = await authService.resetOwnerPw(owner.id, token);
+      // 비밀번호 재설정
+      const resetPassword = await authService.resetOwnerPw(owner.id, token);
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
+    } else {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_OWNER_BY_EMAIL_FAIL));
+    }
+  } catch (error) {
+    console.log(error);
     return res
-      .status(sc.OK)
-      .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
-  } else {
-    return res
-      .status(sc.BAD_REQUEST)
-      .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
