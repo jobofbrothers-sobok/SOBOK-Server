@@ -340,13 +340,18 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
         pass: process.env.GMAIL_PASSWORD,
       },
     });
+    const name = customer.name;
+    const loginId = customer.loginId;
     const emailOptions = {
       from: process.env.GMAIL_ID,
       to: email,
-      subject: "SOBOK 비밀번호 초기화 메일",
+      subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
       html:
-        `<p>비밀번호 초기화를 위해 아래의 URL을 클릭하여 주세요.</p>` +
-        `<a href="http://localhost/reset/${token}">비밀번호 재설정 링크</a>`,
+        `<p>안녕하세요, SOBOK입니다.</p>` +
+        `<p>${name}님의 아이디 : ${loginId} </p>` +
+        `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+        `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+        `<p>감사합니다. </p>`,
     };
     transporter.sendMail(emailOptions);
 
@@ -354,7 +359,7 @@ const findCustomerByEmail = async (req: Request, res: Response) => {
     const resetPassword = await authService.resetCustomerPw(customer.id, token);
     return res
       .status(sc.OK)
-      .send(success(sc.OK, rm.SEND_EMAIL_SUCCESS, resetPassword));
+      .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
   } else {
     return res
       .status(sc.BAD_REQUEST)

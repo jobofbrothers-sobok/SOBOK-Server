@@ -170,15 +170,22 @@ const findCustomerByEmail = async (email: string) => {
 
 // 고객 유저 비밀번호 재설정
 const resetCustomerPw = async (id: number, token: string) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const resetPassword = await bcrypt.hash(token, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
   const data = await prisma.customer.update({
     where: {
       id: id,
     },
     data: {
-      password: token,
+      password: resetPassword,
     },
   });
-  return data;
+  const result = {
+    customerId: data.id,
+    loginId: data.loginId,
+  };
+  return result;
 };
 
 // 고객 유저 회원탈퇴
