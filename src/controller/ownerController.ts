@@ -14,30 +14,6 @@ import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import { CreateStoreNoticeDTO } from "../interfaces/store/createStoreNoticeDTO";
 import { customerService } from "../service";
 
-// // 점주 유저 회원정보 수정
-// const updateOwner = async (req: Request, res: Response) => {
-//   const error = validationResult(req);
-//   if (!error.isEmpty()) {
-//     return res
-//       .status(sc.BAD_REQUEST)
-//       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-//   }
-//   const ownerUpdateDTO: OwnerUpdateDTO = req.body;
-//   const { id } = req.params;
-
-//   try {
-//     const updatedUserId = await ownerService.updateOwner(+id, ownerUpdateDTO);
-//     return res
-//       .status(sc.OK)
-//       .send(success(sc.OK, rm.UPDATE_USER_SUCCESS, { id: updatedUserId }));
-//   } catch (error) {
-//     console.log(error);
-//     return res
-//       .status(sc.INTERNAL_SERVER_ERROR)
-//       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-//   }
-// };
-
 // 점주 유저 이름 조회
 const getOwnerName = async (req: Request, res: Response) => {
   try {
@@ -57,6 +33,12 @@ const getOwnerName = async (req: Request, res: Response) => {
 
 // 점주 유저 매장 정보 등록
 const createStoreInfo = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
   const ownerId = req.user.id;
   const image: Express.Multer.File = req.file as Express.Multer.File;
@@ -67,8 +49,10 @@ const createStoreInfo = async (req: Request, res: Response) => {
       ownerId,
       path
     );
-    // console.log(typeof createStore.description, createStore.description);
-    // console.log(typeof createStore.category, createStore.category);
+    console.log(createStore);
+    console.log(typeof createStore.description, createStore.description);
+    console.log(typeof createStore.category);
+    console.log(createStore.category);
     const storeId = createStore.id;
     const createStoreIdForOwner = await ownerService.createStoreIdForOwner(
       ownerId,
@@ -94,12 +78,14 @@ const updateStoreInfo = async (req: Request, res: Response) => {
   const storeId = req.params.id;
   const image: Express.Multer.File = req.file as Express.Multer.File;
   const path = image.path;
+
   try {
     const updatedStore = await ownerService.updateStoreInfo(
       +storeId,
       createStoreInfoDTO,
       path
     );
+
     // console.log(typeof updatedStore.description, updatedStore.description);
     // console.log(typeof updatedStore.category, updatedStore.category);
     return res
