@@ -69,7 +69,7 @@ const createStoreInfo = async (
       dayOff: createStoreInfoDTO.dayOff,
       homepage: createStoreInfoDTO.homepage,
       image: path,
-      category: createStoreInfoDTO.category,
+      category: createStoreInfoDTO.category.split(","),
       ownerId,
     },
   });
@@ -106,7 +106,7 @@ const updateStoreInfo = async (
       dayOff: createStoreInfoDTO.dayOff,
       homepage: createStoreInfoDTO.homepage,
       image: path,
-      category: createStoreInfoDTO.category,
+      category: createStoreInfoDTO.category.split(","),
     },
   });
   return data;
