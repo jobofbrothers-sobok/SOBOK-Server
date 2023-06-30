@@ -63,16 +63,15 @@ router.post(
   "/update/owner",
   auth,
   ownerUpload.fields([{ name: "file1" }, { name: "file2" }]),
-  // [
-  //   body("password").trim().notEmpty(),
-  //   body("director").trim().notEmpty(),
-  //   body("phone").trim().notEmpty(),
-  //   body("email").trim().notEmpty(),
-  //   body("address").trim().notEmpty(),
-  //   body("detailAddress").trim().notEmpty(),
-  //   body("licenseNumber").trim().notEmpty(),
-  //   body("licenseImage").trim().notEmpty(),
-  // ],
+  [
+    body("password").trim().notEmpty(),
+    body("director").trim().notEmpty(),
+    body("phone").trim().notEmpty(),
+    body("email").trim().notEmpty(),
+    body("address").trim().notEmpty(),
+    body("detailAddress").trim().notEmpty(),
+    body("licenseNumber").trim().notEmpty(),
+  ],
   authController.ownerUpdate
 );
 
