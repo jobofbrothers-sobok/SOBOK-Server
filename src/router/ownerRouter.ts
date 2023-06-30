@@ -58,6 +58,14 @@ router.post(
   "/store",
   auth,
   storeUpload.single("file"),
+  [
+    body("storeName").trim().notEmpty(),
+    body("description").trim().notEmpty(),
+    body("officeHour").trim().notEmpty(),
+    body("storeName").trim().notEmpty(),
+    body("dayOff").trim().notEmpty(),
+    body("homepage").trim().notEmpty(),
+  ],
   ownerController.createStoreInfo
 );
 
