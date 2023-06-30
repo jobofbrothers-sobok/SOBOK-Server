@@ -10,7 +10,7 @@ const noticeUpload = multer({ dest: "uploads/owner/store/notice/" });
 const menuUpload = multer({ dest: "uploads/owner/store/menu/" });
 const productUpload = multer({ dest: "uploads/owner/store/product/" });
 
-// 점주 매장소식 등록 - POST ~/owner/store/notice
+// 점주 매장소식 등록 - POST ~/owner/store/notice/:id
 router.post(
   "/store/notice/:id",
   auth,
@@ -23,7 +23,7 @@ router.post(
   ownerController.createStoreNotice
 );
 
-// 점주 매장메뉴 등록 - POST ~/owner/store/menu
+// 점주 매장메뉴 등록 - POST ~/owner/store/menu/:id
 router.post(
   "/store/menu/:id",
   auth,
@@ -32,7 +32,7 @@ router.post(
   ownerController.createStoreMenu
 );
 
-// 점주 매장 스토어 상품 등록 - POST ~/owner/store/product
+// 점주 매장 스토어 상품 등록 - POST ~/owner/store/product/:id
 router.post(
   "/store/product/:id",
   auth,
@@ -41,6 +41,7 @@ router.post(
     body("category").trim().notEmpty(),
     body("name").trim().notEmpty(),
     body("price").trim().notEmpty(),
+    body("url").trim().notEmpty(),
   ],
   ownerController.createStoreProduct
 );
