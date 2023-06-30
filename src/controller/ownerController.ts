@@ -95,7 +95,11 @@ const updateStoreInfo = async (req: Request, res: Response) => {
     console.log(updatedStore.category);
     return res
       .status(sc.OK)
-      .send(success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, updatedStore));
+      .send(
+        success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, {
+          storeName: updatedStore.storeName,
+        })
+      );
   } catch (error) {
     console.log(error);
     return res
