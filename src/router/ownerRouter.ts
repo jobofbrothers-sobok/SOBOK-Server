@@ -50,6 +50,13 @@ router.post(
   "/store/:id",
   auth,
   storeUpload.single("file"),
+  [
+    body("storeName").trim().notEmpty(),
+    body("description").trim().notEmpty(),
+    body("officeHour").trim().notEmpty(),
+    body("dayOff").trim().notEmpty(),
+    body("category").isLength({ min: 1 }),
+  ],
   ownerController.updateStoreInfo
 );
 
@@ -62,9 +69,8 @@ router.post(
     body("storeName").trim().notEmpty(),
     body("description").trim().notEmpty(),
     body("officeHour").trim().notEmpty(),
-    body("storeName").trim().notEmpty(),
     body("dayOff").trim().notEmpty(),
-    body("homepage").trim().notEmpty(),
+    body("category.*").isString().trim(),
   ],
   ownerController.createStoreInfo
 );
