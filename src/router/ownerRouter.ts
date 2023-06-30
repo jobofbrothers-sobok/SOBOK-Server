@@ -70,7 +70,7 @@ router.post(
     body("description").trim().notEmpty(),
     body("officeHour").trim().notEmpty(),
     body("dayOff").trim().notEmpty(),
-    body("category.*").isString().trim(),
+    body("category").isLength({ min: 1 }),
   ],
   ownerController.createStoreInfo
 );
