@@ -50,7 +50,6 @@ const createStoreInfo = async (req: Request, res: Response) => {
       path
     );
     console.log(createStore);
-    console.log(typeof createStore.description, createStore.description);
     console.log(typeof createStore.category);
     console.log(createStore.category);
     const storeId = createStore.id;
@@ -73,6 +72,12 @@ const createStoreInfo = async (req: Request, res: Response) => {
 
 // 점주 유저 매장 정보 수정
 const updateStoreInfo = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   const createStoreInfoDTO: CreateStoreInfoDTO = req.body;
   // const userId = req.user.id;
   const storeId = req.params.id;
@@ -85,9 +90,9 @@ const updateStoreInfo = async (req: Request, res: Response) => {
       createStoreInfoDTO,
       path
     );
-
-    // console.log(typeof updatedStore.description, updatedStore.description);
-    // console.log(typeof updatedStore.category, updatedStore.category);
+    console.log(updatedStore);
+    console.log(typeof updatedStore.category);
+    console.log(updatedStore.category);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, updatedStore));
