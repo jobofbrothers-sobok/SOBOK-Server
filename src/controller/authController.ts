@@ -336,8 +336,8 @@ const ownerUpdate = async (req: Request, res: Response) => {
   const id = req.user.id;
   const image = req.files as { [fieldname: string]: Express.Multer.File[] };
   console.log(image);
-  const path1 = image?.file1[0].path;
-  const path2 = image?.file2[0].path;
+  const path1 = image.file1[0].path;
+  const path2 = image.file2[0].path;
   console.log(path1);
   console.log(path2);
 
