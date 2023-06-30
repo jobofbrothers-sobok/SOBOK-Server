@@ -93,13 +93,11 @@ const updateStoreInfo = async (req: Request, res: Response) => {
     console.log(updatedStore);
     console.log(typeof updatedStore.category);
     console.log(updatedStore.category);
-    return res
-      .status(sc.OK)
-      .send(
-        success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, {
-          storeName: updatedStore.storeName,
-        })
-      );
+    return res.status(sc.OK).send(
+      success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, {
+        storeName: updatedStore.storeName,
+      })
+    );
   } catch (error) {
     console.log(error);
     return res
@@ -134,6 +132,8 @@ const createStoreNotice = async (req: Request, res: Response) => {
       +storeId,
       date
     );
+    console.log(date);
+    console.log(typeof date);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_STORE_NOTICE_SUCCESS, createStoreNotice));
