@@ -19,7 +19,7 @@ model Customer {
   storeId        Int?
   image          String?         @db.VarChar(800)
   Alim_Customer  Alim_Customer[]
-  Store          Store?          @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store          Store?          @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
   Delivery       Delivery[]
   Stamp          Stamp[]
   Store_Review   Store_Review[]
@@ -53,13 +53,13 @@ model Stamp {
   store      String?   @db.VarChar(30)
   tourId     Int?
   tour       String?   @db.VarChar(30)
-  Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade, map: "customerId")
-  Store      Store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
-  Tour       Tour?     @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "tourId")
+  Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: NoAction, map: "customerId")
+  Store      Store?    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
+  Tour       Tour?     @relation(fields: [tourId], references: [id], onDelete: NoAction, map: "tourId")
 }
 
 model Store {
-  id                                     Int             @id @default(autoincrement())
+  id                                     Int             @id @unique @default(autoincrement())
   storeName                              String          @db.VarChar(30)
   description                            String?         @db.VarChar(100)
   officeHour                             String?         @db.VarChar(50)
@@ -71,8 +71,8 @@ model Store {
   tourId                                 Int?
   Customer                               Customer[]
   Stamp                                  Stamp[]
-  Store_Owner_Store_ownerIdToStore_Owner Store_Owner?    @relation("Store_ownerIdToStore_Owner", fields: [ownerId], references: [id], onDelete: Cascade, map: "ownerId")
-  Tour                                   Tour?           @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "tourId")
+  Store_Owner_Store_ownerIdToStore_Owner Store_Owner?    @relation("Store_ownerIdToStore_Owner", fields: [ownerId], references: [id], onDelete: NoAction, map: "ownerId")
+  Tour                                   Tour?           @relation(fields: [tourId], references: [id], onDelete: NoAction, map: "tourId")
   Store_Menu                             Store_Menu[]
   Store_Notice                           Store_Notice[]
   Store_Owner_Store_Owner_storeIdToStore Store_Owner[]   @relation("Store_Owner_storeIdToStore")
@@ -86,7 +86,7 @@ model Store_Menu {
   content String? @db.VarChar(300)
   image   String? @db.VarChar(300)
   storeId Int?
-  Store   Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store   Store?  @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
 
 model Store_Notice {
@@ -97,7 +97,7 @@ model Store_Notice {
   image       String?   @db.VarChar(300)
   storeId     Int?
   createdTime DateTime? @db.Timestamp(6)
-  Store       Store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store       Store?    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
 
 model Store_Owner {
@@ -120,7 +120,7 @@ model Store_Owner {
   profileImage                     String?        @db.VarChar(800)
   Alim_Request                     Alim_Request[]
   Store_Store_ownerIdToStore_Owner Store[]        @relation("Store_ownerIdToStore_Owner")
-  Store_Store_Owner_storeIdToStore Store?         @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store_Store_Owner_storeIdToStore Store?         @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
 
 model Store_Product {
@@ -132,7 +132,7 @@ model Store_Product {
   url           String? @db.VarChar(300)
   image         String? @db.VarChar(300)
   storeId       Int?
-  Store         Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
+  Store         Store?  @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
 
 model Tour {
@@ -153,8 +153,8 @@ model Store_Review {
   timestamp DateTime @db.Timestamp(6)
   writerId  Int      @default(autoincrement())
   storeId   Int      @id @unique @default(autoincrement())
-  Store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade, map: "storeId")
-  Customer  Customer @relation(fields: [writerId], references: [id], onDelete: Cascade, map: "wrtierId")
+  Store     Store    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
+  Customer  Customer @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "wrtierId")
 }
 
 model Notice {
@@ -184,5 +184,5 @@ model Alim_Request {
   isKakao       Boolean
   writerId      Int
   Alim_Customer Alim_Customer[]
-  Store_Owner   Store_Owner     @relation(fields: [writerId], references: [id], onDelete: Cascade, map: "writerId")
+  Store_Owner   Store_Owner     @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "writerId")
 }
