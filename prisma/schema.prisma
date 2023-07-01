@@ -77,7 +77,7 @@ model Store {
   Tour                                   Tour?           @relation(fields: [tourId], references: [id], onDelete: NoAction, map: "tourId")
   Store_Menu                             Store_Menu[]
   Store_Notice                           Store_Notice[]
-  Store_Owner_Store_Owner_storeIdToStore Store_Owner[]   @relation("Store_Owner_storeIdToStore")
+  Store_Owner_Store_Owner_storeIdToStore Store_Owner?    @relation("Store_Owner_storeIdToStore")
   Store_Product                          Store_Product[]
   Store_Review                           Store_Review?
 }
@@ -117,7 +117,7 @@ model Store_Owner {
   authorized                       Boolean?       @default(false)
   termsAgree                       Boolean?
   marketingAgree                   Boolean?
-  storeId                          Int?
+  storeId                          Int?           @unique
   stampAuthorized                  Boolean?       @default(false)
   profileImage                     String?        @db.VarChar(800)
   Alim_Request                     Alim_Request[]
