@@ -23,8 +23,8 @@ router.get("/customer/:id", auth, managerController.getCustomerById);
 // 최고관리자 고객 정보 전체 조회
 router.get("/customer", auth, managerController.getAllCustomer);
 
-// 매장정보를 투어에 추가
-router.post("/tour/store", auth, managerController.createTourIdForStore);
+// // 매장정보를 투어에 추가
+// router.post("/tour/store", auth, managerController.createTourIdForStore);
 
 // 최고관리자 배송신청 리스트 개별 조회
 router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);

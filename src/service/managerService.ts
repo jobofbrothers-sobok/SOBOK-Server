@@ -129,23 +129,23 @@ const createTour = async (createTourDTO: CreateTourDTO, path: string) => {
       title: createTourDTO.title,
       reward: createTourDTO.reward,
       image: path,
+      cafeList: createTourDTO.cafeList.split(","),
     },
   });
-  return data;
-};
 
-// 매장 id를 받아 매장 정보를 투어에 추가
-const createTourIdForStore = async (
-  createTourIdForStoreDTO: CreateTourIdForStoreDTO
-) => {
-  const data = await prisma.store.update({
-    where: {
-      id: createTourIdForStoreDTO.storeId as number,
-    },
-    data: {
-      tourId: createTourIdForStoreDTO.tourId as number,
-    },
-  });
+  // 매장 정보에 투어 id 부여
+  const cafeListArray = createTourDTO.cafeList.split(",");
+  for (let i = 0; i < cafeListArray.length; i++) {
+    const tourStore = await prisma.store.updateMany({
+      where: {
+        storeName: cafeListArray[i],
+      },
+      data: {
+        tourId: data.id,
+      },
+    });
+  }
+
   return data;
 };
 
@@ -197,7 +197,6 @@ const managerService = {
   grantOwnerSignUp,
   findManagerById,
   createTour,
-  createTourIdForStore,
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,
