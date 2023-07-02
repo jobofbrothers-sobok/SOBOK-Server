@@ -239,6 +239,27 @@ const createAlimRequest = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 소복 스탬프 서비스 사용 신청
+const requestStampSignIn = async (req: Request, res: Response) => {
+  const userId = req.user.id;
+  try {
+    const data = await ownerService.requestStampSignIn(userId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.CREATE_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 점주 고객 스탬프 적립 승낙
 const grantStampByRandNum = async (req: Request, res: Response) => {
   const userId = req.user.id;
@@ -286,11 +307,13 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
       .send(success(sc.OK, rm.GRANT_STAMP_SUCCESS, result));
   } catch (error) {
     console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
 const ownerController = {
-  // updateOwner,
   getOwnerName,
   createStoreInfo,
   updateStoreInfo,
@@ -298,6 +321,7 @@ const ownerController = {
   createStoreMenu,
   createStoreProduct,
   createAlimRequest,
+  requestStampSignIn,
   grantStampByRandNum,
 };
 

@@ -17,6 +17,15 @@ router.get("/owner/:id", auth, managerController.getOwnerById);
 // 최고관리자 담당자(점주) 정보 전체 조회
 router.get("/owner", auth, managerController.getAllOwner);
 
+// 최고관리자 스탬프 사용 신청 담당자 개별 조회
+router.get("/stamp/:id", auth, managerController.getStampSignInRequest);
+
+// 최고관리자 스탬프 사용 신청 승인
+router.post("/stamp/:id", auth, managerController.stampSignInGrant);
+
+// 최고관리자 스탬프 사용 신청 담당자 전체 조회
+router.get("/stamp", auth, managerController.getAllStampSignInRequest);
+
 // 최고관리자 고객 정보 개별 조회
 router.get("/customer/:id", auth, managerController.getCustomerById);
 

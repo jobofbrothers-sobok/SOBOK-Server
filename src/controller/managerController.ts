@@ -225,6 +225,68 @@ const getCustomerById = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회
+const getAllStampSignInRequest = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getAllStampSignInRequest();
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 담당자 개별 조회
+const getStampSignInRequest = async (req: Request, res: Response) => {
+  const ownerId = req.params.id;
+  try {
+    const data = await managerService.getStampSignInRequest(+ownerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 승인
+const stampSignInGrant = async (req: Request, res: Response) => {
+  const ownerId = req.params.id;
+  try {
+    const data = await managerService.stampSignInGrant(+ownerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GRANT_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GRANT_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 투어 추가하기
 const createTour = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -352,6 +414,9 @@ const managerController = {
   managerSignup,
   managerSignin,
   grantOwnerSignUp,
+  getAllStampSignInRequest,
+  getStampSignInRequest,
+  stampSignInGrant,
   createTour,
   getAllDeliveryRequest,
   getDeliveryRequestById,

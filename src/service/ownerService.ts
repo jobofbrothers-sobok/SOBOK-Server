@@ -155,8 +155,17 @@ const getTourByTourTitle = async (tour: string) => {
   return data;
 };
 
-//*
-// 유저 생성번호로 스탬프 적립 승낙
+// 점주 소복 스탬프 서비스 사용 신청
+const requestStampSignIn = async (userId: number) => {
+  const data = await prisma.stamp_Request.create({
+    data: {
+      ownerId: userId,
+    },
+  });
+  return data;
+};
+
+//** 유저 생성번호로 스탬프 적립 승낙
 const grantStampByRandNum = async (
   randNum: string,
   date: Date,
@@ -305,7 +314,6 @@ const createAlimRequest = async (
 };
 
 const ownerService = {
-  // updateOwner,
   getOwnerName,
   findOwnerById,
   createStoreInfo,
@@ -315,6 +323,7 @@ const ownerService = {
   getStorebyStoreId,
   getTourByTourId,
   getTourByTourTitle,
+  requestStampSignIn,
   grantStampByRandNum,
   createStoreNotice,
   createStoreMenu,
