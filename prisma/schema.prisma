@@ -18,8 +18,8 @@ model Customer {
   marketingAgree Boolean?
   storeId        Int?
   image          String?         @db.VarChar(800)
-  stampCount     Int?
-  couponCount    Int?
+  stampCount     Int             @default(0)
+  couponCount    Int             @default(0)
   Alim_Customer  Alim_Customer[]
   Store          Store?          @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
   Delivery       Delivery[]
