@@ -119,7 +119,8 @@ const getStorebyOwnerId = async (id: number) => {
       ownerId: id,
     },
   });
-  return data?.id;
+  console.log("getStorebyOwnerId");
+  return data;
 };
 
 // storeId로 점주 매장 조회
@@ -129,6 +130,103 @@ const getStorebyStoreId = async (storeId: number) => {
       id: storeId,
     },
   });
+  console.log("getStorebyStoreId");
+  return data;
+};
+
+// tourId로 투어 정보 조회
+const getTourByTourId = async (tourId: number) => {
+  const data = await prisma.tour.findUnique({
+    where: {
+      id: tourId,
+    },
+  });
+  console.log("getTourByTourId");
+  return data;
+};
+
+// 투어 제목으로 tourId 조회
+const getTourByTourTitle = async (tour: string) => {
+  const data = await prisma.tour.findFirst({
+    where: {
+      title: tour,
+    },
+  });
+  return data;
+};
+
+//*
+// 유저 생성번호로 스탬프 적립 승낙
+const grantStampByRandNum = async (
+  randNum: string,
+  date: Date,
+  storeId: number,
+  storeName: string,
+  tourTitle: string,
+  tourId: number
+) => {
+  // 스탬프 적립 승낙
+  const data = await prisma.stamp.update({
+    where: {
+      randNum: randNum,
+    },
+    data: {
+      timestamp: date,
+      storeId: storeId,
+      store: storeName,
+      tour: tourTitle,
+      tourId: tourId,
+    },
+  });
+
+  // 스탬프를 적립한 고객의 id
+  const customerId = data.customerId as number;
+
+  // 그 고객의 stampCount 증가시키기
+  const addStampCount = await prisma.customer.update({
+    where: {
+      id: customerId,
+    },
+    data: {
+      stampCount: {
+        increment: 1,
+      },
+    },
+  });
+  console.log("stampCount: ", addStampCount.stampCount);
+
+  console.log("customerId: ", customerId);
+
+  console.log("tourId: ", tourId);
+
+  // 해당 투어에서의 적립한 스탬프 개수가 10개 이상이면 쿠폰 개수 증가
+  const tourStamp = await prisma.stamp.findMany({
+    where: {
+      customerId: customerId,
+      tourId: data.tourId,
+    },
+  });
+
+  console.log(tourStamp);
+  const tourStampCount = tourStamp.length;
+  console.log("customer", customerId, "'s tourstampcount: ", tourStampCount);
+
+  if (tourStampCount % 10 === 0 && tourStampCount !== 0) {
+    const addTourStampCount = await prisma.customer.update({
+      where: {
+        id: customerId,
+      },
+      data: {
+        couponCount: {
+          increment: 1,
+        },
+      },
+    });
+    console.log("coupontCount: ", addTourStampCount.couponCount);
+  } else {
+    console.log("if문 탈출: ");
+  }
+
   return data;
 };
 
@@ -201,50 +299,6 @@ const createAlimRequest = async (
       isMessage: ownerCreateAlimRequestDTO.isMessage,
       isKakao: ownerCreateAlimRequestDTO.isKakao,
       writerId: userId,
-    },
-  });
-  return data;
-};
-
-// tourId로 투어 정보 조회
-const getTourByTourId = async (tourId: number) => {
-  const data = await prisma.tour.findUnique({
-    where: {
-      id: tourId,
-    },
-  });
-  return data;
-};
-
-// 투어 제목으로 tourId 조회
-const getTourByTourTitle = async (tour: string) => {
-  const data = await prisma.tour.findFirst({
-    where: {
-      title: tour,
-    },
-  });
-  return data;
-};
-
-// 유저 생성번호로 스탬프 적립 승낙
-const grantStampByRandNum = async (
-  randNum: string,
-  date: Date,
-  storeId: number,
-  storeName: string,
-  tourTitle: string,
-  tourId: number
-) => {
-  const data = await prisma.stamp.update({
-    where: {
-      randNum: randNum,
-    },
-    data: {
-      timestamp: date,
-      storeId: storeId,
-      store: storeName,
-      tour: tourTitle,
-      tourId: tourId,
     },
   });
   return data;
