@@ -180,7 +180,7 @@ const getAllStampSignInRequest = async () => {
         id: ownerId,
       },
     });
-    data.push(requestOwner);
+    data.push(requestOwner as object);
   }
   return data;
 };
