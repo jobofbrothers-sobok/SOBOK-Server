@@ -155,8 +155,7 @@ const patchOwner = async (req: Request, res: Response) => {
       !email ||
       !address ||
       !licenseNumber ||
-      !termsAgree ||
-      !marketingAgree
+      !termsAgree
     ) {
       return res
         .status(sc.BAD_REQUEST)
