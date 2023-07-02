@@ -121,6 +121,7 @@ model Store_Owner {
   stampAuthorized                  Boolean?       @default(false)
   profileImage                     String?        @db.VarChar(800)
   Alim_Request                     Alim_Request[]
+  Stamp_Request                    Stamp_Request?
   Store_Store_ownerIdToStore_Owner Store[]        @relation("Store_ownerIdToStore_Owner")
   Store_Store_Owner_storeIdToStore Store?         @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
@@ -188,4 +189,11 @@ model Alim_Request {
   writerId      Int
   Alim_Customer Alim_Customer[]
   Store_Owner   Store_Owner     @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "writerId")
+}
+
+model Stamp_Request {
+  id          Int         @id @default(autoincrement())
+  ownerId     Int         @unique
+  isGrant     Boolean     @default(false)
+  Store_Owner Store_Owner @relation(fields: [ownerId], references: [id], onDelete: NoAction, map: "ownerId")
 }
