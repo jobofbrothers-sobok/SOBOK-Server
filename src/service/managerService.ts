@@ -169,6 +169,32 @@ const getDeliveryRequestById = async (deliveryId: number) => {
   return data;
 };
 
+// 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회
+const getAllStampSignInRequest = async () => {
+  const allRequest = await prisma.stamp_Request.findMany();
+  let data: Array<object> = [];
+  for (let i = 0; i < allRequest.length; i++) {
+    const ownerId = allRequest[i].ownerId;
+    const requestOwner = await prisma.store_Owner.findUnique({
+      where: {
+        id: ownerId,
+      },
+    });
+    data.push(requestOwner);
+  }
+  return data;
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 담당자 개별 조회
+const getStampSignInRequest = async (ownerId: number) => {
+  const data = await prisma.store_Owner.findUnique({
+    where: {
+      id: ownerId,
+    },
+  });
+  return data;
+};
+
 // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
 const getAllTour = async () => {
   const data = await prisma.tour.findMany();
@@ -196,6 +222,8 @@ const managerService = {
   managerSignIn,
   grantOwnerSignUp,
   findManagerById,
+  getAllStampSignInRequest,
+  getStampSignInRequest,
   createTour,
   getAllDeliveryRequest,
   getDeliveryRequestById,
