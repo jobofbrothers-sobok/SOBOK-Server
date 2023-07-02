@@ -122,13 +122,13 @@ const getCustomerById = async (customerId: number) => {
 };
 
 // 최고관리자 투어 추가
-const createTour = async (createTourDTO: CreateTourDTO) => {
+const createTour = async (createTourDTO: CreateTourDTO, path: string) => {
   const data = await prisma.tour.create({
     data: {
       keyword: createTourDTO.keyword,
       title: createTourDTO.title,
       reward: createTourDTO.reward,
-      image: createTourDTO.image,
+      image: path,
     },
   });
   return data;
@@ -176,12 +176,16 @@ const getAllTour = async () => {
 };
 
 // 최고관리자 공지사항 작성
-const createNotice = async (createNoticeDTO: CreateNoticeDTO, date: Date) => {
+const createNotice = async (
+  createNoticeDTO: CreateNoticeDTO,
+  date: Date,
+  path: string
+) => {
   const data = await prisma.notice.create({
     data: {
       title: createNoticeDTO.title,
       content: createNoticeDTO.content,
-      image: createNoticeDTO.image,
+      image: path,
       timestamp: date,
     },
   });

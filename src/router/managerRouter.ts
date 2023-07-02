@@ -2,8 +2,11 @@ import { Router } from "express";
 import { managerController } from "../controller";
 import { body } from "express-validator";
 import { auth } from "../middlewares";
+import multer from "multer";
 
 const router: Router = Router();
+const tourUpload = multer({ dest: "uploads/manager/tour" });
+const noticeUpload = multer({ dest: "uploads/manager/notice" });
 
 // 점주 회원가입 승인
 router.post("/grant/:id", auth, managerController.grantOwnerSignUp);
@@ -28,10 +31,12 @@ router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 
 // 최고관리자 배송신청 리스트 전체 조회
 router.get("/delivery", auth, managerController.getAllDeliveryRequest);
+
 // 최고관리자 투어 추가
 router.post(
   "/tour",
   auth,
+  tourUpload.single("file"),
   [
     body("keyword").trim().notEmpty(),
     body("title").trim().notEmpty(),
@@ -40,8 +45,8 @@ router.post(
   managerController.createTour
 );
 
-// // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
-// router.get("/tour", auth, managerController.getAllTour);
+// 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
+router.get("/tour", auth, managerController.getAllTour);
 
 // 최고관리자 회원가입
 router.post("/signup", managerController.managerSignup);
@@ -50,6 +55,11 @@ router.post("/signup", managerController.managerSignup);
 router.post("/signin", managerController.managerSignin);
 
 // 최고관리자 공지글 작성
-router.post("/", auth, managerController.createNotice);
+router.post(
+  "/",
+  auth,
+  noticeUpload.single("file"),
+  managerController.createNotice
+);
 
 export default router;
