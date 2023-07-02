@@ -236,7 +236,15 @@ const createTour = async (req: Request, res: Response) => {
 
   const createTourDTO: CreateTourDTO = req.body;
   try {
-    const createTour = await managerService.createTour(createTourDTO);
+    const image: Express.Multer.File = req.file as Express.Multer.File;
+    const path = image.path;
+
+    if (!image) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const createTour = await managerService.createTour(createTourDTO, path);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_TOUR_SUCCESS, createTour));
@@ -345,8 +353,16 @@ const createNotice = async (req: Request, res: Response) => {
   const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
   const date = new Date(now);
   const createNoticeDTO: CreateNoticeDTO = req.body;
+
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+
+  if (!image) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
   try {
-    const data = await managerService.createNotice(createNoticeDTO, date);
+    const data = await managerService.createNotice(createNoticeDTO, date, path);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_NOTICE_SUCCESS, data));
