@@ -256,31 +256,6 @@ const createTour = async (req: Request, res: Response) => {
   }
 };
 
-// 매장정보를 투어에 추가
-const createTourIdForStore = async (req: Request, res: Response) => {
-  const createTourIdForStoreDTO: CreateTourIdForStoreDTO = req.body;
-  const storeId = createTourIdForStoreDTO.storeId;
-  const tourId = createTourIdForStoreDTO.tourId;
-
-  if (!storeId || !tourId) {
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-  }
-
-  try {
-    const data = await managerService.createTourIdForStore(
-      createTourIdForStoreDTO
-    );
-    return res
-      .status(sc.NOT_FOUND)
-      .send(success(sc.NOT_FOUND, rm.CREATE_TOURID_FOR_STORE_SUCCESS, data));
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(sc.INTERNAL_SERVER_ERROR)
-      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-  }
-};
-
 // 최고관리자 배송신청 리스트 전체 조회
 const getAllDeliveryRequest = async (req: Request, res: Response) => {
   try {
@@ -378,7 +353,6 @@ const managerController = {
   managerSignin,
   grantOwnerSignUp,
   createTour,
-  createTourIdForStore,
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,
