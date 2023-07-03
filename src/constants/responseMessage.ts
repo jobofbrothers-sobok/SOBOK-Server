@@ -70,10 +70,11 @@ export default {
 
   // 스탬프
   CREATE_STAMP_SIGNIN_REQUEST_SUCCESS: "스탬프 서비스 사용 신청 성공",
-  CREATE_STAMP_SIGNIN_REQUEST_FAIL: "스탬프 서비스 사용 신청 성공",
-  GRANT_STAMP_SIGNIN_REQUEST_SUCCESS: "스탬프 서비스 사용 승인 성공",
+  CREATE_STAMP_SIGNIN_REQUEST_FAIL: "스탬프 서비스 사용 신청 실패",
+  GRANT_STAMP_SIGNIN_REQUEST_SUCCESS: "스탬프 서비스 사용 승인 실패",
   GRANT_STAMP_SIGNIN_REQUEST_FAIL: "스탬프 서비스 사용 승인 성공",
-  GET_ALL_STAMP_SIGNIN_REQUEST_SUCCESS: "스탬프 사용 신청 담당자 전체 조회 성공",
+  GET_ALL_STAMP_SIGNIN_REQUEST_SUCCESS:
+    "스탬프 사용 신청 담당자 전체 조회 성공",
   GET_ALL_STAMP_SIGNIN_REQUEST_FAIL: "스탬프 사용 신청 담당자 전체 조회 실패",
   GET_STAMP_SIGNIN_REQUEST_SUCCESS: "스탬프 사용 신청 담당자 개별 조회 성공",
   GET_STAMP_SIGNIN_REQUEST_FAIL: "스탬프 사용 신청 담당자 개별 조회 실패",
