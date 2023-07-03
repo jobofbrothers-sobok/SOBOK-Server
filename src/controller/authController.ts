@@ -222,6 +222,7 @@ const customerSignIn = async (req: Request, res: Response) => {
     // 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
 
     const result = {
+      who: "customer",
       userId,
       accessToken,
     };
@@ -260,6 +261,7 @@ const ownerSignIn = async (req: Request, res: Response) => {
     const accessToken = jwtHandler.sign(userId);
 
     const result = {
+      who: "owner",
       userId: userId,
       accessToken,
     };
