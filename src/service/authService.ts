@@ -90,7 +90,7 @@ const patchOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
 // 고객 유저 로그인
 const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
-    const user = await prisma.customer.findFirst({
+    const user = await prisma.customer.findUnique({
       where: {
         loginId: userSignInDTO.loginId,
       },
@@ -102,7 +102,7 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
     const isMatch = await bcrypt.compare(userSignInDTO.password, user.password);
     if (!isMatch) return sc.UNAUTHORIZED;
 
-    return user.id;
+    return user;
   } catch (error) {
     console.log(error);
     throw error;
@@ -112,7 +112,7 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
 // 점주 유저 로그인
 const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
-    const user = await prisma.store_Owner.findFirst({
+    const user = await prisma.store_Owner.findUnique({
       where: {
         loginId: userSignInDTO.loginId,
       },
@@ -127,7 +127,7 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
     );
     if (!isMatch) return sc.UNAUTHORIZED;
 
-    return user.id;
+    return user;
   } catch (error) {
     console.log(error);
     throw error;

@@ -14,6 +14,7 @@ import { auth } from "../middlewares";
 import router from "../router";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { Customer, Store_Owner } from "@prisma/client";
 
 // 고객 유저 회원가입
 const createCustomer = async (req: Request, res: Response) => {
@@ -203,16 +204,17 @@ const customerSignIn = async (req: Request, res: Response) => {
   const userSigninDTO: UserSignInDTO = req.body;
 
   try {
-    const userId = await authService.customerSignIn(userSigninDTO);
+    const user = await authService.customerSignIn(userSigninDTO);
 
-    if (!userId)
+    if (!user)
       return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-    else if (userId === sc.UNAUTHORIZED)
+    else if (user === sc.UNAUTHORIZED)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const accessToken = jwtHandler.sign(userId);
+    const tokenUser = user as Customer;
+    const accessToken = jwtHandler.sign(tokenUser.id);
 
     // req.session.save(function () {
     //   req.session.loginId = user.loginId;
@@ -223,7 +225,9 @@ const customerSignIn = async (req: Request, res: Response) => {
 
     const result = {
       who: "customer",
-      userId,
+      id: tokenUser.id,
+      loginId: tokenUser.loginId,
+      name: tokenUser.name,
       accessToken,
     };
 
@@ -249,20 +253,24 @@ const ownerSignIn = async (req: Request, res: Response) => {
   const userSigninDTO: UserSignInDTO = req.body;
 
   try {
-    const userId = await authService.ownerSignIn(userSigninDTO);
+    const user = await authService.ownerSignIn(userSigninDTO);
 
-    if (!userId)
+    if (!user)
       return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-    else if (userId === sc.UNAUTHORIZED)
+    else if (user === sc.UNAUTHORIZED)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const accessToken = jwtHandler.sign(userId);
+    const tokenUser = user as Store_Owner;
+    const accessToken = jwtHandler.sign(tokenUser.id);
 
     const result = {
       who: "owner",
-      userId: userId,
+      id: tokenUser.id,
+      loginId: tokenUser.loginId,
+      store: tokenUser.store,
+      director: tokenUser.director,
       accessToken,
     };
 
