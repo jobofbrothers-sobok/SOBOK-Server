@@ -75,6 +75,7 @@ const managerSignin = async (req: Request, res: Response) => {
     const accessToken = jwtHandler.sign(userId);
 
     const result = {
+      who: "manager",
       userId: userId,
       accessToken,
     };
