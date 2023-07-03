@@ -187,12 +187,19 @@ const getAllStampSignInRequest = async () => {
 
 // 최고관리자 스탬프 서비스 사용 신청 담당자 개별 조회
 const getStampSignInRequest = async (ownerId: number) => {
-  const data = await prisma.store_Owner.findUnique({
+  const requestOwner = await prisma.stamp_Request.findUnique({
     where: {
-      id: ownerId,
+      ownerId: ownerId,
     },
   });
-  return data;
+  if (requestOwner !== null) {
+    const data = await prisma.store_Owner.findUnique({
+      where: {
+        id: ownerId,
+      },
+    });
+    return data;
+  }
 };
 
 // 최고관리자 스탬프 서비스 사용 신청 승인
