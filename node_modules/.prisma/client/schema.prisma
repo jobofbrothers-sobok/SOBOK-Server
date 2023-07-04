@@ -69,7 +69,7 @@ model Store {
   homepage                               String?         @db.VarChar(200)
   image                                  String?         @db.VarChar(200)
   category                               String[]
-  ownerId                                Int?
+  ownerId                                Int?            @unique
   tourId                                 Int?
   Customer                               Customer[]
   Stamp                                  Stamp[]
@@ -122,7 +122,7 @@ model Store_Owner {
   profileImage                     String?        @db.VarChar(800)
   Alim_Request                     Alim_Request[]
   Stamp_Request                    Stamp_Request?
-  Store_Store_ownerIdToStore_Owner Store[]        @relation("Store_ownerIdToStore_Owner")
+  Store_Store_ownerIdToStore_Owner Store?         @relation("Store_ownerIdToStore_Owner")
   Store_Store_Owner_storeIdToStore Store?         @relation("Store_Owner_storeIdToStore", fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
 

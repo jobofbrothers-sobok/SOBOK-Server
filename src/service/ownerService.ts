@@ -55,25 +55,52 @@ const findOwnerById = async (id: number) => {
   return data;
 };
 
-// 점주 매장정보 등록
+// 점주 매장정보 등록 및 수정
 const createStoreInfo = async (
   createStoreInfoDTO: CreateStoreInfoDTO,
   ownerId: number,
   path: string
 ) => {
-  const data = await prisma.store.create({
-    data: {
-      storeName: createStoreInfoDTO.storeName,
-      description: createStoreInfoDTO.description,
-      officeHour: createStoreInfoDTO.officeHour,
-      dayOff: createStoreInfoDTO.dayOff,
-      homepage: createStoreInfoDTO.homepage,
-      image: path,
-      category: createStoreInfoDTO.category.split(","),
-      ownerId,
+  const store = await prisma.store.findUnique({
+    where: {
+      ownerId: ownerId,
     },
   });
-  return data;
+  // 이미 등록된 매장정보가 있을 경우 - 수정
+  if (store !== null) {
+    const updatedData = await prisma.store.update({
+      where: {
+        ownerId: ownerId,
+      },
+      data: {
+        storeName: createStoreInfoDTO.storeName,
+        description: createStoreInfoDTO.description,
+        officeHour: createStoreInfoDTO.officeHour,
+        dayOff: createStoreInfoDTO.dayOff,
+        homepage: createStoreInfoDTO.homepage,
+        image: path,
+        category: createStoreInfoDTO.category.split(","),
+      },
+    });
+    console.log("updated");
+    return updatedData;
+  } else {
+    // 이미 등록된 매장정보가 없을 경우 - 등록
+    const data = await prisma.store.create({
+      data: {
+        storeName: createStoreInfoDTO.storeName,
+        description: createStoreInfoDTO.description,
+        officeHour: createStoreInfoDTO.officeHour,
+        dayOff: createStoreInfoDTO.dayOff,
+        homepage: createStoreInfoDTO.homepage,
+        image: path,
+        category: createStoreInfoDTO.category.split(","),
+        ownerId,
+      },
+    });
+    console.log("created");
+    return data;
+  }
 };
 
 // 점주 매장id 부여

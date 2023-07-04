@@ -31,7 +31,7 @@ const getOwnerName = async (req: Request, res: Response) => {
   }
 };
 
-// 점주 유저 매장 정보 등록
+// 점주 유저 매장 정보 등록 및 수정
 const createStoreInfo = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -49,21 +49,19 @@ const createStoreInfo = async (req: Request, res: Response) => {
       ownerId,
       path
     );
-    console.log(createStore);
+    console.log("createStore: ", createStore);
     console.log(typeof createStore.category);
     console.log(createStore.category);
     const storeId = createStore.id;
+    console.log(storeId);
     const createStoreIdForOwner = await ownerService.createStoreIdForOwner(
       ownerId,
       storeId
     );
-    return res.status(sc.OK).send(
-      success(sc.OK, rm.CREATE_STORE_INFO_SUCCESS, {
-        storeId: createStore.id,
-        storeName: createStore.storeName,
-        ownerId: createStore.ownerId,
-      })
-    );
+
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_STORE_INFO_SUCCESS, createStore));
   } catch (error) {
     console.log(error);
     return res
