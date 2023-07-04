@@ -269,6 +269,7 @@ const ownerSignIn = async (req: Request, res: Response) => {
       who: "owner",
       id: tokenUser.id,
       loginId: tokenUser.loginId,
+      storeId: tokenUser.storeId,
       store: tokenUser.store,
       director: tokenUser.director,
       accessToken,
