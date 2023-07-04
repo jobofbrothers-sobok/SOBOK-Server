@@ -46,22 +46,22 @@ router.post(
   ownerController.createStoreProduct
 );
 
-// 점주 매장정보 수정 - POST ~/owner/store/:id
-router.post(
-  "/store/:id",
-  auth,
-  storeUpload.single("file"),
-  [
-    body("storeName").trim().notEmpty(),
-    body("description").trim().notEmpty(),
-    body("officeHour").trim().notEmpty(),
-    body("dayOff").trim().notEmpty(),
-    body("category").isLength({ min: 1 }),
-  ],
-  ownerController.updateStoreInfo
-);
+// // 점주 매장정보 수정 - POST ~/owner/store/:id
+// router.post(
+//   "/store/:id",
+//   auth,
+//   storeUpload.single("file"),
+//   [
+//     body("storeName").trim().notEmpty(),
+//     body("description").trim().notEmpty(),
+//     body("officeHour").trim().notEmpty(),
+//     body("dayOff").trim().notEmpty(),
+//     body("category").isLength({ min: 1 }),
+//   ],
+//   ownerController.updateStoreInfo
+// );
 
-// 점주 매장정보 등록 - POST ~/owner/store
+// 점주 매장정보 등록 및 수정 - POST ~/owner/store
 router.post(
   "/store",
   auth,
