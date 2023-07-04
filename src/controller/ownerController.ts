@@ -59,7 +59,9 @@ const createStoreInfo = async (req: Request, res: Response) => {
     );
     return res.status(sc.OK).send(
       success(sc.OK, rm.CREATE_STORE_INFO_SUCCESS, {
+        storeId: createStore.id,
         storeName: createStore.storeName,
+        ownerId: createStore.ownerId,
       })
     );
   } catch (error) {
@@ -95,7 +97,9 @@ const updateStoreInfo = async (req: Request, res: Response) => {
     console.log(updatedStore.category);
     return res.status(sc.OK).send(
       success(sc.OK, rm.UPDATE_STORE_INFO_SUCCESS, {
+        storeId: updatedStore.id,
         storeName: updatedStore.storeName,
+        ownerId: updatedStore.ownerId,
       })
     );
   } catch (error) {

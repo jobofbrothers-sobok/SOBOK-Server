@@ -46,7 +46,7 @@ router.post(
   ownerController.createStoreProduct
 );
 
-// 점주 매장정보 수정 - POST ~/owner/store/info/:id
+// 점주 매장정보 수정 - POST ~/owner/store/:id
 router.post(
   "/store/:id",
   auth,
@@ -61,7 +61,7 @@ router.post(
   ownerController.updateStoreInfo
 );
 
-// 점주 매장정보 등록 - POST ~/owner/store/info
+// 점주 매장정보 등록 - POST ~/owner/store
 router.post(
   "/store",
   auth,
