@@ -247,7 +247,7 @@ const grantStampByRandNum = async (
   const tourStampCount = tourStamp.length;
   console.log("customer", customerId, "'s tourstampcount: ", tourStampCount);
 
-  if (tourStampCount % 10 === 0 && tourStampCount !== 0) {
+  if (tourStampCount % 10 === 0 && tourStampCount >= 0) {
     const addTourStampCount = await prisma.customer.update({
       where: {
         id: customerId,
