@@ -100,10 +100,16 @@ const getAllStamp = async (req: Request, res: Response) => {
 
   try {
     const allStamp = await customerService.getAllStamp(sort, id);
-    if (!allStamp || allStamp.length === 0) {
+    if (!allStamp) {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.GET_ALL_STAMP_FAIL));
+    }
+
+    if (allStamp.length === 0) {
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.GET_ALL_STAMP_NONE, allStamp));
     }
     return res
       .status(sc.CREATED)
