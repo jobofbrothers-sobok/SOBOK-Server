@@ -295,18 +295,12 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
       tourTitle as string,
       tourId as number
     );
-
-    const result = {
-      stampId: data.id,
-      randNum: data.randNum,
-      timestamp: data.timestamp,
-      customerId: data.customerId,
-      storeId: data.storeId,
-    };
-
-    return res
-      .status(sc.OK)
-      .send(success(sc.OK, rm.GRANT_STAMP_SUCCESS, result));
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GRANT_STAMP_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.GRANT_STAMP_SUCCESS, data));
   } catch (error) {
     console.log(error);
     return res
