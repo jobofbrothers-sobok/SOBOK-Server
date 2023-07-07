@@ -9,6 +9,7 @@ import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import { CreateStoreMenuDTO } from "../interfaces/store/createStoreMenuDTO";
+import axios from "axios";
 
 const prisma = new PrismaClient();
 
@@ -66,7 +67,7 @@ const createStoreInfo = async (
       ownerId: ownerId,
     },
   });
-  // 이미 등록된 매장정보가 있을 경우 - 수정
+  //* 이미 등록된 매장정보가 있을 경우 - 수정
   if (store !== null) {
     const updatedData = await prisma.store.update({
       where: {
@@ -85,7 +86,30 @@ const createStoreInfo = async (
     console.log("updated");
     return updatedData;
   } else {
-    // 이미 등록된 매장정보가 없을 경우 - 등록
+    //* 이미 등록된 매장정보가 없을 경우 - 등록
+    // 점주 유저의 매장 주소 조회
+    const owner = await prisma.store_Owner.findUnique({
+      where: {
+        id: ownerId,
+      },
+    });
+    const storeLocation = owner?.address;
+
+    // 네이버 지도 API를 통해 x, y 좌표 조회
+    const geocodeResult = await axios.get(
+      `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${storeLocation}`,
+      {
+        headers: {
+          "X-NCP-APIGW-API-KEY-ID": process.env.NAVER_GEOCODING_CLIENT_ID,
+          "X-NCP-APIGW-API-KEY": process.env.NAVER_GEOCODING_CLIENT_SECRET,
+        },
+      }
+    );
+    console.log(geocodeResult.data);
+    const x = geocodeResult.data.addresses[0].x;
+    const y = geocodeResult.data.addresses[0].y;
+
+    // request body에 x, y 좌표를 추가하여 매장 레코드 생성
     const data = await prisma.store.create({
       data: {
         storeName: createStoreInfoDTO.storeName,
@@ -96,6 +120,8 @@ const createStoreInfo = async (
         image: path,
         category: createStoreInfoDTO.category.split(","),
         ownerId,
+        x: x,
+        y: y,
       },
     });
     console.log("created");
