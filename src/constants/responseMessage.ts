@@ -95,6 +95,8 @@ export default {
   GET_DELIVERY_REQUEST_FAIL: "스탬프 배송신청 리스트 개별 조회 실패",
 
   // 투어
+  GET_STORE_BY_STORENAME_SUCCESS: "매장 검색 성공",
+  GET_STORE_BY_STORENAME_FAIL: "매장 검색 실패",
   CREATE_TOUR_SUCCESS: "스탬프 투어 생성 성공",
   CREATE_TOUR_FAIL: "스탬프 투어 생성 실패",
   CREATE_TOURID_FOR_STORE_SUCCESS: "스탬프 투어에 매장정보 추가 성공",
