@@ -149,6 +149,17 @@ const createTour = async (createTourDTO: CreateTourDTO, path: string) => {
   return data;
 };
 
+// 최고관리자 투어 추가 시 매장정보 검색
+const getStoreByStoreName = async (store: string) => {
+  const data = await prisma.store.findMany({
+    // 검색어를 포함하는 매장명 조회 시 해당 매장 레코드 반환
+    where: {
+      storeName: { contains: store },
+    },
+  });
+  return data;
+};
+
 // 최고관리자 배송신청 리스트 전체 조회
 const getAllDeliveryRequest = async () => {
   const data = await prisma.delivery.findMany({
@@ -260,6 +271,7 @@ const managerService = {
   getStampSignInRequest,
   stampSignInGrant,
   createTour,
+  getStoreByStoreName,
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,

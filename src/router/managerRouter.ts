@@ -38,6 +38,9 @@ router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 // 최고관리자 배송신청 리스트 전체 조회
 router.get("/delivery", auth, managerController.getAllDeliveryRequest);
 
+// 최고관리자 투어 추가 시 매장 검색
+router.get("/tour/search", auth, managerController.getStoreByStoreName);
+
 // 최고관리자 투어 추가
 router.post(
   "/tour",
