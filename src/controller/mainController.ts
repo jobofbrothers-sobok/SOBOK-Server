@@ -4,6 +4,26 @@ import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import jwtHandler from "../modules/jwtHandler";
 import { mainService } from "../service";
+import axios from "axios";
+
+// 유저 근처 카페 전체 조회
+const getAllCafe = async (req: Request, res: Response) => {
+  // 유저 현위치 x, y 좌표
+  const x = req.body.x;
+  const y = req.body.y;
+
+  try {
+    const data = await mainService.getAllCafe(x, y);
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_NEAR_CAFE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 
 // 유저 근처 카페 개별 업체 정보 조회
 const getCafeById = async (req: Request, res: Response) => {
@@ -102,6 +122,7 @@ const getCafeReviewById = async (req: Request, res: Response) => {
 };
 
 const mainController = {
+  getAllCafe,
   getCafeById,
   getCafeNoticeById,
   getCafeMenuById,
