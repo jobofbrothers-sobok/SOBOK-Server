@@ -282,6 +282,8 @@ const ownerSignIn = async (req: Request, res: Response) => {
       storeId: tokenUser.storeId,
       store: tokenUser.store,
       director: tokenUser.director,
+      authorized: tokenUser.authorized,
+      stampAuthorized: tokenUser.stampAuthorized,
       accessToken,
     };
 

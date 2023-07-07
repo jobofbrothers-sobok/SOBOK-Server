@@ -319,6 +319,32 @@ const createTour = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 투어 추가 시 매장 검색
+const getStoreByStoreName = async (req: Request, res: Response) => {
+  const store = req.body.storeName;
+  try {
+    if (!store) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const data = await managerService.getStoreByStoreName(store);
+    if (!data || data.length === 0) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_STORE_BY_STORENAME_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_STORE_BY_STORENAME_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 배송신청 리스트 전체 조회
 const getAllDeliveryRequest = async (req: Request, res: Response) => {
   try {
@@ -419,6 +445,7 @@ const managerController = {
   getStampSignInRequest,
   stampSignInGrant,
   createTour,
+  getStoreByStoreName,
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,
