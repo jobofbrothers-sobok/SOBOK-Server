@@ -27,10 +27,10 @@ router.post("/stamp/:id", auth, managerController.stampSignInGrant);
 router.get("/stamp", auth, managerController.getAllStampSignInRequest);
 
 // 최고관리자 고객 정보 개별 조회
-router.get("/customer/:id", auth, managerController.getCustomerById);
+router.get("/client/:id", auth, managerController.getCustomerById);
 
 // 최고관리자 고객 정보 전체 조회
-router.get("/customer", auth, managerController.getAllCustomer);
+router.get("/client", auth, managerController.getAllCustomer);
 
 // 최고관리자 배송신청 리스트 개별 조회
 router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
@@ -55,11 +55,11 @@ router.post(
 // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
 router.get("/tour", auth, managerController.getAllTour);
 
-// 최고관리자 회원가입
-router.post("/signup", managerController.managerSignup);
+// // 최고관리자 회원가입
+// router.post("/signup", managerController.managerSignup);
 
-// 최고관리자 로그인
-router.post("/signin", managerController.managerSignin);
+// // 최고관리자 로그인
+// router.post("/signin", managerController.managerSignin);
 
 // 최고관리자 공지글 작성
 router.post(

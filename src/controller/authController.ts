@@ -223,13 +223,23 @@ const customerSignIn = async (req: Request, res: Response) => {
 
     // 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
 
-    const result = {
+    let result = {
       who: "customer",
       id: tokenUser.id,
       loginId: tokenUser.loginId,
       name: tokenUser.name,
       accessToken,
     };
+
+    if (tokenUser.loginId === "admin") {
+      result = {
+        who: "manager",
+        id: tokenUser.id,
+        loginId: tokenUser.loginId,
+        name: tokenUser.name,
+        accessToken,
+      };
+    }
 
     res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
   } catch (e) {
