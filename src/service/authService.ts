@@ -9,6 +9,7 @@ import { CustomerUpdateDTO } from "./../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import { Request, Response } from "express";
+import axios from "axios";
 
 const prisma = new PrismaClient();
 
@@ -182,6 +183,34 @@ const ownerUpdate = async (
       licenseNumber: ownerUpdateDTO.licenseNumber,
       licenseImage: path1,
       profileImage: path2,
+    },
+  });
+
+  //* 담당자 정보 수정 시 매장 주소를 수정할 경우 -> 매장 테이블의 x, y 필드 값 변경
+  // 점주 유저의 매장 주소(도로명 주소)
+  const storeLocation = data.address;
+
+  // 네이버 지도 API를 통해 x, y 좌표 조회
+  const geocodeResult = await axios.get(
+    `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${storeLocation}`,
+    {
+      headers: {
+        "X-NCP-APIGW-API-KEY-ID": process.env.NAVER_GEOCODING_CLIENT_ID,
+        "X-NCP-APIGW-API-KEY": process.env.NAVER_GEOCODING_CLIENT_SECRET,
+      },
+    }
+  );
+  const x = geocodeResult.data.addresses[0].x;
+  const y = geocodeResult.data.addresses[0].y;
+
+  // 점주 유저의 매장 x, y 필드 값을 수정
+  const result = await prisma.store.update({
+    where: {
+      ownerId: id,
+    },
+    data: {
+      x: x,
+      y: y,
     },
   });
   // console.log(data);

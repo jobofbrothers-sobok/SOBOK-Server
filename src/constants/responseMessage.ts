@@ -54,6 +54,8 @@ export default {
   INTERNAL_SERVER_ERROR: "서버 내 오류",
 
   // 매장
+  GET_ALL_NEAR_CAFE_SUCCESS: "유저 근처 카페 전체 조회 성공",
+  GET_ALL_NEAR_CAFE_FAIL: "유저 근처 카페 전체 조회 실패",
   CREATE_STORE_INFO_SUCCESS: "매장 정보 생성 및 수정 성공",
   UPDATE_STORE_INFO_SUCCESS: "매장 정보 수정 성공",
   CREATE_STORE_NOTICE_SUCCESS: "매장 소식 생성 성공",
