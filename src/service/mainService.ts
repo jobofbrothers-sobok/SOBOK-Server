@@ -6,11 +6,12 @@ import axios from "axios";
 const prisma = new PrismaClient();
 
 // 유저 근처 카페 전체 조회
-const getAllCafe = async (x: number, y: number) => {
+const getAllCafe = async (x: number, y: number, category: Array<string>) => {
   // 전제 1: 투어에 포함된 카페 전체 조회
   let allTourCafe = await prisma.store.findMany({
     where: {
       tourId: { not: null },
+      category: { hasEvery: category },
     },
   });
 
