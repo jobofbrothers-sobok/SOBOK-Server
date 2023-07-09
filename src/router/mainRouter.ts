@@ -17,6 +17,12 @@ router.get("/store/menu/:id", mainController.getCafeMenuById);
 // 유저 근처 카페 개별 업체 피드 조회
 router.get("/store/review/:id", mainController.getCafeReviewById);
 
+// 카페 찜하기
+router.post("/store/:storeId", auth, mainController.createLikeCafe);
+
+// 카페 찜 해제하기
+router.delete("/store/:storeId", auth, mainController.deleteLikeCafe);
+
 // 유저 근처 카페 전체 조회 - GET ~/main/store
 router.get("/store", mainController.getAllCafe);
 
