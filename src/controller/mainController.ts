@@ -11,9 +11,10 @@ const getAllCafe = async (req: Request, res: Response) => {
   // 유저 현위치 x, y 좌표
   const x = req.body.x;
   const y = req.body.y;
+  const category = req.body.category;
 
   try {
-    const data = await mainService.getAllCafe(x, y);
+    const data = await mainService.getAllCafe(x, y, category);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.GET_ALL_NEAR_CAFE_SUCCESS, data));
