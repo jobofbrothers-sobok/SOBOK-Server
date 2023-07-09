@@ -6,6 +6,60 @@ import jwtHandler from "../modules/jwtHandler";
 import { mainService } from "../service";
 import axios from "axios";
 
+// 카페 찜하기
+const createLikeCafe = async (req: Request, res: Response) => {
+  const storeId = req.params.storeId;
+  const customerId = req.user.id;
+  try {
+    if (!storeId) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const data = await mainService.createLikeCafe(+storeId, customerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.CREATE_LIKE_CAFE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_LIKE_CAFE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 카페 찜 해제하기
+const deleteLikeCafe = async (req: Request, res: Response) => {
+  const storeId = req.params.storeId;
+  const customerId = req.user.id;
+  try {
+    if (!storeId) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const data = await mainService.deleteLikeCafe(+storeId, customerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_LIKE_CAFE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_LIKE_CAFE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 유저 근처 카페 전체 조회
 const getAllCafe = async (req: Request, res: Response) => {
   // 유저 현위치 x, y 좌표
@@ -15,6 +69,11 @@ const getAllCafe = async (req: Request, res: Response) => {
 
   try {
     const data = await mainService.getAllCafe(x, y, category);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_NEAR_CAFE_FAIL));
+    }
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.GET_ALL_NEAR_CAFE_SUCCESS, data));
@@ -123,6 +182,8 @@ const getCafeReviewById = async (req: Request, res: Response) => {
 };
 
 const mainController = {
+  createLikeCafe,
+  deleteLikeCafe,
   getAllCafe,
   getCafeById,
   getCafeNoticeById,
