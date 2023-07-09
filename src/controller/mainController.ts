@@ -1,3 +1,4 @@
+import { CreateStoreReviewDTO } from "./../interfaces/store/createStoreReviewDTO";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { rm, sc } from "../constants";
@@ -181,6 +182,52 @@ const getCafeReviewById = async (req: Request, res: Response) => {
   }
 };
 
+// 유저 근처 카페 개별 업체 피드 작성
+const createCafeReviewById = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const writerId = req.user.id;
+  const storeId = req.params.id;
+  const createStoreReviewDTO: CreateStoreReviewDTO = req.body;
+  if (!storeId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+
+  // 현시각보다 9시간 느려서 가산
+  const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
+  const date = new Date(now);
+
+  try {
+    const data = await mainService.createCafeReviewById(
+      writerId,
+      +storeId,
+      createStoreReviewDTO,
+      path,
+      date
+    );
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.CREATE_CAFE_REVIEW_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_CAFE_REVIEW_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -189,5 +236,6 @@ const mainController = {
   getCafeNoticeById,
   getCafeMenuById,
   getCafeReviewById,
+  createCafeReviewById,
 };
 export default mainController;
