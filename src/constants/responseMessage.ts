@@ -54,6 +54,10 @@ export default {
   INTERNAL_SERVER_ERROR: "서버 내 오류",
 
   // 매장
+  CREATE_LIKE_CAFE_SUCCESS: "매장 찜 성공",
+  CREATE_LIKE_CAFE_FAIL: "매장 찜 실패",
+  DELETE_LIKE_CAFE_SUCCESS: "매장 찜 해제 성공",
+  DELETE_LIKE_CAFE_FAIL: "매장 찜 해제 실패",
   GET_ALL_NEAR_CAFE_SUCCESS: "유저 근처 카페 전체 조회 성공",
   GET_ALL_NEAR_CAFE_FAIL: "유저 근처 카페 전체 조회 실패",
   CREATE_STORE_INFO_SUCCESS: "매장 정보 생성 및 수정 성공",

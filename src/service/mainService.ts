@@ -5,6 +5,33 @@ import axios from "axios";
 
 const prisma = new PrismaClient();
 
+// 카페 찜하기
+const createLikeCafe = async (storeId: number, customerId: number) => {
+  const data = await prisma.store_Like.create({
+    data: {
+      customerId: customerId,
+      storeId: storeId,
+    },
+  });
+  return data;
+};
+
+// 카페 찜 해제
+const deleteLikeCafe = async (storeId: number, customerId: number) => {
+  const likedStore = await prisma.store_Like.findFirst({
+    where: {
+      customerId: customerId,
+      storeId: storeId,
+    },
+  });
+  const data = await prisma.store_Like.delete({
+    where: {
+      id: likedStore.id,
+    },
+  });
+  return data;
+};
+
 // 유저 근처 카페 전체 조회
 const getAllCafe = async (x: number, y: number, category: Array<string>) => {
   // 전제 1: 투어에 포함된 카페 전체 조회
@@ -80,6 +107,8 @@ const getCafeReviewById = async (storeId: number) => {
   return data;
 };
 const mainService = {
+  createLikeCafe,
+  deleteLikeCafe,
   getAllCafe,
   getCafeById,
   getCafeNoticeById,
