@@ -1,3 +1,4 @@
+import { CreateStoreReviewDTO } from "./../interfaces/store/createStoreReviewDTO";
 import { PrismaClient, Stamp } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
@@ -106,6 +107,28 @@ const getCafeReviewById = async (storeId: number) => {
   });
   return data;
 };
+
+// 유저 근처 카페 개별 업체 피드 작성
+const createCafeReviewById = async (
+  writerId: number,
+  storeId: number,
+  createStoreReviewDTO: CreateStoreReviewDTO,
+  path: string,
+  date: Date
+) => {
+  const data = await prisma.store_Review.create({
+    data: {
+      title: createStoreReviewDTO.title,
+      content: createStoreReviewDTO.content,
+      image: path,
+      timestamp: date,
+      storeId: storeId,
+      writerId: writerId,
+    },
+  });
+  return data;
+};
+
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -114,5 +137,6 @@ const mainService = {
   getCafeNoticeById,
   getCafeMenuById,
   getCafeReviewById,
+  createCafeReviewById,
 };
 export default mainService;
