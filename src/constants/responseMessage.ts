@@ -78,6 +78,10 @@ export default {
   CREATE_CAFE_REVIEW_SUCCESS: "유저 근처 개별 카페 피드 작성 성공",
   CREATE_CAFE_REVIEW_FAIL: "유저 근처 개별 카페 피드 작성 실패",
 
+  // 고객 마이페이지
+  GET_CUSTOMER_MYPAGE_SUCCESS: "고객 마이페이지 조회 성공",
+  GET_CUSTOMER_MYPAGE_FAIL: "고객 마이페이지 조회 실패",
+
   // 스탬프
   CREATE_STAMP_SIGNIN_REQUEST_SUCCESS: "스탬프 서비스 사용 신청 성공",
   CREATE_STAMP_SIGNIN_REQUEST_FAIL: "스탬프 서비스 사용 신청 실패",
