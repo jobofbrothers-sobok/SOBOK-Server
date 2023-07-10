@@ -88,7 +88,7 @@ const getAllCafe = async (req: Request, res: Response) => {
 
 // 유저 근처 카페 개별 업체 정보 조회
 const getCafeById = async (req: Request, res: Response) => {
-  const storeId = req.params.id;
+  const storeId = req.params.storeId;
   if (!storeId) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
@@ -110,14 +110,22 @@ const getCafeById = async (req: Request, res: Response) => {
   }
 };
 
+const queryType = {
+  ALL: "all",
+  MENU: "menu",
+  SALE: "sale",
+};
+
 // 유저 근처 카페 개별 업체 소식 조회
 const getCafeNoticeById = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  if (!id) {
+  const id = req.params.storeId;
+  const query = req.query.query as string;
+
+  if (!id || !query) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
   try {
-    const data = await mainService.getCafeNoticeById(+id);
+    const data = await mainService.getCafeNoticeById(+id, query);
     if (!data || data.length === 0) {
       return res
         .status(sc.BAD_REQUEST)
@@ -136,7 +144,7 @@ const getCafeNoticeById = async (req: Request, res: Response) => {
 
 // 유저 근처 카페 개별 업체 메뉴 조회
 const getCafeMenuById = async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = req.params.storeId;
   if (!id) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
@@ -160,7 +168,7 @@ const getCafeMenuById = async (req: Request, res: Response) => {
 
 // 유저 근처 카페 개별 업체 피드 조회
 const getCafeReviewById = async (req: Request, res: Response) => {
-  const storeId = req.params.id;
+  const storeId = req.params.storeId;
   if (!storeId) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
@@ -191,7 +199,7 @@ const createCafeReviewById = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
   const writerId = req.user.id;
-  const storeId = req.params.id;
+  const storeId = req.params.storeId;
   const createStoreReviewDTO: CreateStoreReviewDTO = req.body;
   if (!storeId) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
@@ -272,6 +280,27 @@ const getCafeStoreProducts = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 마이페이지 조회
+const getCustomerMyPage = async (req: Request, res: Response) => {
+  const customerId = req.user.id;
+  try {
+    const data = await mainService.getCustomerMyPage(customerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_MYPAGE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_CUSTOMER_MYPAGE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -282,5 +311,6 @@ const mainController = {
   getCafeReviewById,
   createCafeReviewById,
   getCafeStoreProducts,
+  getCustomerMyPage,
 };
 export default mainController;
