@@ -8,20 +8,20 @@ const router: Router = Router();
 const reviewUpload = multer({ dest: "uploads/customer/review/" });
 
 // 유저 근처 카페 개별 업체 정보 조회
-router.get("/store/info/:id", mainController.getCafeById);
+router.get("/store/info/:storeId", mainController.getCafeById);
 
 // 유저 근처 카페 개별 업체 소식 조회
-router.get("/store/notice/:id", mainController.getCafeNoticeById);
+router.get("/store/notice/:storeId", mainController.getCafeNoticeById);
 
 // 유저 근처 카페 개별 업체 메뉴 조회
-router.get("/store/menu/:id", mainController.getCafeMenuById);
+router.get("/store/menu/:storeId", mainController.getCafeMenuById);
 
 // 유저 근처 카페 개별 업체 피드 조회
-router.get("/store/review/:id", mainController.getCafeReviewById);
+router.get("/store/review/:storeId", mainController.getCafeReviewById);
 
 // 유저 근처 카페 개별 업체 피드 작성
 router.post(
-  "/store/review/:id",
+  "/store/review/:storeId",
   auth,
   reviewUpload.single("file"),
   [body("title").trim().notEmpty(), body("content").trim().notEmpty()],
