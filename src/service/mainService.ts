@@ -119,7 +119,7 @@ const getCafeNoticeById = async (id: number, query: string) => {
 
 // 유저 근처 카페 개별 업체 메뉴 조회
 const getCafeMenuById = async (storeId: number) => {
-  const data = await prisma.store_Menu.findFirst({
+  const data = await prisma.store_Menu.findMany({
     where: {
       storeId: storeId,
     },
