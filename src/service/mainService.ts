@@ -27,7 +27,7 @@ const deleteLikeCafe = async (storeId: number, customerId: number) => {
   });
   const data = await prisma.store_Like.delete({
     where: {
-      id: likedStore.id,
+      id: likedStore?.id,
     },
   });
   return data;
@@ -129,6 +129,44 @@ const createCafeReviewById = async (
   return data;
 };
 
+// 소복 스토어 상품 조회
+const getCafeStoreProducts = async (sort: string) => {
+  if (sort !== "all") {
+    switch (sort) {
+      case "cookie":
+        const cookie = await prisma.store_Product.findMany({
+          where: {
+            category: "수제 쿠키",
+          },
+        });
+        return cookie;
+      case "cake":
+        const cake = await prisma.store_Product.findMany({
+          where: {
+            category: "수제 케이크",
+          },
+        });
+        return cake;
+      case "bean":
+        const bean = await prisma.store_Product.findMany({
+          where: {
+            category: "원두",
+          },
+        });
+        return bean;
+    }
+  }
+
+  if (sort === "all") {
+    const data = await prisma.store_Product.findMany({
+      where: {
+        storeId: { not: null },
+      },
+    });
+    return data;
+  }
+};
+
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -138,5 +176,6 @@ const mainService = {
   getCafeMenuById,
   getCafeReviewById,
   createCafeReviewById,
+  getCafeStoreProducts,
 };
 export default mainService;
