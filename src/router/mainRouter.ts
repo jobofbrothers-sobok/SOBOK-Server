@@ -40,7 +40,8 @@ router.delete("/store/:storeId", auth, mainController.deleteLikeCafe);
 // 유저 근처 카페 전체 조회 - GET ~/main/store
 router.get("/store", mainController.getAllCafe);
 
-//* 고객 유저 마이페이지
+// 고객 유저 마이페이지 조회
+router.get("/mypage", auth, mainController.getCustomerMyPage);
 
 //* 점주 유저 마이페이지
 export default router;

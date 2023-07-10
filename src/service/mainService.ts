@@ -53,10 +53,16 @@ const getAllCafe = async (x: number, y: number, category: Array<string>) => {
       let distance = Math.sqrt(
         Math.pow(+x - cafeX, 2) + Math.pow(+y - cafeY, 2)
       );
-      // 전체 카페 배열 내의 카페 객체 각각에 distance 속성과 값 추가
+      // 전체 카페 배열 내의 카페 객체 각각의 distance 필드 업데이트
+      const store = await prisma.store.update({
+        where: {
+          id: allTourCafe[i].id,
+        },
+        data: {
+          distance: distance * 100000,
+        },
+      });
       allTourCafe[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
-    } else {
-      allTourCafe[i].distance = null;
     }
   }
   console.log(allTourCafe);
@@ -167,6 +173,44 @@ const getCafeStoreProducts = async (sort: string) => {
   }
 };
 
+// 고객 마이페이지 조회
+const getCustomerMyPage = async (customerId: number) => {
+  // 유저 이름 조회
+  const customer = await prisma.customer.findUnique({
+    where: {
+      id: customerId,
+    },
+  });
+
+  const customerName = customer?.name;
+
+  // 찜한 카페 전체 조회
+  const allStoreLike = await prisma.store_Like.findMany({
+    where: {
+      customerId: customerId,
+    },
+  });
+
+  let allLikeCafe: Array<any> = [];
+  for (let i = 0; i < allStoreLike.length; i++) {
+    let likeCafe = await prisma.store.findUnique({
+      where: {
+        id: allStoreLike[i].storeId,
+      },
+    });
+    allLikeCafe.push(likeCafe);
+  }
+
+  // 내가 작성한 리뷰 전체 조회
+  const allStoreReview = await prisma.store_Review.findMany({
+    where: {
+      writerId: customerId,
+    },
+  });
+
+  return { customerName, allLikeCafe, allStoreReview };
+};
+
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -177,5 +221,6 @@ const mainService = {
   getCafeReviewById,
   createCafeReviewById,
   getCafeStoreProducts,
+  getCustomerMyPage,
 };
 export default mainService;
