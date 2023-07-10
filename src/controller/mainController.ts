@@ -272,6 +272,27 @@ const getCafeStoreProducts = async (req: Request, res: Response) => {
   }
 };
 
+// 고객 마이페이지 조회
+const getCustomerMyPage = async (req: Request, res: Response) => {
+  const customerId = req.user.id;
+  try {
+    const data = await mainService.getCustomerMyPage(customerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_MYPAGE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_CUSTOMER_MYPAGE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -282,5 +303,6 @@ const mainController = {
   getCafeReviewById,
   createCafeReviewById,
   getCafeStoreProducts,
+  getCustomerMyPage,
 };
 export default mainController;
