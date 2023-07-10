@@ -228,6 +228,50 @@ const createCafeReviewById = async (req: Request, res: Response) => {
   }
 };
 
+const sortType = {
+  ALL: "all",
+  COOKIE: "cookie",
+  CAKE: "cake",
+  BEAN: "bean",
+};
+
+// 소복 스토어 상품 조회
+const getCafeStoreProducts = async (req: Request, res: Response) => {
+  const sort = req.query.sort as string;
+
+  if (!sort) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  if (
+    sort !== sortType.ALL &&
+    sort !== sortType.COOKIE &&
+    sort !== sortType.CAKE &&
+    sort !== sortType.BEAN
+  ) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const data = await mainService.getCafeStoreProducts(sort);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_STORE_PRODUCTS_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_STORE_PRODUCTS_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -237,5 +281,6 @@ const mainController = {
   getCafeMenuById,
   getCafeReviewById,
   createCafeReviewById,
+  getCafeStoreProducts,
 };
 export default mainController;
