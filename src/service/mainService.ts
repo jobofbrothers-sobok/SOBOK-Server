@@ -85,13 +85,36 @@ const getCafeById = async (storeId: number) => {
 };
 
 // 유저 근처 카페 개별 업체 소식 조회
-const getCafeNoticeById = async (id: number) => {
-  const data = await prisma.store_Notice.findMany({
-    where: {
-      storeId: id,
-    },
-  });
-  return data;
+const getCafeNoticeById = async (id: number, query: string) => {
+  if (query === "all") {
+    const allNotice = await prisma.store_Notice.findMany({
+      where: {
+        storeId: id,
+      },
+    });
+    return allNotice;
+  }
+
+  if (query !== "all") {
+    switch (query) {
+      case "menu":
+        const menuNotice = await prisma.store_Notice.findMany({
+          where: {
+            storeId: id,
+            category: { contains: "메뉴" }, // 신메뉴 소식만 조회
+          },
+        });
+        return menuNotice;
+      case "sale":
+        const saleNotice = await prisma.store_Notice.findMany({
+          where: {
+            storeId: id,
+            category: { contains: "이벤트" }, // 할인/이벤트 소식만 조회
+          },
+        });
+        return saleNotice;
+    }
+  }
 };
 
 // 유저 근처 카페 개별 업체 메뉴 조회

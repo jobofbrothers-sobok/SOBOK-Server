@@ -110,14 +110,22 @@ const getCafeById = async (req: Request, res: Response) => {
   }
 };
 
+const queryType = {
+  ALL: "all",
+  MENU: "menu",
+  SALE: "sale",
+};
+
 // 유저 근처 카페 개별 업체 소식 조회
 const getCafeNoticeById = async (req: Request, res: Response) => {
   const id = req.params.storeId;
-  if (!id) {
+  const query = req.query.query as string;
+
+  if (!id || !query) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
   try {
-    const data = await mainService.getCafeNoticeById(+id);
+    const data = await mainService.getCafeNoticeById(+id, query);
     if (!data || data.length === 0) {
       return res
         .status(sc.BAD_REQUEST)
