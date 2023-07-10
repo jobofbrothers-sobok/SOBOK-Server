@@ -180,20 +180,32 @@ const getDeliveryRequestById = async (deliveryId: number) => {
   return data;
 };
 
-// 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회
-const getAllStampSignInRequest = async () => {
-  const allRequest = await prisma.stamp_Request.findMany();
-  let data: Array<object> = [];
-  for (let i = 0; i < allRequest.length; i++) {
-    const ownerId = allRequest[i].ownerId;
-    const requestOwner = await prisma.store_Owner.findUnique({
-      where: {
-        id: ownerId,
-      },
-    });
-    data.push(requestOwner as object);
+// 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회 - 다시다시!!
+const getAllStampSignInRequest = async (sort: string) => {
+  switch (sort) {
+    case "auth":
+      const allAuthOwner = await prisma.store_Owner.findMany({
+        where: {
+          stampAuthorized: true,
+        },
+      });
+      return allAuthOwner;
+    case "pending":
+      const allRequest = await prisma.stamp_Request.findMany();
+      console.log("allRequest: ", allRequest);
+      let allPendingOwner: Array<object> = [];
+      for (let i = 0; i < allRequest.length; i++) {
+        const ownerId = allRequest[i].ownerId;
+        const requestOwner = await prisma.store_Owner.findFirst({
+          where: {
+            id: ownerId,
+            stampAuthorized: false,
+          },
+        });
+        allPendingOwner.push(requestOwner as object);
+      }
+      return allPendingOwner;
   }
-  return data;
 };
 
 // 최고관리자 스탬프 서비스 사용 신청 담당자 개별 조회
