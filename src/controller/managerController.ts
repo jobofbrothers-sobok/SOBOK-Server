@@ -228,8 +228,17 @@ const getCustomerById = async (req: Request, res: Response) => {
 
 // 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회
 const getAllStampSignInRequest = async (req: Request, res: Response) => {
+  const sort = req.query.sort as string;
+  if (!sort) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  if (sort !== sortType.AUTH && sort !== sortType.NOT_AUTH) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   try {
-    const data = await managerService.getAllStampSignInRequest();
+    const data = await managerService.getAllStampSignInRequest(sort);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)

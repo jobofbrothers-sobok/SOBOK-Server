@@ -28,6 +28,9 @@ router.post(
   mainController.createCafeReviewById
 );
 
+// 소복 스토어 상품 조회
+router.get("/store/products", mainController.getCafeStoreProducts);
+
 // 카페 찜하기
 router.post("/store/:storeId", auth, mainController.createLikeCafe);
 
