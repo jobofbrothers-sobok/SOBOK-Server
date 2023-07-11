@@ -257,6 +257,16 @@ const deleteCafeMenuById = async (menuId: number) => {
   });
   return data;
 };
+
+// 최고관리자 카페 피드 삭제
+const deleteCafeReviewById = async (reviewId: number) => {
+  const data = await prisma.store_Review.delete({
+    where: {
+      id: reviewId,
+    },
+  });
+  return data;
+};
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -270,5 +280,6 @@ const mainService = {
   getCustomerMyPage,
   deleteCafeNoticeById,
   deleteCafeMenuById,
+  deleteCafeReviewById,
 };
 export default mainService;

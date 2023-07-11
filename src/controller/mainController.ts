@@ -349,6 +349,30 @@ const deleteCafeMenuById = async (req: Request, res: Response) => {
   }
 };
 
+// 카페 피드 삭제
+const deleteCafeReviewById = async (req: Request, res: Response) => {
+  const reviewId = req.params.reviewId;
+  if (!reviewId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.deleteCafeReviewById(+reviewId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_REVIEW_SUCCESS));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_CAFE_REVIEW_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -362,5 +386,6 @@ const mainController = {
   getCustomerMyPage,
   deleteCafeNoticeById,
   deleteCafeMenuById,
+  deleteCafeReviewById,
 };
 export default mainController;
