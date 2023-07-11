@@ -373,6 +373,32 @@ const deleteCafeReviewById = async (req: Request, res: Response) => {
   }
 };
 
+// 소복 스토어 상품 삭제
+const deleteCafeProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    if (!productId) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const data = await mainService.deleteCafeProductById(+productId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_STORE_PRODUCTS_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_STORE_PRODUCTS_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -387,5 +413,6 @@ const mainController = {
   deleteCafeNoticeById,
   deleteCafeMenuById,
   deleteCafeReviewById,
+  deleteCafeProductById,
 };
 export default mainController;

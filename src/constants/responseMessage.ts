@@ -67,6 +67,8 @@ export default {
   CREATE_STORE_PRODUCT_SUCCESS: "매장 스토어 상품 생성 성공",
   GET_STORE_PRODUCTS_SUCCESS: "소복 스토어 상품 조회 성공",
   GET_STORE_PRODUCTS_FAIL: "소복 스토어 상품 조회 실패",
+  DELETE_STORE_PRODUCTS_SUCCESS: "소복 스토어 상품 삭제 성공",
+  DELETE_STORE_PRODUCTS_FAIL: "소복 스토어 상품 삭제 실패",
   GET_NEAR_CAFE_SUCCESS: "유저 근처 개별 카페 정보 조회 성공",
   GET_NEAR_CAFE_FAIL: "유저 근처 개별 카페 정보 조회 실패",
   GET_CAFE_NOTICE_SUCCESS: "유저 근처 개별 카페 소식 조회 성공",
