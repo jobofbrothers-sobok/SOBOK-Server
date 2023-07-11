@@ -43,5 +43,28 @@ router.delete("/store/:storeId", auth, mainController.deleteLikeCafe);
 // 고객 유저 마이페이지 조회
 router.get("/mypage", auth, mainController.getCustomerMyPage);
 
-//* 점주 유저 마이페이지
+// 최고관리자 | 개별 업체 소식 삭제
+router.delete(
+  "/store/notice/:noticeId",
+  auth,
+  mainController.deleteCafeNoticeById
+);
+
+// 최고관리자 | 개별 업체 메뉴 삭제
+router.delete("/store/menu/:menuId", auth, mainController.deleteCafeMenuById);
+
+// 최고관리자 | 개별 업체 피드 삭제
+router.delete(
+  "/store/review/:reviewId",
+  auth,
+  mainController.deleteCafeReviewById
+);
+
+// 최고관리자 | 스토어 상품 삭제
+router.delete(
+  "/store/products/:productId",
+  auth,
+  mainController.deleteCafeProductById
+);
+
 export default router;

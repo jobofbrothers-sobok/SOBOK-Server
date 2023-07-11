@@ -238,6 +238,46 @@ const getCustomerMyPage = async (customerId: number) => {
   return { customerName, allLikeCafe, allStoreReview };
 };
 
+// 최고관리자 카페 소식 삭제
+const deleteCafeNoticeById = async (noticeId: number) => {
+  const data = await prisma.store_Notice.delete({
+    where: {
+      id: noticeId,
+    },
+  });
+  return data;
+};
+
+// 최고관리자 카페 메뉴 삭제
+const deleteCafeMenuById = async (menuId: number) => {
+  const data = await prisma.store_Menu.delete({
+    where: {
+      id: menuId,
+    },
+  });
+  return data;
+};
+
+// 최고관리자 카페 피드 삭제
+const deleteCafeReviewById = async (reviewId: number) => {
+  const data = await prisma.store_Review.delete({
+    where: {
+      id: reviewId,
+    },
+  });
+  return data;
+};
+
+// 최고관리자 소복 스토어 상품 삭제
+const deleteCafeProductById = async (productId: number) => {
+  const data = await prisma.store_Product.delete({
+    where: {
+      id: productId,
+    },
+  });
+  return data;
+};
+
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -249,5 +289,9 @@ const mainService = {
   createCafeReviewById,
   getCafeStoreProducts,
   getCustomerMyPage,
+  deleteCafeNoticeById,
+  deleteCafeMenuById,
+  deleteCafeReviewById,
+  deleteCafeProductById,
 };
 export default mainService;

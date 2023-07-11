@@ -301,6 +301,104 @@ const getCustomerMyPage = async (req: Request, res: Response) => {
   }
 };
 
+// 카페 소식 삭제
+const deleteCafeNoticeById = async (req: Request, res: Response) => {
+  const noticeId = req.params.noticeId;
+  if (!noticeId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.deleteCafeNoticeById(+noticeId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_NOTICE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_CAFE_NOTICE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 카페 메뉴 삭제
+const deleteCafeMenuById = async (req: Request, res: Response) => {
+  const menuId = req.params.menuId;
+  if (!menuId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.deleteCafeMenuById(+menuId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_MENU_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_CAFE_MENU_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 카페 피드 삭제
+const deleteCafeReviewById = async (req: Request, res: Response) => {
+  const reviewId = req.params.reviewId;
+  if (!reviewId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.deleteCafeReviewById(+reviewId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_REVIEW_SUCCESS));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_CAFE_REVIEW_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 소복 스토어 상품 삭제
+const deleteCafeProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    if (!productId) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const data = await mainService.deleteCafeProductById(+productId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_STORE_PRODUCTS_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_STORE_PRODUCTS_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   createLikeCafe,
   deleteLikeCafe,
@@ -312,5 +410,9 @@ const mainController = {
   createCafeReviewById,
   getCafeStoreProducts,
   getCustomerMyPage,
+  deleteCafeNoticeById,
+  deleteCafeMenuById,
+  deleteCafeReviewById,
+  deleteCafeProductById,
 };
 export default mainController;
