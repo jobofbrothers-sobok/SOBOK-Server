@@ -59,4 +59,12 @@ router.delete(
   auth,
   mainController.deleteCafeReviewById
 );
+
+// 최고관리자 | 스토어 상품 삭제
+router.delete(
+  "/store/products/:productId",
+  auth,
+  mainController.deleteCafeProductById
+);
+
 export default router;

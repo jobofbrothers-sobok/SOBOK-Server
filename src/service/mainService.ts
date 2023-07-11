@@ -267,6 +267,17 @@ const deleteCafeReviewById = async (reviewId: number) => {
   });
   return data;
 };
+
+// 최고관리자 소복 스토어 상품 삭제
+const deleteCafeProductById = async (productId: number) => {
+  const data = await prisma.store_Product.delete({
+    where: {
+      id: productId,
+    },
+  });
+  return data;
+};
+
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -281,5 +292,6 @@ const mainService = {
   deleteCafeNoticeById,
   deleteCafeMenuById,
   deleteCafeReviewById,
+  deleteCafeProductById,
 };
 export default mainService;
