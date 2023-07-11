@@ -52,4 +52,11 @@ router.delete(
 
 // 최고관리자 | 개별 업체 메뉴 삭제
 router.delete("/store/menu/:menuId", auth, mainController.deleteCafeMenuById);
+
+// 최고관리자 | 개별 업체 피드 삭제
+router.delete(
+  "/store/review/:reviewId",
+  auth,
+  mainController.deleteCafeReviewById
+);
 export default router;
