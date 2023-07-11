@@ -155,8 +155,8 @@ const createCafeReviewById = async (
       content: createStoreReviewDTO.content,
       image: path,
       timestamp: date,
-      storeId: storeId,
       writerId: writerId,
+      storeId: storeId,
     },
   });
   return data;
