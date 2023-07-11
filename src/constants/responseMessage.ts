@@ -75,8 +75,12 @@ export default {
   DELETE_CAFE_NOTICE_FAIL: "카페 소식 삭제 실패",
   GET_CAFE_MENU_SUCCESS: "유저 근처 개별 카페 메뉴 조회 성공",
   GET_CAFE_MENU_FAIL: "유저 근처 개별 카페 메뉴 조회 실패",
+  DELETE_CAFE_MENU_SUCCESS: "카페 메뉴 삭제 성공",
+  DELETE_CAFE_MENU_FAIL: "카페 메뉴 삭제 실패",
   GET_CAFE_REVIEW_SUCCESS: "유저 근처 개별 카페 피드 조회 성공",
   GET_CAFE_REVIEW_FAIL: "유저 근처 개별 카페 피드 조회 실패",
+  DELETE_CAFE_REVIEW_SUCCESS: "카페 피드 삭제 성공",
+  DELETE_CAFE_REVIEW_FAIL: "카페 피드 삭제 실패",
   CREATE_CAFE_REVIEW_SUCCESS: "유저 근처 개별 카페 피드 작성 성공",
   CREATE_CAFE_REVIEW_FAIL: "유저 근처 개별 카페 피드 작성 실패",
 
