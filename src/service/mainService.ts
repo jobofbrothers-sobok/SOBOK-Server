@@ -238,6 +238,16 @@ const getCustomerMyPage = async (customerId: number) => {
   return { customerName, allLikeCafe, allStoreReview };
 };
 
+// 최고관리자 카페 소식 삭제
+const deleteCafeNoticeById = async (noticeId: number) => {
+  const data = await prisma.store_Notice.delete({
+    where: {
+      id: noticeId,
+    },
+  });
+  return data;
+};
+
 const mainService = {
   createLikeCafe,
   deleteLikeCafe,
@@ -249,5 +259,6 @@ const mainService = {
   createCafeReviewById,
   getCafeStoreProducts,
   getCustomerMyPage,
+  deleteCafeNoticeById,
 };
 export default mainService;

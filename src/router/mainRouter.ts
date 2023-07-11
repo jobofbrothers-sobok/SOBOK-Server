@@ -13,8 +13,17 @@ router.get("/store/info/:storeId", mainController.getCafeById);
 // 유저 근처 카페 개별 업체 소식 조회
 router.get("/store/notice/:storeId", mainController.getCafeNoticeById);
 
+// 최고관리자 | 개별 업체 소식 삭제
+router.delete(
+  "/store/notice/:noticeId",
+  auth,
+  mainController.deleteCafeNoticeById
+);
+
 // 유저 근처 카페 개별 업체 메뉴 조회
 router.get("/store/menu/:storeId", mainController.getCafeMenuById);
+
+//
 
 // 유저 근처 카페 개별 업체 피드 조회
 router.get("/store/review/:storeId", mainController.getCafeReviewById);

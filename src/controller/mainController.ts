@@ -142,6 +142,30 @@ const getCafeNoticeById = async (req: Request, res: Response) => {
   }
 };
 
+// 카페 소식 삭제
+const deleteCafeNoticeById = async (req: Request, res: Response) => {
+  const noticeId = req.params.noticeId;
+  if (!noticeId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.deleteCafeNoticeById(+noticeId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_NOTICE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.DELETE_CAFE_NOTICE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 유저 근처 카페 개별 업체 메뉴 조회
 const getCafeMenuById = async (req: Request, res: Response) => {
   const id = req.params.storeId;
@@ -312,5 +336,6 @@ const mainController = {
   createCafeReviewById,
   getCafeStoreProducts,
   getCustomerMyPage,
+  deleteCafeNoticeById,
 };
 export default mainController;
