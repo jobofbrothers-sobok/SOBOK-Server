@@ -79,7 +79,7 @@
 
 "@types/express-validator@^3.0.0":
   version "3.0.0"
-  resolved "https://registry.npmjs.org/@types/express-validator/-/express-validator-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/@types/express-validator/-/express-validator-3.0.0.tgz#e6f3cab842e5ae376a1cfa11295202ec380b68d1"
   integrity sha512-LusnB0YhTXpBT25PXyGPQlK7leE1e41Vezq1hHEUwjfkopM1Pkv2X2Ppxqh9c+w/HZ6Udzki8AJotKNjDTGdkQ==
   dependencies:
     express-validator "*"
@@ -529,7 +529,7 @@ express-session@^1.17.3:
 
 express-validator@*, express-validator@^7.0.1:
   version "7.0.1"
-  resolved "https://registry.npmjs.org/express-validator/-/express-validator-7.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-7.0.1.tgz#435fac6b5fa838763f78eca05d2206317b92106e"
   integrity sha512-oB+z9QOzQIE8FnlINqyIFA8eIckahC6qc8KtqLdLJcU3/phVyuhXH3bA4qzcrhme+1RYaCSwrq+TlZ/kAKIARA==
   dependencies:
     lodash "^4.17.21"
