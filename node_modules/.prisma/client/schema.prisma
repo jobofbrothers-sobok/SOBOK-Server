@@ -160,7 +160,7 @@ model Store_Review {
   content   String   @db.VarChar(200)
   image     String?  @db.VarChar(300)
   timestamp DateTime @db.Timestamp(6)
-  writerId  Int      @default(autoincrement())
+  writerId  Int
   storeId   Int      @unique
   Store     Store    @relation(fields: [storeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "storeId")
   Customer  Customer @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "wrtierId")
