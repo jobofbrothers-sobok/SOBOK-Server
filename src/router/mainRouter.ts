@@ -13,17 +13,8 @@ router.get("/store/info/:storeId", mainController.getCafeById);
 // 유저 근처 카페 개별 업체 소식 조회
 router.get("/store/notice/:storeId", mainController.getCafeNoticeById);
 
-// 최고관리자 | 개별 업체 소식 삭제
-router.delete(
-  "/store/notice/:noticeId",
-  auth,
-  mainController.deleteCafeNoticeById
-);
-
 // 유저 근처 카페 개별 업체 메뉴 조회
 router.get("/store/menu/:storeId", mainController.getCafeMenuById);
-
-//
 
 // 유저 근처 카페 개별 업체 피드 조회
 router.get("/store/review/:storeId", mainController.getCafeReviewById);
@@ -52,5 +43,13 @@ router.delete("/store/:storeId", auth, mainController.deleteLikeCafe);
 // 고객 유저 마이페이지 조회
 router.get("/mypage", auth, mainController.getCustomerMyPage);
 
-//* 점주 유저 마이페이지
+// 최고관리자 | 개별 업체 소식 삭제
+router.delete(
+  "/store/notice/:noticeId",
+  auth,
+  mainController.deleteCafeNoticeById
+);
+
+// 최고관리자 | 개별 업체 메뉴 삭제
+router.delete("/store/menu/:menuId", auth, mainController.deleteCafeMenuById);
 export default router;
