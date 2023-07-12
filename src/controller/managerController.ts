@@ -462,8 +462,9 @@ const getAlimRequestById = async (req: Request, res: Response) => {
 // 최고관리자 소복 매니저 문자 일괄전송
 const sendMessage = async (req: Request, res: Response) => {
   const writerId = req.body.writerId;
+  const content = req.body.content;
   try {
-    const data = await managerService.sendMessage(writerId);
+    const data = await managerService.sendMessage(writerId, content);
     if (data === null) {
       return res
         .status(sc.NOT_FOUND)
