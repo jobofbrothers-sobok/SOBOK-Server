@@ -50,7 +50,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       foundUser = await ownerService.findOwnerById(id);
     }
     if (req.originalUrl.includes("/manager")) {
-      foundUser = await managerService.findManagerById(id);
+      foundUser = await customerService.findCustomerById(id);
     }
 
     // const foundUser = await ownerService.findOwnerById(id);

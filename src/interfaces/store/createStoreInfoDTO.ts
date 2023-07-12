@@ -5,6 +5,6 @@ export interface CreateStoreInfoDTO {
   dayOff: string;
   homepage: string;
   image: string;
-  category: Array<string>;
+  category: string;
   ownerId: number;
 }

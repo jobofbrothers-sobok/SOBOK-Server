@@ -14,6 +14,7 @@ import { auth } from "../middlewares";
 import router from "../router";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { Customer, Store_Owner } from "@prisma/client";
 
 // 고객 유저 회원가입
 const createCustomer = async (req: Request, res: Response) => {
@@ -62,7 +63,7 @@ const createCustomer = async (req: Request, res: Response) => {
   }
 };
 
-// 점주 유저 회원가입
+// 점주 유저 회원가입 1
 const createOwner = async (req: Request, res: Response) => {
   // validation의 결과를 바탕으로 분기 처리
   const error = validationResult(req);
@@ -79,6 +80,64 @@ const createOwner = async (req: Request, res: Response) => {
     console.log(path);
     const ownerCreateDTO: OwnerCreateDTO = req.body;
     const loginId = ownerCreateDTO.loginId;
+    // const password = ownerCreateDTO.password;
+    // const store = ownerCreateDTO.store;
+    // const director = ownerCreateDTO.director;
+    // const phone = ownerCreateDTO.phone;
+    // const email = ownerCreateDTO.email;
+    // const address = ownerCreateDTO.address;
+    // const licenseNumber = ownerCreateDTO.licenseNumber;
+    // const termsAgree = req.body.termsAgree;
+    if (
+      !loginId
+      // !password ||
+      // !store ||
+      // !director ||
+      // !phone ||
+      // !email ||
+      // !address ||
+      // !licenseNumber
+    ) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    console.log("create");
+    console.log(typeof loginId, typeof path);
+    const data = await authService.createOwner(ownerCreateDTO, path);
+
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.OWNER_SIGNUP_1_FAIL));
+    }
+
+    return res
+      .status(sc.CREATED)
+      .send(success(sc.CREATED, rm.OWNER_SIGNUP_1_SUCCESS, data));
+  } catch (e) {
+    console.log(e);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 점주 유저 회원가입 2(loginId, 나머지 필드)
+const patchOwner = async (req: Request, res: Response) => {
+  // validation의 결과를 바탕으로 분기 처리
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    console.log(error);
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const ownerCreateDTO: OwnerCreateDTO = req.body;
+    const loginId = ownerCreateDTO.loginId;
     const password = ownerCreateDTO.password;
     const store = ownerCreateDTO.store;
     const director = ownerCreateDTO.director;
@@ -87,6 +146,7 @@ const createOwner = async (req: Request, res: Response) => {
     const address = ownerCreateDTO.address;
     const licenseNumber = ownerCreateDTO.licenseNumber;
     const termsAgree = req.body.termsAgree;
+    const marketingAgree = req.body.marketingAgree;
     if (
       !loginId ||
       !password ||
@@ -95,19 +155,20 @@ const createOwner = async (req: Request, res: Response) => {
       !phone ||
       !email ||
       !address ||
-      !licenseNumber
+      !licenseNumber ||
+      !termsAgree
     ) {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
-    console.log("create");
-    const data = await authService.createOwner(ownerCreateDTO, path);
+    console.log("patch");
+    const data = await authService.patchOwner(ownerCreateDTO);
 
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
+        .send(fail(sc.BAD_REQUEST, rm.OWNER_SIGNUP_2_FAIL));
     }
 
     // jwtHandler 내 sign 함수를 이용해 accessToken 생성
@@ -115,13 +176,13 @@ const createOwner = async (req: Request, res: Response) => {
 
     const result = {
       userId: data.id,
-      name: data.store,
+      storeName: data.store,
       accessToken,
     };
 
     return res
       .status(sc.CREATED)
-      .send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
+      .send(success(sc.CREATED, rm.OWNER_SIGNUP_2_SUCCESS, result));
   } catch (e) {
     console.log(e);
     // 서버 내부에서 오류 발생
@@ -152,19 +213,33 @@ const customerSignIn = async (req: Request, res: Response) => {
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const accessToken = jwtHandler.sign(user.id);
+    const tokenUser = user as Customer;
+    const accessToken = jwtHandler.sign(tokenUser.id);
 
-    req.session.save(function () {
-      req.session.loginId = user.loginId;
-      router.get("/signout/customer", auth);
-    });
+    // req.session.save(function () {
+    //   req.session.loginId = user.loginId;
+    //   router.get("/signout/customer", auth);
+    // });
 
     // 이 req.session 세션이 logout 컨트롤러 호출 시 유지되지 않는 것으로 보인다.
 
-    const result = {
-      userId: user.id,
+    let result = {
+      who: "customer",
+      id: tokenUser.id,
+      loginId: tokenUser.loginId,
+      name: tokenUser.name,
       accessToken,
     };
+
+    if (tokenUser.loginId === "admin") {
+      result = {
+        who: "manager",
+        id: tokenUser.id,
+        loginId: tokenUser.loginId,
+        name: tokenUser.name,
+        accessToken,
+      };
+    }
 
     res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
   } catch (e) {
@@ -188,19 +263,27 @@ const ownerSignIn = async (req: Request, res: Response) => {
   const userSigninDTO: UserSignInDTO = req.body;
 
   try {
-    const userId = await authService.ownerSignIn(userSigninDTO);
+    const user = await authService.ownerSignIn(userSigninDTO);
 
-    if (!userId)
+    if (!user)
       return res.status(sc.NOT_FOUND).send(fail(sc.NOT_FOUND, rm.NOT_FOUND));
-    else if (userId === sc.UNAUTHORIZED)
+    else if (user === sc.UNAUTHORIZED)
       return res
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const accessToken = jwtHandler.sign(userId);
+    const tokenUser = user as Store_Owner;
+    const accessToken = jwtHandler.sign(tokenUser.id);
 
     const result = {
-      userId: userId,
+      who: "owner",
+      id: tokenUser.id,
+      loginId: tokenUser.loginId,
+      storeId: tokenUser.storeId,
+      store: tokenUser.store,
+      director: tokenUser.director,
+      authorized: tokenUser.authorized,
+      stampAuthorized: tokenUser.stampAuthorized,
       accessToken,
     };
 
@@ -214,20 +297,20 @@ const ownerSignIn = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 로그아웃
-const customerSignOut = async (req: Request, res: Response) => {
-  const id = req.user.id;
-  console.log(req.session);
-  console.log(req.session.loginId); // undefined 출력
+// // 고객 유저 로그아웃
+// const customerSignOut = async (req: Request, res: Response) => {
+//   const id = req.user.id;
+//   console.log(req.session);
+//   console.log(req.session.loginId); // undefined 출력
 
-  if (!req.session.loginId) {
-    res.status(400).send({ data: null, message: "not authorized" });
-  } else {
-    req.session.destroy();
-    const destroy = req.session.loginId;
-    res.json({ data: null, message: "ok", destroy });
-  }
-};
+//   if (!req.session.loginId) {
+//     res.status(400).send({ data: null, message: "not authorized" });
+//   } else {
+//     req.session.destroy();
+//     const destroy = req.session.loginId;
+//     res.json({ data: null, message: "ok", destroy });
+//   }
+// };
 
 // 고객 유저 회원정보 수정
 const customerUpdate = async (req: Request, res: Response) => {
@@ -273,12 +356,12 @@ const ownerUpdate = async (req: Request, res: Response) => {
   }
   const ownerUpdateDTO: OwnerUpdateDTO = req.body;
   const id = req.user.id;
-  const image = req.files;
-  console.log(image.file1[0].path);
-  console.log(image.file2[0].path);
-
+  const image = req.files as { [fieldname: string]: Express.Multer.File[] };
+  console.log(image);
   const path1 = image.file1[0].path;
   const path2 = image.file2[0].path;
+  console.log(path1);
+  console.log(path2);
 
   const password = ownerUpdateDTO.password;
   const director = ownerUpdateDTO.director;
@@ -317,55 +400,125 @@ const ownerUpdate = async (req: Request, res: Response) => {
   }
 };
 
-// 고객 유저 회원정보 찾기
+// 고객 유저 회원정보 찾기 및 비밀번호 재설정
 const findCustomerByEmail = async (req: Request, res: Response) => {
   const email = req.body.email;
   if (!email || email === "") {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
-  const customer = await authService.findCustomerByEmail(email);
-  if (customer) {
-    const token = crypto.randomBytes(20).toString("hex");
-    const data = {
-      token,
-      customerId: customer.id,
-      ttl: 300, // Time To Live 5분
-    };
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.GMAIL_ID,
-        pass: process.env.GMAIL_PASSWORD,
-      },
-    });
-    const emailOptions = {
-      from: process.env.GMAIL_ID,
-      to: email,
-      subject: "SOBOK 비밀번호 초기화 메일",
-      html:
-        `<p>비밀번호 초기화를 위해 아래의 URL을 클릭하여 주세요.</p>` +
-        `<a href="http://localhost/reset/${token}">비밀번호 재설정 링크</a>`,
-    };
-    transporter.sendMail(emailOptions);
+  try {
+    const customer = await authService.findCustomerByEmail(email);
+    if (customer) {
+      // 10글자 string
+      const token = crypto.randomBytes(5).toString("hex");
+      const data = {
+        token,
+        customerId: customer.id,
+        ttl: 300, // Time To Live 5분
+      };
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.GMAIL_ID,
+          pass: process.env.GMAIL_PASSWORD,
+        },
+      });
+      const name = customer.name;
+      const loginId = customer.loginId;
+      const emailOptions = {
+        from: process.env.GMAIL_ID,
+        to: email,
+        subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
+        html:
+          `<p>안녕하세요, SOBOK입니다.</p>` +
+          `<p>'${name}'님의 아이디 : ${loginId} </p>` +
+          `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+          `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+          `<p>감사합니다. </p>`,
+      };
+      transporter.sendMail(emailOptions);
 
-    // 비밀번호 재설정
-    const resetPassword = await authService.resetCustomerPw(customer.id, token);
+      // 비밀번호 재설정
+      const resetPassword = await authService.resetCustomerPw(
+        customer.id,
+        token
+      );
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
+    } else {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+    }
+  } catch (error) {
+    console.log(error);
     return res
-      .status(sc.OK)
-      .send(success(sc.OK, rm.SEND_EMAIL_SUCCESS, resetPassword));
-  } else {
-    return res
-      .status(sc.BAD_REQUEST)
-      .send(fail(sc.BAD_REQUEST, rm.GET_CUSTOMER_BY_EMAIL_FAIL));
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
-// 고객 유저 비밀번호 재설정
-// const customerPasswordReset = async (req: Request, res: Response) => {
-//   const resetPassword =
-// };
+// 점주 유저 회원정보 찾기 및 비밀번호 재설정
+const findOwnerByEmail = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  if (!email || email === "") {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const owner = await authService.findOwnerByEmail(email);
+    if (owner) {
+      // 10글자 string
+      const token = crypto.randomBytes(5).toString("hex");
+      const data = {
+        token,
+        ownerId: owner.id,
+        ttl: 300, // Time To Live 5분
+      };
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.GMAIL_ID,
+          pass: process.env.GMAIL_PASSWORD,
+        },
+      });
+      const name = owner.director;
+      const loginId = owner.loginId;
+      const emailOptions = {
+        from: process.env.GMAIL_ID,
+        to: email,
+        subject: "[SOBOK] 회원님의 ID/비밀번호 정보입니다.",
+        html:
+          `<p>안녕하세요, SOBOK입니다.</p>` +
+          `<p>'${name}' 담당자님의 아이디 : <b>${loginId}</b> </p>` +
+          `초기화된 임시 비밀번호 : <b>${token}</b> </p>` +
+          `<p>(임시 비밀번호는 로그인 후 변경해주세요.)</p>` +
+          `<p>감사합니다. </p>`,
+      };
+      transporter.sendMail(emailOptions);
+
+      // 비밀번호 재설정
+      const resetPassword = await authService.resetOwnerPw(owner.id, token);
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.SEND_EMAIL_RESET_PW_SUCCESS, resetPassword));
+    } else {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_OWNER_BY_EMAIL_FAIL));
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 유저 탈퇴
 const customerDelete = async (req: Request, res: Response) => {
   try {
@@ -404,13 +557,14 @@ const ownerDelete = async (req: Request, res: Response) => {
 const authController = {
   createCustomer,
   createOwner,
+  patchOwner,
   customerSignIn,
   ownerSignIn,
-  customerSignOut,
+  // customerSignOut,
   customerUpdate,
   ownerUpdate,
   findCustomerByEmail,
-  // customerPasswordReset,
+  findOwnerByEmail,
   customerDelete,
   ownerDelete,
 };

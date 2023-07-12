@@ -122,28 +122,39 @@ const getCustomerById = async (customerId: number) => {
 };
 
 // 최고관리자 투어 추가
-const createTour = async (createTourDTO: CreateTourDTO) => {
+const createTour = async (createTourDTO: CreateTourDTO, path: string) => {
   const data = await prisma.tour.create({
     data: {
       keyword: createTourDTO.keyword,
       title: createTourDTO.title,
       reward: createTourDTO.reward,
-      image: createTourDTO.image,
+      image: path,
+      cafeList: createTourDTO.cafeList.split(","),
     },
   });
+
+  // 매장 정보에 투어 id 부여
+  const cafeListArray = createTourDTO.cafeList.split(",");
+  for (let i = 0; i < cafeListArray.length; i++) {
+    const tourStore = await prisma.store.updateMany({
+      where: {
+        storeName: cafeListArray[i],
+      },
+      data: {
+        tourId: data.id,
+      },
+    });
+  }
+
   return data;
 };
 
-// 매장 id를 받아 매장 정보를 투어에 추가
-const createTourIdForStore = async (
-  createTourIdForStoreDTO: CreateTourIdForStoreDTO
-) => {
-  const data = await prisma.store.update({
+// 최고관리자 투어 추가 시 매장정보 검색
+const getStoreByStoreName = async (store: string) => {
+  const data = await prisma.store.findMany({
+    // 검색어를 포함하는 매장명 조회 시 해당 매장 레코드 반환
     where: {
-      id: createTourIdForStoreDTO.storeId as number,
-    },
-    data: {
-      tourId: createTourIdForStoreDTO.tourId as number,
+      storeName: { contains: store },
     },
   });
   return data;
@@ -169,6 +180,78 @@ const getDeliveryRequestById = async (deliveryId: number) => {
   return data;
 };
 
+// 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회 - 다시다시!!
+const getAllStampSignInRequest = async (sort: string) => {
+  switch (sort) {
+    case "auth":
+      const allAuthOwner = await prisma.store_Owner.findMany({
+        where: {
+          stampAuthorized: true,
+        },
+      });
+      return allAuthOwner;
+    case "pending":
+      const allRequest = await prisma.stamp_Request.findMany();
+      console.log("allRequest: ", allRequest);
+      let allPendingOwner: Array<object> = [];
+      for (let i = 0; i < allRequest.length; i++) {
+        const ownerId = allRequest[i].ownerId;
+        const requestOwner = await prisma.store_Owner.findFirst({
+          where: {
+            id: ownerId,
+            stampAuthorized: false,
+          },
+        });
+        allPendingOwner.push(requestOwner as object);
+      }
+      return allPendingOwner;
+  }
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 담당자 개별 조회
+const getStampSignInRequest = async (ownerId: number) => {
+  const requestOwner = await prisma.stamp_Request.findUnique({
+    where: {
+      ownerId: ownerId,
+    },
+  });
+  if (requestOwner !== null) {
+    const data = await prisma.store_Owner.findUnique({
+      where: {
+        id: ownerId,
+      },
+    });
+    return data;
+  }
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 승인
+const stampSignInGrant = async (ownerId: number) => {
+  // 스탬프 사용 신청 건 - 승인 여부 갱신
+  await prisma.stamp_Request.update({
+    where: {
+      ownerId: ownerId,
+    },
+    data: {
+      isGrant: true,
+    },
+  });
+  // 스탬프 사용 신청 담당자 - 승인 여부 갱신
+  const data = await prisma.store_Owner.update({
+    where: {
+      id: ownerId,
+    },
+    data: {
+      stampAuthorized: true,
+    },
+  });
+  const result = {
+    ownerId: data.id,
+    stampAuthorized: data.stampAuthorized,
+  };
+  return result;
+};
+
 // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
 const getAllTour = async () => {
   const data = await prisma.tour.findMany();
@@ -178,13 +261,14 @@ const getAllTour = async () => {
 // 최고관리자 공지사항 작성
 const createNotice = async (
   createNoticeDTO: CreateNoticeDTO,
-  date: EpochTimeStamp
+  date: Date,
+  path: string
 ) => {
   const data = await prisma.notice.create({
     data: {
       title: createNoticeDTO.title,
       content: createNoticeDTO.content,
-      image: createNoticeDTO.image,
+      image: path,
       timestamp: date,
     },
   });
@@ -195,8 +279,11 @@ const managerService = {
   managerSignIn,
   grantOwnerSignUp,
   findManagerById,
+  getAllStampSignInRequest,
+  getStampSignInRequest,
+  stampSignInGrant,
   createTour,
-  createTourIdForStore,
+  getStoreByStoreName,
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,

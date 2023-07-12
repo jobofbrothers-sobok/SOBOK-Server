@@ -75,6 +75,7 @@ const managerSignin = async (req: Request, res: Response) => {
     const accessToken = jwtHandler.sign(userId);
 
     const result = {
+      who: "manager",
       userId: userId,
       accessToken,
     };
@@ -225,6 +226,77 @@ const getCustomerById = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회
+const getAllStampSignInRequest = async (req: Request, res: Response) => {
+  const sort = req.query.sort as string;
+  if (!sort) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  if (sort !== sortType.AUTH && sort !== sortType.NOT_AUTH) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  try {
+    const data = await managerService.getAllStampSignInRequest(sort);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 담당자 개별 조회
+const getStampSignInRequest = async (req: Request, res: Response) => {
+  const ownerId = req.params.id;
+  try {
+    const data = await managerService.getStampSignInRequest(+ownerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 최고관리자 스탬프 서비스 사용 신청 승인
+const stampSignInGrant = async (req: Request, res: Response) => {
+  const ownerId = req.params.id;
+  try {
+    const data = await managerService.stampSignInGrant(+ownerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GRANT_STAMP_SIGNIN_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GRANT_STAMP_SIGNIN_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 투어 추가하기
 const createTour = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -236,7 +308,15 @@ const createTour = async (req: Request, res: Response) => {
 
   const createTourDTO: CreateTourDTO = req.body;
   try {
-    const createTour = await managerService.createTour(createTourDTO);
+    const image: Express.Multer.File = req.file as Express.Multer.File;
+    const path = image.path;
+
+    if (!image) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const createTour = await managerService.createTour(createTourDTO, path);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_TOUR_SUCCESS, createTour));
@@ -248,23 +328,24 @@ const createTour = async (req: Request, res: Response) => {
   }
 };
 
-// 매장정보를 투어에 추가
-const createTourIdForStore = async (req: Request, res: Response) => {
-  const createTourIdForStoreDTO: CreateTourIdForStoreDTO = req.body;
-  const storeId = createTourIdForStoreDTO.storeId;
-  const tourId = createTourIdForStoreDTO.tourId;
-
-  if (!storeId || !tourId) {
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-  }
-
+// 최고관리자 투어 추가 시 매장 검색
+const getStoreByStoreName = async (req: Request, res: Response) => {
+  const store = req.body.storeName;
   try {
-    const data = await managerService.createTourIdForStore(
-      createTourIdForStoreDTO
-    );
+    if (!store) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+    }
+    const data = await managerService.getStoreByStoreName(store);
+    if (!data || data.length === 0) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_STORE_BY_STORENAME_FAIL, data));
+    }
     return res
-      .status(sc.NOT_FOUND)
-      .send(success(sc.NOT_FOUND, rm.CREATE_TOURID_FOR_STORE_SUCCESS, data));
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_STORE_BY_STORENAME_SUCCESS, data));
   } catch (error) {
     console.log(error);
     return res
@@ -363,8 +444,16 @@ const createNotice = async (req: Request, res: Response) => {
   const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
   const date = new Date(now);
   const createNoticeDTO: CreateNoticeDTO = req.body;
+
+  const image: Express.Multer.File = req.file as Express.Multer.File;
+  const path = image.path;
+
+  if (!image) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
   try {
-    const data = await managerService.createNotice(createNoticeDTO, date);
+    const data = await managerService.createNotice(createNoticeDTO, date, path);
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.CREATE_NOTICE_SUCCESS, data));
@@ -379,8 +468,11 @@ const managerController = {
   managerSignup,
   managerSignin,
   grantOwnerSignUp,
+  getAllStampSignInRequest,
+  getStampSignInRequest,
+  stampSignInGrant,
   createTour,
-  createTourIdForStore,
+  getStoreByStoreName,
   getAllDeliveryRequest,
   getDeliveryRequestById,
   getAllTour,
