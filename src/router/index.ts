@@ -8,10 +8,10 @@ import { auth } from "../middlewares";
 
 const router: Router = Router();
 
-router.use("/auth", authRouter);
-router.use("/customer", customerRouter);
-router.use("/owner", ownerRouter);
-router.use("/manager", managerRouter);
-router.use("/main", mainRouter);
+router.use("/api/auth", authRouter);
+router.use("/api/customer", customerRouter);
+router.use("/api/owner", ownerRouter);
+router.use("/api/manager", managerRouter);
+router.use("/api/main", mainRouter);
 
 export default router;
