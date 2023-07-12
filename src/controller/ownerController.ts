@@ -218,6 +218,8 @@ const createStoreProduct = async (req: Request, res: Response) => {
 const createAlimRequest = async (req: Request, res: Response) => {
   const ownerCreateAlimRequestDTO: OwnerCreateAlimRequestDTO = req.body;
   const userId = req.user.id;
+  const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
+  const date = new Date(now);
   const error = validationResult(req);
   if (!error.isEmpty() || !userId) {
     return res
@@ -228,7 +230,8 @@ const createAlimRequest = async (req: Request, res: Response) => {
   try {
     const data = await ownerService.createAlimRequest(
       ownerCreateAlimRequestDTO,
-      userId
+      userId,
+      date
     );
     return res
       .status(sc.OK)
