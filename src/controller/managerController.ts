@@ -464,7 +464,7 @@ const sendMessage = async (req: Request, res: Response) => {
   const writerId = req.body.writerId;
   try {
     const data = await managerService.sendMessage(writerId);
-    if (!data) {
+    if (data === null) {
       return res
         .status(sc.NOT_FOUND)
         .send(fail(sc.NOT_FOUND, rm.SEND_MESSAGE_FAIL));
