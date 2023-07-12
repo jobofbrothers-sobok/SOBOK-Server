@@ -339,7 +339,6 @@ const sendMessage = async (writerId: number, content: string) => {
   data.append("sender", "01025636996");
   data.append("receiver", customerPhoneResult);
   data.append("msg", content);
-  data.append("testmode_yn", "Y");
 
   let config = {
     method: "post",
