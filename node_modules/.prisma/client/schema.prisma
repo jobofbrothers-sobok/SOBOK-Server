@@ -192,6 +192,7 @@ model Alim_Request {
   isMessage     Boolean
   isKakao       Boolean
   writerId      Int
+  timestamp     DateTime        @db.Timestamp(6)
   Alim_Customer Alim_Customer[]
   Store_Owner   Store_Owner     @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "writerId")
 }

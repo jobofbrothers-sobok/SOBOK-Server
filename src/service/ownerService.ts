@@ -352,7 +352,8 @@ const createStoreProduct = async (
 // 점주 소복 매니저 서비스 사용 신청
 const createAlimRequest = async (
   ownerCreateAlimRequestDTO: OwnerCreateAlimRequestDTO,
-  userId: number
+  userId: number,
+  date: Date
 ) => {
   const data = await prisma.alim_Request.create({
     data: {
@@ -361,6 +362,7 @@ const createAlimRequest = async (
       isMessage: ownerCreateAlimRequestDTO.isMessage,
       isKakao: ownerCreateAlimRequestDTO.isKakao,
       writerId: userId,
+      timestamp: date,
     },
   });
   return data;
