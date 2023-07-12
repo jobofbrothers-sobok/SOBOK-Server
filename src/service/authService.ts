@@ -1,4 +1,4 @@
-import { session } from "express-session";
+// import { session } from "express-session";
 import { CreateDeliveryRequestDTO } from "./../interfaces/delivery/createDeliveryRequestDTO";
 import { PrismaClient, Stamp } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -9,6 +9,7 @@ import { CustomerUpdateDTO } from "./../interfaces/user/customerUpdateDTO";
 import { OwnerCreateDTO } from "../interfaces/user/ownerCreateDTO";
 import { OwnerUpdateDTO } from "../interfaces/user/ownerUpdateDTO";
 import { Request, Response } from "express";
+import axios from "axios";
 
 const prisma = new PrismaClient();
 
@@ -32,15 +33,46 @@ const createCustomer = async (customerCreateDTO: CustomerCreateDTO) => {
   return data;
 };
 
-// 점주 유저 회원가입
+// 점주 유저 회원가입 1
 const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
-  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
-  const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
-  const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
+  // // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  // const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
+  // const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
   const data = await prisma.store_Owner.create({
     data: {
       loginId: ownerCreateDTO.loginId,
-      password,
+      // password,
+      // store: ownerCreateDTO.store,
+      // director: ownerCreateDTO.director,
+      // phone: ownerCreateDTO.phone,
+      // email: ownerCreateDTO.email,
+      // address: ownerCreateDTO.address,
+      // detailAddress: ownerCreateDTO.detailAddress,
+      // licenseNumber: ownerCreateDTO.licenseNumber,
+      licenseImage: path,
+      // termsAgree: ownerCreateDTO.termsAgree,
+      // marketingAgree: ownerCreateDTO.marketingAgree,
+    },
+  });
+  const result = {
+    userId: data.id,
+    loginId: data.loginId,
+    licenseImage: data.licenseImage,
+  };
+  return result;
+};
+
+// 점주 유저 회원가입 2
+const patchOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10); // 매우 작은 임의의 랜덤 텍스트 salt
+  const password = await bcrypt.hash(ownerCreateDTO.password, salt); // 위에서 랜덤을 생성한 salt를 이용해 암호화
+  const data = await prisma.store_Owner.update({
+    where: {
+      loginId: ownerCreateDTO.loginId,
+    },
+    data: {
+      password: password,
       store: ownerCreateDTO.store,
       director: ownerCreateDTO.director,
       phone: ownerCreateDTO.phone,
@@ -48,7 +80,6 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
       address: ownerCreateDTO.address,
       detailAddress: ownerCreateDTO.detailAddress,
       licenseNumber: ownerCreateDTO.licenseNumber,
-      licenseImage: path,
       termsAgree: ownerCreateDTO.termsAgree,
       marketingAgree: ownerCreateDTO.marketingAgree,
     },
@@ -60,7 +91,7 @@ const createOwner = async (ownerCreateDTO: OwnerCreateDTO, path: string) => {
 // 고객 유저 로그인
 const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
-    const user = await prisma.customer.findFirst({
+    const user = await prisma.customer.findUnique({
       where: {
         loginId: userSignInDTO.loginId,
       },
@@ -82,7 +113,7 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
 // 점주 유저 로그인
 const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
-    const user = await prisma.store_Owner.findFirst({
+    const user = await prisma.store_Owner.findUnique({
       where: {
         loginId: userSignInDTO.loginId,
       },
@@ -91,10 +122,13 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
 
     // bcrypt가 DB에 저장된 기존 password와 넘겨 받은 password를 대조하고
     // match false시 401을 리턴
-    const isMatch = await bcrypt.compare(userSignInDTO.password, user.password);
+    const isMatch = await bcrypt.compare(
+      userSignInDTO.password,
+      user.password as string
+    );
     if (!isMatch) return sc.UNAUTHORIZED;
 
-    return user.id;
+    return user;
   } catch (error) {
     console.log(error);
     throw error;
@@ -151,6 +185,34 @@ const ownerUpdate = async (
       profileImage: path2,
     },
   });
+
+  //* 담당자 정보 수정 시 매장 주소를 수정할 경우 -> 매장 테이블의 x, y 필드 값 변경
+  // 점주 유저의 매장 주소(도로명 주소)
+  const storeLocation = data.address;
+
+  // 네이버 지도 API를 통해 x, y 좌표 조회
+  const geocodeResult = await axios.get(
+    `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${storeLocation}`,
+    {
+      headers: {
+        "X-NCP-APIGW-API-KEY-ID": process.env.NAVER_GEOCODING_CLIENT_ID,
+        "X-NCP-APIGW-API-KEY": process.env.NAVER_GEOCODING_CLIENT_SECRET,
+      },
+    }
+  );
+  const x = geocodeResult.data.addresses[0].x;
+  const y = geocodeResult.data.addresses[0].y;
+
+  // 점주 유저의 매장 x, y 필드 값을 수정
+  const result = await prisma.store.update({
+    where: {
+      ownerId: id,
+    },
+    data: {
+      x: x,
+      y: y,
+    },
+  });
   // console.log(data);
   return data.id;
 };
@@ -167,15 +229,52 @@ const findCustomerByEmail = async (email: string) => {
 
 // 고객 유저 비밀번호 재설정
 const resetCustomerPw = async (id: number, token: string) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const resetPassword = await bcrypt.hash(token, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
   const data = await prisma.customer.update({
     where: {
       id: id,
     },
     data: {
-      password: token,
+      password: resetPassword,
+    },
+  });
+  const result = {
+    customerId: data.id,
+    loginId: data.loginId,
+  };
+  return result;
+};
+
+// 점주 유저 회원정보 찾기
+const findOwnerByEmail = async (email: string) => {
+  const data = await prisma.store_Owner.findUnique({
+    where: {
+      email: email,
     },
   });
   return data;
+};
+
+// 점주 유저 비밀번호 재설정
+const resetOwnerPw = async (id: number, token: string) => {
+  // 넘겨받은 password를 bcrypt의 도움을 받아 암호화
+  const salt = await bcrypt.genSalt(10);
+  const resetPassword = await bcrypt.hash(token, salt); // 위에서 랜덤으로 생성한 salt를 이용해 암호화
+  const data = await prisma.store_Owner.update({
+    where: {
+      id: id,
+    },
+    data: {
+      password: resetPassword,
+    },
+  });
+  const result = {
+    ownerId: data.id,
+    loginId: data.loginId,
+  };
+  return result;
 };
 
 // 고객 유저 회원탈퇴
@@ -201,12 +300,15 @@ const ownerDelete = async (id: number) => {
 const authService = {
   createCustomer,
   createOwner,
+  patchOwner,
   customerSignIn,
   ownerSignIn,
   customerUpdate,
   ownerUpdate,
   findCustomerByEmail,
   resetCustomerPw,
+  findOwnerByEmail,
+  resetOwnerPw,
   customerDelete,
   ownerDelete,
 };

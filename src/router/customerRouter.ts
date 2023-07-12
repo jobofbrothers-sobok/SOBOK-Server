@@ -25,6 +25,9 @@ router.post(
 // 고객 스탬프 적립 - POST ~/customer/stamp
 router.post("/stamp", auth, customerController.createStampNumber);
 
+// 고객 스탬프 투어 참여 매장 조회 - GET ~/customer/stamp/tour?sort=value
+router.get("/tour", auth, customerController.getAllTourStore);
+
 // 고객 스탬프 적립 내역 확인 - GET ~/customer/stamp?sort=value
 router.get("/stamp", auth, customerController.getAllStamp);
 

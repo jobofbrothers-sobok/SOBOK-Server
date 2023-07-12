@@ -48,7 +48,7 @@ const getAllStamp = async (sort: string, id: number) => {
         const hoegi = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: "경희대학교 카페 투어",
+            tour: "회기역 스탬프 투어",
           },
         });
         return hoegi;
@@ -56,7 +56,7 @@ const getAllStamp = async (sort: string, id: number) => {
         const sookmyung = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: "숙대입구 카페 투어",
+            tour: "숙대입구 스탬프 투어",
           },
         });
         return sookmyung;
@@ -64,7 +64,7 @@ const getAllStamp = async (sort: string, id: number) => {
         const halloween = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: "할로윈 특집 카페 투어",
+            tour: "할로윈 특집 스탬프 투어",
           },
         });
         console.log(halloween);
@@ -73,7 +73,7 @@ const getAllStamp = async (sort: string, id: number) => {
         const xmas = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: "크리스마스 특집 카페 투어",
+            tour: "크리스마스 특집 스탬프 투어",
           },
         });
         return xmas;
@@ -95,7 +95,7 @@ const getAllTourStore = async (sort: string) => {
   let tourTitle;
   switch (sort) {
     case "hoegi":
-      tourTitle = "경희대학교 카페 투어";
+      tourTitle = "회기역 스탬프 투어";
       const hoegiTour = await ownerService.getTourByTourTitle(tourTitle);
       const hoegi = await prisma.store.findMany({
         where: {
@@ -104,7 +104,7 @@ const getAllTourStore = async (sort: string) => {
       });
       return hoegi;
     case "sookmyung":
-      tourTitle = "숙대입구 카페 투어";
+      tourTitle = "숙대입구 스탬프 투어";
       const sookTour = await ownerService.getTourByTourTitle(tourTitle);
       const sookmyung = await prisma.store.findMany({
         where: {
@@ -113,7 +113,7 @@ const getAllTourStore = async (sort: string) => {
       });
       return sookmyung;
     case "halloween":
-      tourTitle = "할로윈 특집 카페 투어";
+      tourTitle = "할로윈 특집 스탬프 투어";
       const halloweenTour = await ownerService.getTourByTourTitle(tourTitle);
       const halloween = await prisma.store.findMany({
         where: {
@@ -122,7 +122,7 @@ const getAllTourStore = async (sort: string) => {
       });
       return halloween;
     case "xmas":
-      tourTitle = "크리스마스 특집 카페 투어";
+      tourTitle = "크리스마스 특집 스탬프 투어";
       const xmasTour = await ownerService.getTourByTourTitle(tourTitle);
       const xmas = await prisma.store.findMany({
         where: {

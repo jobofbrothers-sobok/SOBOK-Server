@@ -3,4 +3,5 @@ export interface CreateTourDTO {
   title: string;
   reward: string;
   image: string;
+  cafeList: string;
 }
