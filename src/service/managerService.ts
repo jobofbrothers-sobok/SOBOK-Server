@@ -278,9 +278,7 @@ const getAlimRequestById = async (id: number) => {
 };
 
 // 최고관리자 소복 매니저 문자 일괄전송
-const sendMessage = async (writerId: number) => {
-  console.log(typeof writerId, writerId);
-
+const sendMessage = async (writerId: number, content: string) => {
   // 문자 전송 신청자의 매장 및 매장id 탐색
   const writerStore = await prisma.store.findUnique({
     where: {
@@ -314,26 +312,33 @@ const sendMessage = async (writerId: number) => {
   const uniqueCustomerId: Array<any> = [...set];
   console.log(uniqueCustomerId);
 
-  // 스탬프를 적립한 객들의 전화번호가 모인 배열 생성
-  const customerPhone = [];
+  // 스탬프를 적립한 곡객들의 전화번호가 모인 배열 생송
+  let customerPhone: Array<string> = [];
   for (let i = 0; i < uniqueCustomerId.length; i++) {
     const customer = await prisma.customer.findUnique({
       where: {
         id: uniqueCustomerId[i],
       },
     });
-    customerPhone.push(customer?.phone);
+    // 전화번호 문자열 정제
+    let phone = customer?.phone as string;
+    let replacedPhone = phone.replace(/-/g, ""); // "-" globally replaced
+    customerPhone.push(replacedPhone); // 배열에 값 추가
   }
 
-  console.log(customerPhone);
+  console.log(typeof customerPhone, "customerPhone: ", customerPhone);
+
+  // 배열 안 전화번호를 하나의 스트링으로 합침
+  const customerPhoneResult: string = customerPhone.join();
+  console.log(customerPhoneResult);
 
   // 알리고 문자 api 호출
   let data = new FormData();
   data.append("key", "5hs408olr441l1gojp90yf2lqvcbkwi0");
   data.append("user_id", "sobok");
   data.append("sender", "01025636996");
-  data.append("receiver", "01024234894");
-  data.append("msg", "알리고 test");
+  data.append("receiver", customerPhoneResult);
+  data.append("msg", content);
   data.append("testmode_yn", "Y");
 
   let config = {
@@ -353,7 +358,6 @@ const sendMessage = async (writerId: number) => {
     return dataPromise;
   };
 
-  const success = "일단 호출성공";
   return axiosResult();
 };
 
