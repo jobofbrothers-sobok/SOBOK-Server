@@ -8,6 +8,7 @@ import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CreateTourDTO } from "../interfaces/manager/createTourDTO";
 import axios from "axios";
 import FormData from "form-data";
+import { response } from "express";
 
 const prisma = new PrismaClient();
 
@@ -345,17 +346,15 @@ const sendMessage = async (writerId: number) => {
     data: data,
   };
 
-  const axiosResult = await axios
-    .request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const axiosResult = async () => {
+    const promise = axios.request(config);
+
+    const dataPromise = promise.then((response) => response.data);
+    return dataPromise;
+  };
 
   const success = "일단 호출성공";
-  return axiosResult;
+  return axiosResult();
 };
 
 // 최고관리자 공지사항 작성
