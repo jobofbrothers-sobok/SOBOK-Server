@@ -395,7 +395,7 @@ const sendKakao = async (writerId: number, content: string) => {
   newData.append("userid", "sobok");
   newData.append(
     "token",
-    token.token
+    token.data.token
     //"10b91d8fd2d4be91945e444dcbfbba224a570e11486270ded68578f714f42af3f200bf69d7c0bd469d3d15b825b4508773e5cc10c043d6210274a1fff275a5bc11GLQquNFYJ/qL2pDTjaQ8BNwspqIsPCAYV65s8FgtmbFZJTbs8ccu1sbfqpdYEDqfoKrCxVKKFe+H9IdYhhUg=="
   );
   newData.append("senderkey", "28761cda9b6c4062146443a53dcdbd29a057fcb7");
