@@ -361,6 +361,35 @@ const sendMessage = async (writerId: number, content: string) => {
   return axiosResult();
 };
 
+// 최고관리자 소복 매니저 카카오톡(친구톡) 일괄전송
+const sendKakao = async (writerId: number, content: string) => {
+  // 알리고 토큰 생성 api 호출
+  let data = JSON.stringify({
+    apikey: "5hs408olr441l1gojp90yf2lqvcbkwi0",
+    userid: "sobok",
+  });
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://kakaoapi.aligo.in/akv10/token/create/30/s/",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  const axiosResult = async () => {
+    const promise = axios.request(config);
+
+    const dataPromise = await promise.then((response) => response.data);
+    console.log(dataPromise);
+
+    return dataPromise;
+  };
+  return axiosResult();
+};
+
 // 최고관리자 공지사항 작성
 const createNotice = async (
   createNoticeDTO: CreateNoticeDTO,
@@ -397,6 +426,7 @@ const managerService = {
   getAllAlimRequest,
   getAlimRequestById,
   sendMessage,
+  sendKakao,
   createNotice,
 };
 
