@@ -364,8 +364,6 @@ const sendMessage = async (writerId: number, content: string) => {
 // 최고관리자 소복 매니저 카카오톡(친구톡) 일괄전송
 const sendKakao = async (writerId: number, content: string) => {
   // 알리고 토큰 생성 api 호출
-  const axios = require("axios");
-  const FormData = require("form-data");
   let data = new FormData();
   data.append("apikey", "5hs408olr441l1gojp90yf2lqvcbkwi0");
   data.append("userid", "sobok");
@@ -389,7 +387,45 @@ const sendKakao = async (writerId: number, content: string) => {
     return dataPromise;
   };
 
-  return axiosResult();
+  const token = axiosResult.token;
+
+  // 알리고 친구톡 일괄전송 api
+  const axios = require("axios");
+  const FormData = require("form-data");
+  let newData = new FormData();
+  newData.append("apikey", "5hs408olr441l1gojp90yf2lqvcbkwi0");
+  newData.append("userid", "sobok");
+  newData.append(
+    "token",
+    token
+    //"10b91d8fd2d4be91945e444dcbfbba224a570e11486270ded68578f714f42af3f200bf69d7c0bd469d3d15b825b4508773e5cc10c043d6210274a1fff275a5bc11GLQquNFYJ/qL2pDTjaQ8BNwspqIsPCAYV65s8FgtmbFZJTbs8ccu1sbfqpdYEDqfoKrCxVKKFe+H9IdYhhUg=="
+  );
+  newData.append("senderkey", "28761cda9b6c4062146443a53dcdbd29a057fcb7");
+  newData.append("sender", "01025636996");
+  newData.append("receiver_1", "01024234894");
+  newData.append("subject_1", "친구톡 ");
+  newData.append("message_1", "친구톡입니다.");
+
+  let configuration = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://kakaoapi.aligo.in/akv10/friend/send/ ",
+    headers: {
+      ...newData.getHeaders(),
+    },
+    data: newData,
+  };
+
+  const newAxiosResult = async () => {
+    const promise = axios.request(configuration);
+
+    const dataPromise = promise.then(
+      (response: { data: any }) => response.data
+    );
+    return dataPromise;
+  };
+
+  return newAxiosResult();
 };
 
 // 최고관리자 공지사항 작성
