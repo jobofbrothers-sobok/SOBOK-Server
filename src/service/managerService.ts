@@ -364,17 +364,18 @@ const sendMessage = async (writerId: number, content: string) => {
 // 최고관리자 소복 매니저 카카오톡(친구톡) 일괄전송
 const sendKakao = async (writerId: number, content: string) => {
   // 알리고 토큰 생성 api 호출
-  let data = JSON.stringify({
-    apikey: "5hs408olr441l1gojp90yf2lqvcbkwi0",
-    userid: "sobok",
-  });
+  const axios = require("axios");
+  const FormData = require("form-data");
+  let data = new FormData();
+  data.append("apikey", "5hs408olr441l1gojp90yf2lqvcbkwi0");
+  data.append("userid", "sobok");
 
   let config = {
     method: "post",
     maxBodyLength: Infinity,
     url: "https://kakaoapi.aligo.in/akv10/token/create/30/s/",
     headers: {
-      "Content-Type": "application/json",
+      ...data.getHeaders(),
     },
     data: data,
   };
@@ -382,11 +383,12 @@ const sendKakao = async (writerId: number, content: string) => {
   const axiosResult = async () => {
     const promise = axios.request(config);
 
-    const dataPromise = await promise.then((response) => response.data);
-    console.log(dataPromise);
-
+    const dataPromise = promise.then(
+      (response: { data: any }) => response.data
+    );
     return dataPromise;
   };
+
   return axiosResult();
 };
 
