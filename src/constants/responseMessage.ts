@@ -135,6 +135,8 @@ export default {
   GET_ALL_ALIM_REQUEST_FAIL: "소복 매니저 사용신청 리스트 전체 조회 실패",
   GET_ALIM_REQUEST_SUCCESS: "소복 매니저 사용신청 리스트 개별 조회 성공",
   GET_ALIM_REQUEST_FAIL: "소복 매니저 사용신청 리스트 개별 조회 실패",
+  SEND_MESSAGE_SUCCESS: "소복 매니저 문자 일괄전송 성공",
+  SEND_MESSAGE_FAIL: "소복 매니저 문자 일괄전송 실패",
 
   // 공지사항, 문의사항
   CREATE_NOTICE_SUCCESS: "공지사항 생성 성공",
