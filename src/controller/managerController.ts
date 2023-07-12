@@ -415,23 +415,49 @@ const getAllTour = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 소복 매니저 신청 리스트 전체 조회
+const getAllAlimRequest = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getAllAlimRequest();
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(success(sc.NOT_FOUND, rm.GET_ALL_ALIM_REQUEST_FAIL, data));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_ALIM_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 소복 매니저 신청 리스트 개별 조회
-// const getAlimRequestById = async (req: Request, res: Response) => {
-//   const id = req.query.id;
-//   if (!id) {
-//     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
-//   }
-
-//   const data = await managerService.getAlimRequestById(+id);
-
-//   try {
-//   } catch (error) {
-//     return res
-//       .status(sc.INTERNAL_SERVER_ERROR)
-//       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
-//     console.log(error);
-//   }
-// };
+const getAlimRequestById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await managerService.getAlimRequestById(+id);
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(fail(sc.NOT_FOUND, rm.GET_ALIM_REQUEST_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALIM_REQUEST_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 
 // 최고관리자 공지사항 작성
 const createNotice = async (req: Request, res: Response) => {
@@ -480,7 +506,8 @@ const managerController = {
   getOwnerById,
   getAllCustomer,
   getCustomerById,
-  //getAlimRequestById,
+  getAllAlimRequest,
+  getAlimRequestById,
   createNotice,
 };
 

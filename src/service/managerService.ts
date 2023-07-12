@@ -258,6 +258,22 @@ const getAllTour = async () => {
   return data;
 };
 
+// 최고관리자 소복 매니저 신청 리스트 전체 조회
+const getAllAlimRequest = async () => {
+  const data = await prisma.alim_Request.findMany();
+  return data;
+};
+
+// 최고관리자 소복 매니저 신청 리스트 전체 조회
+const getAlimRequestById = async (id: number) => {
+  const data = await prisma.alim_Request.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return data;
+};
+
 // 최고관리자 공지사항 작성
 const createNotice = async (
   createNoticeDTO: CreateNoticeDTO,
@@ -291,6 +307,8 @@ const managerService = {
   getOwnerById,
   getAllCustomer,
   getCustomerById,
+  getAllAlimRequest,
+  getAlimRequestById,
   createNotice,
 };
 

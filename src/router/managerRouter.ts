@@ -38,11 +38,6 @@ router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 // 최고관리자 배송신청 리스트 전체 조회
 router.get("/delivery", auth, managerController.getAllDeliveryRequest);
 
-// 최고관리자 소복 매니저 신청 리스트 개별 조회
-// router.get("/alim/:id", auth, managerController.getAlimRequestById);
-
-// 최고관리자 소복 매니저 신청 리스트 전체 조회
-
 // 최고관리자 투어 추가 시 매장 검색
 router.get("/tour/search", auth, managerController.getStoreByStoreName);
 
@@ -68,6 +63,12 @@ router.get("/tour", auth, managerController.getAllTour);
 
 // // 최고관리자 로그인
 // router.post("/signin", managerController.managerSignin);
+
+// 최고관리자 소복 매니저 신청 리스트 개별 조회
+router.get("/alim/:id", auth, managerController.getAlimRequestById);
+
+// 최고관리자 소복 매니저 신청 리스트 전체 조회
+router.get("/alim", auth, managerController.getAllAlimRequest);
 
 // 최고관리자 공지글 작성
 router.post(
