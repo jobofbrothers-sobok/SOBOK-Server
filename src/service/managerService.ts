@@ -345,7 +345,7 @@ const sendMessage = async (writerId: number) => {
     data: data,
   };
 
-  axios
+  const axiosResult = await axios
     .request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
@@ -355,7 +355,7 @@ const sendMessage = async (writerId: number) => {
     });
 
   const success = "일단 호출성공";
-  return success;
+  return axiosResult;
 };
 
 // 최고관리자 공지사항 작성
