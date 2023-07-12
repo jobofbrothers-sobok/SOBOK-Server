@@ -481,6 +481,26 @@ const sendMessage = async (req: Request, res: Response) => {
   }
 };
 
+// 최고관리자 소복 매니저 카톡 일괄전송
+const sendKakao = async (req: Request, res: Response) => {
+  const writerId = req.body.writerId;
+  const content = req.body.content;
+  try {
+    const data = await managerService.sendKakao(writerId, content);
+    if (data === null) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(fail(sc.NOT_FOUND, rm.SEND_KAKAO_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.SEND_KAKAO_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 최고관리자 공지사항 작성
 const createNotice = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -531,6 +551,7 @@ const managerController = {
   getAllAlimRequest,
   getAlimRequestById,
   sendMessage,
+  sendKakao,
   createNotice,
 };
 
