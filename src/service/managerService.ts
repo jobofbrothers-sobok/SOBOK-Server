@@ -6,6 +6,8 @@ import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
 import { CreateTourDTO } from "../interfaces/manager/createTourDTO";
+import axios from "axios";
+import FormData from "form-data";
 
 const prisma = new PrismaClient();
 
@@ -258,6 +260,104 @@ const getAllTour = async () => {
   return data;
 };
 
+// 최고관리자 소복 매니저 신청 리스트 전체 조회
+const getAllAlimRequest = async () => {
+  const data = await prisma.alim_Request.findMany();
+  return data;
+};
+
+// 최고관리자 소복 매니저 신청 리스트 개별 조회
+const getAlimRequestById = async (id: number) => {
+  const data = await prisma.alim_Request.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return data;
+};
+
+// 최고관리자 소복 매니저 문자 일괄전송
+const sendMessage = async (writerId: number) => {
+  console.log(typeof writerId, writerId);
+
+  // 문자 전송 신청자의 매장 및 매장id 탐색
+  const writerStore = await prisma.store.findUnique({
+    where: {
+      ownerId: writerId,
+    },
+  });
+  console.log(writerStore);
+  const storeId = writerStore?.id;
+
+  // 해당 매장에서 스탬프 적립 승인을 받은 고객 탐색
+  const customer = await prisma.stamp.findMany({
+    where: {
+      timestamp: { not: null },
+      storeId: storeId,
+      store: { not: null },
+      tourId: { not: null },
+      tour: { not: null },
+    },
+  });
+  console.log(customer);
+
+  // 고객 id 배열에 스탬프를 적립한 고객의 id를 push
+  const customerId = [];
+  for (let i = 0; i < customer.length; i++) {
+    customerId.push(customer[i].customerId);
+  }
+  console.log(customerId);
+
+  // 스탬프를 적립한 고객 id 배열에서 중복값을 제거
+  const set = new Set(customerId);
+  const uniqueCustomerId: Array<any> = [...set];
+  console.log(uniqueCustomerId);
+
+  // 스탬프를 적립한 객들의 전화번호가 모인 배열 생성
+  const customerPhone = [];
+  for (let i = 0; i < uniqueCustomerId.length; i++) {
+    const customer = await prisma.customer.findUnique({
+      where: {
+        id: uniqueCustomerId[i],
+      },
+    });
+    customerPhone.push(customer?.phone);
+  }
+
+  console.log(customerPhone);
+
+  // 알리고 문자 api 호출
+  let data = new FormData();
+  data.append("key", "5hs408olr441l1gojp90yf2lqvcbkwi0");
+  data.append("user_id", "sobok");
+  data.append("sender", "01025636996");
+  data.append("receiver", "01024234894");
+  data.append("msg", "알리고 test");
+  data.append("testmode_yn", "Y");
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://apis.aligo.in/send/",
+    headers: {
+      ...data.getHeaders(),
+    },
+    data: data,
+  };
+
+  axios
+    .request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  const success = "일단 호출성공";
+  return success;
+};
+
 // 최고관리자 공지사항 작성
 const createNotice = async (
   createNoticeDTO: CreateNoticeDTO,
@@ -291,6 +391,9 @@ const managerService = {
   getOwnerById,
   getAllCustomer,
   getCustomerById,
+  getAllAlimRequest,
+  getAlimRequestById,
+  sendMessage,
   createNotice,
 };
 
