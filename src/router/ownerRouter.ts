@@ -77,7 +77,12 @@ router.post(
 );
 
 // 점주 소복 매니저 서비스 사용 신청
-router.post("/alim", auth, ownerController.createAlimRequest);
+router.post(
+  "/alim",
+  auth,
+  [body("category").trim().notEmpty(), body("content").trim().notEmpty()],
+  ownerController.createAlimRequest
+);
 
 // 점주 스탬프 서비스 사용 신청 - POST ~/owner/request
 router.post("/stamp/request", auth, ownerController.requestStampSignIn);

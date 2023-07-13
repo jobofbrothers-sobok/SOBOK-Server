@@ -221,7 +221,12 @@ const createAlimRequest = async (req: Request, res: Response) => {
   const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
   const date = new Date(now);
   const error = validationResult(req);
-  if (!error.isEmpty() || !userId) {
+  if (
+    !error.isEmpty() ||
+    !userId ||
+    !ownerCreateAlimRequestDTO.isMessage ||
+    !ownerCreateAlimRequestDTO.isKakao
+  ) {
     return res
       .status(sc.BAD_REQUEST)
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
