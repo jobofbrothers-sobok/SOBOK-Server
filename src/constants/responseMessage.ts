@@ -8,6 +8,8 @@ export default {
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_GRANT_SUCCESS: "점주 회원가입 승인 성공",
   SIGNUP_FAIL: "회원 가입 실패",
+  CHECK_LOGINID_SUCCESS: "아이디 중복확인 성공",
+  CHECK_LOGINID_FAIL: "아이디 중복확인 실패",
   OWNER_SIGNUP_1_SUCCESS: "점주 회원가입 1 성공",
   OWNER_SIGNUP_1_FAIL: "점주 회원가입 1 실패",
   OWNER_SIGNUP_2_SUCCESS: "점주 회원가입 2 성공",
