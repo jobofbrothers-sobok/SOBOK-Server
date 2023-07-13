@@ -70,6 +70,9 @@ router.delete(
 // 전체 카페 소식 모아보기
 router.get("/notice/all", mainController.getAllCafeNotice);
 
+// 찜한 카페 소식 모아보기
+router.get("/notice/like", auth, mainController.getAllLikeCafeNotice);
+
 // 카페 검색
 router.get("/", mainController.getCafeByKeyword);
 
