@@ -174,6 +174,32 @@ const createCafeReviewById = async (
   return data;
 };
 
+// 전체 카페 소식 모아보기
+const getAllCafeNotice = async (query: string) => {
+  if (query === "all") {
+    const allNotice = await prisma.store_Notice.findMany();
+    return allNotice;
+  }
+
+  if (query !== "all") {
+    switch (query) {
+      case "menu":
+        const menuNotice = await prisma.store_Notice.findMany({
+          where: {
+            category: { contains: "메뉴" }, // 신메뉴 소식만 조회
+          },
+        });
+        return menuNotice;
+      case "sale":
+        const saleNotice = await prisma.store_Notice.findMany({
+          where: {
+            category: { contains: "이벤트" }, // 할인/이벤트 소식만 조회
+          },
+        });
+        return saleNotice;
+    }
+  }
+};
 // 소복 스토어 상품 조회
 const getCafeStoreProducts = async (sort: string) => {
   if (sort !== "all") {
@@ -300,6 +326,7 @@ const mainService = {
   getCafeMenuById,
   getCafeReviewById,
   createCafeReviewById,
+  getAllCafeNotice,
   getCafeStoreProducts,
   getCustomerMyPage,
   deleteCafeNoticeById,
