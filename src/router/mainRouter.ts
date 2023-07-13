@@ -67,4 +67,7 @@ router.delete(
   mainController.deleteCafeProductById
 );
 
+// 카페 검색
+router.get("/", mainController.getCafeByKeyword);
+
 export default router;
