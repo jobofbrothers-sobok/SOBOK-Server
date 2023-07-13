@@ -7,7 +7,7 @@ import axios from "axios";
 const prisma = new PrismaClient();
 
 // 키워드로 카페 검색
-const getCafeByKeyword = async (keyword: string, customerId: number) => {
+const getCafeByKeyword = async (keyword: string) => {
   const data = await prisma.store.findMany({
     where: {
       OR: [
