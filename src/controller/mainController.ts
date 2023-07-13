@@ -10,12 +10,15 @@ import axios from "axios";
 // 카페 검색
 const getCafeByKeyword = async (req: Request, res: Response) => {
   const keyword = req.body.keyword;
-  const customerId = req.user.id;
+  if (req.user) {
+    const customerId = req.user.id;
+    return customerId;
+  }
   if (!keyword) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
   try {
-    const data = await mainService.getCafeByKeyword(keyword, customerId);
+    const data = await mainService.getCafeByKeyword(keyword);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)

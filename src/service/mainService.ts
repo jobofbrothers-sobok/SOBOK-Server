@@ -10,7 +10,10 @@ const prisma = new PrismaClient();
 const getCafeByKeyword = async (keyword: string, customerId: number) => {
   const data = await prisma.store.findMany({
     where: {
-      storeName: { contains: keyword },
+      OR: [
+        { storeName: { contains: keyword } },
+        { description: { contains: keyword } },
+      ],
     },
   });
   return data;
