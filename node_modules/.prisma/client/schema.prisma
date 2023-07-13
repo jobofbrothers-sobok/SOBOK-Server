@@ -64,16 +64,16 @@ model Stamp {
 model Store {
   id                                     Int             @id @unique @default(autoincrement())
   storeName                              String          @db.VarChar(30)
-  description                            String?         @db.VarChar(100)
-  officeHour                             String?         @db.VarChar(50)
-  dayOff                                 String?         @db.VarChar(50)
-  homepage                               String?         @db.VarChar(200)
-  image                                  String?         @db.VarChar(200)
+  description                            String?         @db.VarChar(300)
+  officeHour                             String?         @db.VarChar(300)
+  dayOff                                 String?         @db.VarChar(300)
+  homepage                               String?         @db.VarChar(300)
+  image                                  String?         @db.VarChar(300)
   category                               String[]
   ownerId                                Int             @unique
   tourId                                 Int?
-  x                                      String?         @db.VarChar(50)
-  y                                      String?         @db.VarChar(50)
+  x                                      String?         @db.VarChar(100)
+  y                                      String?         @db.VarChar(100)
   distance                               Float?          @default(0)
   Customer                               Customer[]
   Stamp                                  Stamp[]
