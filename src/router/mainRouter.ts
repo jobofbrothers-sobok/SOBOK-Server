@@ -67,6 +67,9 @@ router.delete(
   mainController.deleteCafeProductById
 );
 
+// 전체 카페 소식 모아보기
+router.get("/notice/all", mainController.getAllCafeNotice);
+
 // 카페 검색
 router.get("/", mainController.getCafeByKeyword);
 

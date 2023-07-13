@@ -276,6 +276,39 @@ const createCafeReviewById = async (req: Request, res: Response) => {
   }
 };
 
+// 전체 카페 소식 모아보기
+const getAllCafeNotice = async (req: Request, res: Response) => {
+  const query = req.query.query as string;
+  if (!query) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  if (
+    query !== queryType.ALL &&
+    query !== queryType.MENU &&
+    query !== queryType.SALE
+  ) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  try {
+    const data = await mainService.getAllCafeNotice(query);
+    if (!data || data.length === 0) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_CAFE_NOTICE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_CAFE_NOTICE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const sortType = {
   ALL: "all",
   COOKIE: "cookie",
@@ -449,6 +482,7 @@ const mainController = {
   getCafeMenuById,
   getCafeReviewById,
   createCafeReviewById,
+  getAllCafeNotice,
   getCafeStoreProducts,
   getCustomerMyPage,
   deleteCafeNoticeById,
