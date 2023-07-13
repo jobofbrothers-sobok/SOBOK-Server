@@ -68,6 +68,9 @@ const getAllCafe = async (req: Request, res: Response) => {
   const y = req.body.y;
   const category = req.body.category;
 
+  if (!x || !y || !category) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
   try {
     const data = await mainService.getAllCafe(x, y, category);
     if (!data) {
