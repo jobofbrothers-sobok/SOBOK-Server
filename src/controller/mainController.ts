@@ -467,7 +467,7 @@ const deleteCafeReviewById = async (req: Request, res: Response) => {
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_REVIEW_SUCCESS));
+        .send(fail(sc.BAD_REQUEST, rm.DELETE_CAFE_REVIEW_FAIL));
     }
     return res
       .status(sc.OK)
