@@ -192,6 +192,46 @@ const patchOwner = async (req: Request, res: Response) => {
   }
 };
 
+const sortType = {
+  CUSTOMER: "customer",
+  OWNER: "owner",
+};
+
+// 로그인 아이디 중복확인
+const checkLoginId = async (req: Request, res: Response) => {
+  const sort = req.query.sort as string;
+  const loginId = req.body.loginId;
+
+  if (!sort || !loginId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  if (sort !== sortType.CUSTOMER && sort !== sortType.OWNER) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const data = await authService.checkLoginId(sort, loginId);
+
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.CHECK_LOGINID_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CHECK_LOGINID_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    // 서버 내부에서 오류 발생
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 고객 유저 로그인
 const customerSignIn = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -558,6 +598,7 @@ const authController = {
   createCustomer,
   createOwner,
   patchOwner,
+  checkLoginId,
   customerSignIn,
   ownerSignIn,
   // customerSignOut,

@@ -88,6 +88,48 @@ const patchOwner = async (ownerCreateDTO: OwnerCreateDTO) => {
   return data;
 };
 
+// 로그인아이디 중복확인
+const checkLoginId = async (sort: string, loginId: string) => {
+  switch (sort) {
+    case "customer":
+      const customer = await prisma.customer.findUnique({
+        where: {
+          loginId: loginId,
+        },
+      });
+      if (customer !== null) {
+        return {
+          idAlreadyExist: true,
+          foundCustomerId: customer.id,
+          foundCustomerLoginId: customer.loginId,
+          fondCustomerName: customer.name,
+        };
+      } else {
+        return {
+          LoginIdAlreadyExist: false,
+        };
+      }
+    case "owner":
+      const owner = await prisma.store_Owner.findUnique({
+        where: {
+          loginId: loginId,
+        },
+      });
+      if (owner !== null) {
+        return {
+          idAlreadyExist: true,
+          foundOwnerId: owner.id,
+          foundOwnerLoginId: owner.loginId,
+          fondOwnerName: owner.director,
+        };
+      } else {
+        return {
+          LoginIdAlreadyExist: false,
+        };
+      }
+  }
+};
+
 // 고객 유저 로그인
 const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
@@ -301,6 +343,7 @@ const authService = {
   createCustomer,
   createOwner,
   patchOwner,
+  checkLoginId,
   customerSignIn,
   ownerSignIn,
   customerUpdate,
