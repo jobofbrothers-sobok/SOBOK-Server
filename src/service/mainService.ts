@@ -200,6 +200,53 @@ const getAllCafeNotice = async (query: string) => {
     }
   }
 };
+
+// 찜한 카페 소식 모아보기
+const getAllLikeCafeNotice = async (query: string, customerId: number) => {
+  // 찜한 카페 전체 조회
+  const allStoreLike = await prisma.store_Like.findMany({
+    where: {
+      customerId: customerId,
+    },
+  });
+
+  // 찜한 카페의 아이디가 모인 배열 생성
+  let allLikeCafeId: Array<number> = [];
+  for (let i = 0; i < allStoreLike.length; i++) {
+    allLikeCafeId.push(allStoreLike[i].storeId);
+  }
+
+  if (query === "all") {
+    const allNotice = await prisma.store_Notice.findMany({
+      where: {
+        storeId: { in: allLikeCafeId },
+      },
+    });
+    return allNotice;
+  }
+
+  if (query !== "all") {
+    switch (query) {
+      case "menu":
+        const menuNotice = await prisma.store_Notice.findMany({
+          where: {
+            category: { contains: "메뉴" }, // 신메뉴 소식만 조회
+            storeId: { in: allLikeCafeId },
+          },
+        });
+        return menuNotice;
+      case "sale":
+        const saleNotice = await prisma.store_Notice.findMany({
+          where: {
+            category: { contains: "이벤트" }, // 할인/이벤트 소식만 조회
+            storeId: { in: allLikeCafeId },
+          },
+        });
+        return saleNotice;
+    }
+  }
+};
+
 // 소복 스토어 상품 조회
 const getCafeStoreProducts = async (sort: string) => {
   if (sort !== "all") {
@@ -327,6 +374,7 @@ const mainService = {
   getCafeReviewById,
   createCafeReviewById,
   getAllCafeNotice,
+  getAllLikeCafeNotice,
   getCafeStoreProducts,
   getCustomerMyPage,
   deleteCafeNoticeById,

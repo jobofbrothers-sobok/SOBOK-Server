@@ -79,6 +79,8 @@ export default {
   GET_CAFE_NOTICE_FAIL: "유저 근처 개별 카페 소식 조회 실패",
   GET_ALL_CAFE_NOTICE_SUCCESS: "카페 전체 소식 모아보기 성공",
   GET_ALL_CAFE_NOTICE_FAIL: "카페 전체 소식 모아보기 실패",
+  GET_ALL_LIKE_CAFE_NOTICE_SUCCESS: "찜한 카페 소식 모아보기 성공",
+  GET_ALL_LIKE_CAFE_NOTICE_FAIL: "찜한 카페 소식 모아보기 실패",
   DELETE_CAFE_NOTICE_SUCCESS: "카페 소식 삭제 성공",
   DELETE_CAFE_NOTICE_FAIL: "카페 소식 삭제 실패",
   GET_CAFE_MENU_SUCCESS: "유저 근처 개별 카페 메뉴 조회 성공",
