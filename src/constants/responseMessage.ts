@@ -54,6 +54,8 @@ export default {
   INTERNAL_SERVER_ERROR: "서버 내 오류",
 
   // 매장
+  SEARCH_CAFE_BY_KEYWORD_SUCCESS: "키워드로 매장 검색 성공",
+  SEARCH_CAFE_BY_KEYWORD_FAIL: "키워드로 매장 검색 실패",
   CREATE_LIKE_CAFE_SUCCESS: "매장 찜 성공",
   CREATE_LIKE_CAFE_FAIL: "매장 찜 실패",
   DELETE_LIKE_CAFE_SUCCESS: "매장 찜 해제 성공",

@@ -7,6 +7,31 @@ import jwtHandler from "../modules/jwtHandler";
 import { mainService } from "../service";
 import axios from "axios";
 
+// 카페 검색
+const getCafeByKeyword = async (req: Request, res: Response) => {
+  const keyword = req.body.keyword;
+  const customerId = req.user.id;
+  if (!keyword) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.getCafeByKeyword(keyword, customerId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.SEARCH_CAFE_BY_KEYWORD_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.SEARCH_CAFE_BY_KEYWORD_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 카페 찜하기
 const createLikeCafe = async (req: Request, res: Response) => {
   const storeId = req.params.storeId;
@@ -403,6 +428,7 @@ const deleteCafeProductById = async (req: Request, res: Response) => {
 };
 
 const mainController = {
+  getCafeByKeyword,
   createLikeCafe,
   deleteLikeCafe,
   getAllCafe,
