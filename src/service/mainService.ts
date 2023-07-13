@@ -6,6 +6,16 @@ import axios from "axios";
 
 const prisma = new PrismaClient();
 
+// 키워드로 카페 검색
+const getCafeByKeyword = async (keyword: string, customerId: number) => {
+  const data = await prisma.store.findMany({
+    where: {
+      storeName: { contains: keyword },
+    },
+  });
+  return data;
+};
+
 // 카페 찜하기
 const createLikeCafe = async (storeId: number, customerId: number) => {
   const data = await prisma.store_Like.create({
@@ -278,6 +288,7 @@ const deleteCafeProductById = async (productId: number) => {
 };
 
 const mainService = {
+  getCafeByKeyword,
   createLikeCafe,
   deleteLikeCafe,
   getAllCafe,
