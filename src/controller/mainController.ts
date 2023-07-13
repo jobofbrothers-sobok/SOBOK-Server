@@ -155,6 +155,15 @@ const getCafeNoticeById = async (req: Request, res: Response) => {
   if (!id || !query) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
+  if (
+    query !== queryType.ALL &&
+    query !== queryType.MENU &&
+    query !== queryType.SALE
+  ) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
   try {
     const data = await mainService.getCafeNoticeById(+id, query);
     if (!data || data.length === 0) {
