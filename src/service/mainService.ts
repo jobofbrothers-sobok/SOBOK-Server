@@ -112,7 +112,7 @@ const deleteLikeCafe = async (storeId: number, customerId: number) => {
 // 유저 근처 카페 전체 조회
 const getAllCafe = async (x: number, y: number, category: Array<string>) => {
   // 전제 1: 투어에 포함된 카페 전체 조회
-  const allTourCafe = await prisma.store.findMany({
+  const allTourCafe: any = await prisma.store.findMany({
     where: {
       tourId: { not: null },
       category: { hasEvery: category },
@@ -149,7 +149,9 @@ const getAllCafe = async (x: number, y: number, category: Array<string>) => {
   console.log(allTourCafe);
 
   // sort 함수로 정렬
-  const sortAllTourCafe = allTourCafe.sort((a, b) => a.distance! - b.distance!);
+  const sortAllTourCafe = allTourCafe.sort(
+    (a: { distance: any }, b: { distance: any }) => a.distance - b.distance
+  );
   return sortAllTourCafe;
 };
 
