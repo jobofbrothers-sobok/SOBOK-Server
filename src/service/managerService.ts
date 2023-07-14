@@ -141,7 +141,7 @@ const createTour = async (createTourDTO: CreateTourDTO, path: string) => {
   for (let i = 0; i < cafeListArray.length; i++) {
     const tourStore = await prisma.store.updateMany({
       where: {
-        storeName: cafeListArray[i],
+        storeName: { contains: cafeListArray[i].trim() },
       },
       data: {
         tourId: data.id,

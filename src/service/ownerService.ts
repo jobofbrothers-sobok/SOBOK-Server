@@ -202,7 +202,7 @@ const getTourByTourId = async (tourId: number) => {
 const getTourByTourTitle = async (tour: string) => {
   const data = await prisma.tour.findFirst({
     where: {
-      title: tour,
+      title: { contains: tour },
     },
   });
   return data;
