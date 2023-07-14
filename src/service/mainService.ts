@@ -134,15 +134,15 @@ const getAllCafe = async (x: number, y: number, category: Array<string>) => {
         Math.pow(+x - parseFloat(cafeX as string), 2) +
           Math.pow(+y - parseFloat(cafeY as string), 2)
       );
-      // 전체 카페 배열 내의 카페 객체 각각의 distance 필드 업데이트
-      const store = await prisma.store.update({
-        where: {
-          id: allTourCafe[i].id,
-        },
-        data: {
-          distance: distance * 100000,
-        },
-      });
+      // // 전체 카페 배열 내의 카페 객체 각각의 distance 필드 업데이트
+      // const store = await prisma.store.update({
+      //   where: {
+      //     id: allTourCafe[i].id,
+      //   },
+      //   data: {
+      //     distance: distance * 100000,
+      //   },
+      // });
       allTourCafe[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
     }
   }
