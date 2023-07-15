@@ -1,5 +1,5 @@
 import { CreateStoreReviewDTO } from "./../interfaces/store/createStoreReviewDTO";
-import { PrismaClient, Stamp, Store } from "@prisma/client";
+import { Customer, PrismaClient, Stamp, Store } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import axios from "axios";
@@ -231,18 +231,22 @@ const createCafeReviewById = async (
       id: writerId,
     },
   });
-  const data = await prisma.store_Review.create({
-    data: {
-      title: createStoreReviewDTO.title,
-      content: createStoreReviewDTO.content,
-      image: path,
-      timestamp: date,
-      writerId: writerId,
-      storeId: storeId,
-      writerName: writer?.name,
-    },
-  });
-  return data;
+  if (writer !== null) {
+    const data = await prisma.store_Review.create({
+      data: {
+        title: createStoreReviewDTO.title,
+        content: createStoreReviewDTO.content,
+        image: path,
+        timestamp: date,
+        writerId: writerId,
+        storeId: storeId,
+        writerName: writer.name,
+      },
+    });
+    return data;
+  } else {
+    return 0;
+  }
 };
 
 // 전체 카페 소식 모아보기
