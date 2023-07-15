@@ -154,15 +154,16 @@ model Tour {
 }
 
 model Store_Review {
-  id        Int      @unique @default(autoincrement())
-  title     String?  @db.VarChar(100)
-  content   String   @db.VarChar(200)
-  image     String?  @db.VarChar(300)
-  timestamp DateTime @db.Timestamp(6)
-  writerId  Int
-  storeId   Int      @unique
-  Store     Store    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
-  Customer  Customer @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "wrtierId")
+  id         Int      @unique @default(autoincrement())
+  title      String?  @db.VarChar(100)
+  content    String   @db.VarChar(200)
+  image      String?  @db.VarChar(300)
+  timestamp  DateTime @db.Timestamp(6)
+  writerId   Int
+  storeId    Int      @unique
+  writerName String   @db.VarChar(20)
+  Store      Store    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
+  Customer   Customer @relation(fields: [writerId], references: [id], onDelete: NoAction, map: "wrtierId")
 }
 
 model Notice {
