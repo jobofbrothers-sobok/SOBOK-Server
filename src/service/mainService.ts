@@ -226,6 +226,11 @@ const createCafeReviewById = async (
   path: string,
   date: Date
 ) => {
+  const writer = await prisma.customer.findUnique({
+    where: {
+      id: writerId,
+    },
+  });
   const data = await prisma.store_Review.create({
     data: {
       title: createStoreReviewDTO.title,
@@ -234,6 +239,7 @@ const createCafeReviewById = async (
       timestamp: date,
       writerId: writerId,
       storeId: storeId,
+      writerName: writer?.name,
     },
   });
   return data;
