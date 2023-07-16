@@ -37,8 +37,8 @@ router.post("/store/:storeId", auth, mainController.createLikeCafe);
 // 카페 찜 해제하기
 router.delete("/store/:storeId", auth, mainController.deleteLikeCafe);
 
-// 유저 근처 카페 전체 조회 - GET ~/main/store
-router.post("/store", mainController.getAllCafe);
+// 로그인한 유저 근처 카페 전체 조회 - GET ~/main/store
+router.post("/store", auth, mainController.getAllCafe);
 
 // 고객 유저 마이페이지 조회
 router.get("/mypage", auth, mainController.getCustomerMyPage);

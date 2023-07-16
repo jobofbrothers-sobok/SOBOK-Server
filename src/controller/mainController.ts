@@ -92,6 +92,7 @@ const deleteLikeCafe = async (req: Request, res: Response) => {
 // 유저 근처 카페 전체 조회
 const getAllCafe = async (req: Request, res: Response) => {
   // 유저 현위치 x, y 좌표
+  const customerId = req.user.id;
   const x = req.body.x;
   const y = req.body.y;
   const category = req.body.category;
@@ -100,7 +101,7 @@ const getAllCafe = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
   try {
-    const data = await mainService.getAllCafe(x, y, category);
+    const data = await mainService.getAllCafe(customerId, x, y, category);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)

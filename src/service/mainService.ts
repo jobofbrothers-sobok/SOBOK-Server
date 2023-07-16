@@ -110,7 +110,12 @@ const deleteLikeCafe = async (storeId: number, customerId: number) => {
 };
 
 // 유저 근처 카페 전체 조회
-const getAllCafe = async (x: number, y: number, category: Array<string>) => {
+const getAllCafe = async (
+  customerId: number,
+  x: number,
+  y: number,
+  category: Array<string>
+) => {
   // 전제 1: 투어에 포함된 카페 전체 조회
   const allTourCafe: any = await prisma.store.findMany({
     where: {
@@ -118,6 +123,18 @@ const getAllCafe = async (x: number, y: number, category: Array<string>) => {
       category: { hasEvery: category },
     },
   });
+
+  // 카페 찜 여부 찾기
+  const likeCafe = await prisma.store_Like.findMany({
+    where: {
+      customerId: customerId,
+    },
+  });
+
+  const likeCafeId: Array<number> = [];
+  for (let i = 0; i < likeCafe.length; i++) {
+    likeCafeId.push(likeCafe[i].id);
+  }
 
   // 현위치 좌표와 카페 좌표 사이의 거리 계산
   for (let i = 0; i < allTourCafe.length; i++) {
@@ -144,6 +161,11 @@ const getAllCafe = async (x: number, y: number, category: Array<string>) => {
       //   },
       // });
       allTourCafe[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
+      if (likeCafeId.includes(allTourCafe[i].id)) {
+        allTourCafe[i].isLiked = true;
+      } else {
+        allTourCafe[i].isLiked = false;
+      }
     }
   }
   console.log(allTourCafe);
