@@ -102,6 +102,7 @@ const getAllCafe = async (req: Request, res: Response) => {
   }
   try {
     const data = await mainService.getAllCafe(customerId, x, y, category);
+
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)
