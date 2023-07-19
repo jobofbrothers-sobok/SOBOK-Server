@@ -415,7 +415,7 @@ const getCafeStoreProducts = async (sort: string) => {
 };
 
 // 고객 마이페이지 조회
-const getCustomerMyPage = async (customerId: number) => {
+const getCustomerMyPage = async (customerId: number, x: string, y: string) => {
   // 유저 이름 조회
   const customer = await prisma.customer.findUnique({
     where: {
@@ -432,6 +432,7 @@ const getCustomerMyPage = async (customerId: number) => {
     },
   });
 
+  // 찜한 카페를 담은 배열 생성
   let allLikeCafe: Array<any> = [];
   for (let i = 0; i < allStoreLike.length; i++) {
     let likeCafe = await prisma.store.findUnique({
@@ -440,7 +441,19 @@ const getCustomerMyPage = async (customerId: number) => {
       },
     });
     allLikeCafe.push(likeCafe);
+    // 찜 여부 불린 key와 value 추가
     allLikeCafe[i].isLiked = true;
+    // 유저 현위치에서의 거리 key와 value 추가
+    if (allLikeCafe[i].x !== null && allLikeCafe[i].y !== null) {
+      let cafeX = allLikeCafe[i].x;
+      let cafeY = allLikeCafe[i].y;
+      // 좌표평면상 두 좌표 사이의 거리
+      let distance = Math.sqrt(
+        Math.pow(+x - parseFloat(cafeX as string), 2) +
+          Math.pow(+y - parseFloat(cafeY as string), 2)
+      );
+      allLikeCafe[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
+    }
   }
 
   // 내가 작성한 리뷰 전체 조회
