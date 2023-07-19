@@ -7,7 +7,9 @@ import jwtHandler from "../modules/jwtHandler";
 import { customerService, managerService, ownerService } from "../service";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
+  console.log("authorization: ", req.headers.authorization);
   const token = req.headers.authorization?.split(" ").reverse()[0]; //? Bearer ~~ 에서 토큰만 파싱
+  // Bearer 얄랴야얄
   console.log(req.route.path);
   console.log(req.headers.authorization);
   console.log(token);

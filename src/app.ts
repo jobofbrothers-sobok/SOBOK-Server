@@ -15,7 +15,10 @@ app.use(
 );
 
 // 이미지 폴더 접근 권한 허용
-app.use("/uploads", express.static(__dirname + "/uploads"));
+app.use("/uploads", express.static("/uploads"));
+console.log("*****__dirname: ", __dirname);
+// /uploads/owner
+// /uploads/customer
 
 app.get("/test", (req: Request, res: Response) => {
   res.send("server is listening on 3000");
