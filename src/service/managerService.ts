@@ -439,10 +439,9 @@ const sendKakao = async (writerId: number, content: string) => {
   newData.append("sender", "01025636996");
   for (let i = 0; i < customerPhone.length; i++) {
     newData.append(`receiver_${i + 1}`, customerPhone[i]);
+    newData.append(`subject_${i + 1}`, "[SOBOK] 친구톡입니다.");
+    newData.append(`message_${i + 1}`, content);
   }
-  newData.append("receiver_1", "01024234894");
-  newData.append("subject_1", "[SOBOK] 친구톡입니다.");
-  newData.append("message_1", content);
 
   let configuration = {
     method: "post",
