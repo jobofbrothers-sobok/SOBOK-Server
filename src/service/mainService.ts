@@ -7,7 +7,13 @@ import axios from "axios";
 const prisma = new PrismaClient();
 
 // 키워드로 카페 검색
-const getCafeByKeyword = async (x: number, y: number, keyword: string) => {
+const getCafeByKeyword = async (
+  customerId: number,
+  x: number,
+  y: number,
+  keyword: string
+) => {
+  console.log("customerId: ", customerId);
   const categoryList = [
     "콘센트",
     "테이블",
@@ -41,7 +47,7 @@ const getCafeByKeyword = async (x: number, y: number, keyword: string) => {
     "ciagrette",
   ];
 
-  console.log("here");
+  console.log("hereeeee");
 
   // 카테고리 배열에 포함되는 문자열로 검색을 한 경우
   if (categoryList.includes(keyword)) {
@@ -75,7 +81,29 @@ const getCafeByKeyword = async (x: number, y: number, keyword: string) => {
       );
       data[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
     }
-    console.log("Data: ", data);
+
+    // 로그인한 경우 - accesstoken 정상적 전달
+    if (customerId !== 7777 && customerId !== null) {
+      // 찜한 카페 아이디 전체 조회
+      const allLikeCafe = await prisma.store_Like.findMany({
+        where: {
+          customerId: customerId,
+        },
+      });
+
+      // 찜한 카페 아이디가 모인 배열 생성
+      const allLikeCafeId: Array<number> = [];
+      for (let i = 0; i < allLikeCafe.length; i++) {
+        allLikeCafeId.push(allLikeCafe[i].id);
+      }
+
+      for (let i = 0; i < data.length; i++) {
+        if (allLikeCafeId.includes(data[i].id)) {
+          data[i].isLiked = true;
+        }
+      }
+    }
+    console.log("Keyword included data: ", data);
     return data;
   } else {
     // 검색어에 카테고리명이 포함되지 않은 경우
@@ -96,6 +124,27 @@ const getCafeByKeyword = async (x: number, y: number, keyword: string) => {
           Math.pow(+y - parseFloat(cafeY as string), 2)
       );
       data[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
+    }
+    // 로그인한 경우 - accesstoken 정상적 전달
+    if (customerId !== 7777 && customerId !== null) {
+      // 찜한 카페 아이디 전체 조회
+      const allLikeCafe = await prisma.store_Like.findMany({
+        where: {
+          customerId: customerId,
+        },
+      });
+
+      // 찜한 카페 아이디가 모인 배열 생성
+      const allLikeCafeId: Array<number> = [];
+      for (let i = 0; i < allLikeCafe.length; i++) {
+        allLikeCafeId.push(allLikeCafe[i].id);
+      }
+
+      for (let i = 0; i < data.length; i++) {
+        if (allLikeCafeId.includes(data[i].id)) {
+          data[i].isLiked = true;
+        }
+      }
     }
     console.log("No Keyword Data: ", data);
     return data;

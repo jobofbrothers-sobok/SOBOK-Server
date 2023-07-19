@@ -74,6 +74,6 @@ router.get("/notice/all", mainController.getAllCafeNotice);
 router.get("/notice/like", auth, mainController.getAllLikeCafeNotice);
 
 // 카페 검색
-router.get("/", mainController.getCafeByKeyword);
+router.get("/", auth, mainController.getCafeByKeyword);
 
 export default router;
