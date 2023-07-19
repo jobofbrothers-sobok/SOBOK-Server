@@ -440,6 +440,7 @@ const getCustomerMyPage = async (customerId: number) => {
       },
     });
     allLikeCafe.push(likeCafe);
+    allLikeCafe[i].isLiked = true;
   }
 
   // 내가 작성한 리뷰 전체 조회
