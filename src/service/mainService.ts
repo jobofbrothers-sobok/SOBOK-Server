@@ -62,7 +62,7 @@ const getCafeByKeyword = async (
     console.log("here3");
 
     // 매장명 또는 매장설명 또는 매장 카테고리에 카테고리가 포함된 경우 리턴
-    const data = await prisma.store.findMany({
+    const data: any = await prisma.store.findMany({
       where: {
         OR: [
           { storeName: { contains: keyword } },
@@ -107,7 +107,7 @@ const getCafeByKeyword = async (
     return data;
   } else {
     // 검색어에 카테고리명이 포함되지 않은 경우
-    const data = await prisma.store.findMany({
+    const data: any = await prisma.store.findMany({
       where: {
         OR: [
           { storeName: { contains: keyword } },
