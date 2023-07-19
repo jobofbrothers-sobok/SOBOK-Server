@@ -405,8 +405,14 @@ const getCafeStoreProducts = async (req: Request, res: Response) => {
 // 고객 마이페이지 조회
 const getCustomerMyPage = async (req: Request, res: Response) => {
   const customerId = req.user.id;
+  // 유저 현위치 x, y 좌표
+  const x = req.body.x;
+  const y = req.body.y;
+  if (!x || !y) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
   try {
-    const data = await mainService.getCustomerMyPage(customerId);
+    const data = await mainService.getCustomerMyPage(customerId, x, y);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)
