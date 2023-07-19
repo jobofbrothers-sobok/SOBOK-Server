@@ -463,6 +463,9 @@ const getAlimRequestById = async (req: Request, res: Response) => {
 const sendMessage = async (req: Request, res: Response) => {
   const writerId = req.body.writerId;
   const content = req.body.content;
+  if (!writerId || !content) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
   try {
     const data = await managerService.sendMessage(writerId, content);
     if (data === null) {
@@ -485,6 +488,9 @@ const sendMessage = async (req: Request, res: Response) => {
 const sendKakao = async (req: Request, res: Response) => {
   const writerId = req.body.writerId;
   const content = req.body.content;
+  if (!writerId || !content) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
   try {
     const data = await managerService.sendKakao(writerId, content);
     if (data === null) {
