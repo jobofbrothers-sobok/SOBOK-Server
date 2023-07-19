@@ -7,7 +7,7 @@ import axios from "axios";
 const prisma = new PrismaClient();
 
 // 키워드로 카페 검색
-const getCafeByKeyword = async (keyword: string) => {
+const getCafeByKeyword = async (x: number, y: number, keyword: string) => {
   const categoryList = [
     "콘센트",
     "테이블",
@@ -65,6 +65,16 @@ const getCafeByKeyword = async (keyword: string) => {
         ],
       },
     });
+    for (let i = 0; i < data.length; i++) {
+      let cafeX = data[i].x;
+      let cafeY = data[i].y;
+      // 좌표평면상 두 좌표 사이의 거리
+      let distance = Math.sqrt(
+        Math.pow(+x - parseFloat(cafeX as string), 2) +
+          Math.pow(+y - parseFloat(cafeY as string), 2)
+      );
+      data[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
+    }
     console.log("Data: ", data);
     return data;
   } else {
@@ -77,6 +87,16 @@ const getCafeByKeyword = async (keyword: string) => {
         ],
       },
     });
+    for (let i = 0; i < data.length; i++) {
+      let cafeX = data[i].x;
+      let cafeY = data[i].y;
+      // 좌표평면상 두 좌표 사이의 거리
+      let distance = Math.sqrt(
+        Math.pow(+x - parseFloat(cafeX as string), 2) +
+          Math.pow(+y - parseFloat(cafeY as string), 2)
+      );
+      data[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
+    }
     console.log("No Keyword Data: ", data);
     return data;
   }
