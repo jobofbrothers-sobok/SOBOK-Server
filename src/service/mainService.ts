@@ -280,11 +280,22 @@ const getAllCafe = async (
 
 // 유저 근처 카페 개별 업체 정보 조회
 const getCafeById = async (storeId: number) => {
-  const data = await prisma.store.findUnique({
+  const data: any = await prisma.store.findUnique({
     where: {
       id: storeId,
     },
   });
+
+  const storeOwner = await prisma.store_Owner.findUnique({
+    where: {
+      storeId: storeId,
+    },
+  });
+
+  const address: string | null | any = storeOwner?.address;
+  const detailAddress: string | null | any = storeOwner?.detailAddress;
+
+  data.address = address.concat(" ".concat(detailAddress));
   return data;
 };
 
