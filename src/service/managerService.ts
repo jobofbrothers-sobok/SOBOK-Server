@@ -362,6 +362,50 @@ const sendMessage = async (writerId: number, content: string) => {
 
 // 최고관리자 소복 매니저 카카오톡(친구톡) 일괄전송
 const sendKakao = async (writerId: number, content: string) => {
+  // 문자 전송 신청자의 매장 및 매장id 탐색
+  const writerStore = await prisma.store.findUnique({
+    where: {
+      ownerId: writerId,
+    },
+  });
+  console.log(writerStore);
+  const storeId = writerStore?.id;
+  // 해당 매장에서 스탬프 적립 승인을 받은 고객 탐색
+  const customer = await prisma.stamp.findMany({
+    where: {
+      timestamp: { not: null },
+      storeId: storeId,
+      store: { not: null },
+      tourId: { not: null },
+      tour: { not: null },
+    },
+  });
+
+  // 고객 id 배열에 스탬프를 적립한 고객의 id를 push
+  const customerId = [];
+  for (let i = 0; i < customer.length; i++) {
+    customerId.push(customer[i].customerId);
+  }
+
+  // 스탬프를 적립한 고객 id 배열에서 중복값을 제거
+  const set = new Set(customerId);
+  const uniqueCustomerId: Array<any> = [...set];
+  console.log(uniqueCustomerId);
+
+  // 스탬프를 적립한 곡객들의 전화번호가 모인 배열 생성
+  let customerPhone: Array<string> = [];
+  for (let i = 0; i < uniqueCustomerId.length; i++) {
+    const customer = await prisma.customer.findUnique({
+      where: {
+        id: uniqueCustomerId[i],
+      },
+    });
+    // 전화번호 문자열 정제
+    let phone = customer?.phone as string;
+    let replacedPhone = phone.replace(/-/g, ""); // "-" globally replaced
+    customerPhone.push(replacedPhone); // 배열에 값 추가
+  }
+
   // 알리고 토큰 생성 api 호출
   let data = new FormData();
   data.append("apikey", "5hs408olr441l1gojp90yf2lqvcbkwi0");
@@ -393,9 +437,12 @@ const sendKakao = async (writerId: number, content: string) => {
   newData.append("token", token.token);
   newData.append("senderkey", "28761cda9b6c4062146443a53dcdbd29a057fcb7");
   newData.append("sender", "01025636996");
+  for (let i = 0; i < customerPhone.length; i++) {
+    newData.append(`receiver_${i + 1}`, customerPhone[i]);
+  }
   newData.append("receiver_1", "01024234894");
-  newData.append("subject_1", "친구톡 ");
-  newData.append("message_1", "친구톡입니다.");
+  newData.append("subject_1", "[SOBOK] 친구톡입니다.");
+  newData.append("message_1", content);
 
   let configuration = {
     method: "post",
