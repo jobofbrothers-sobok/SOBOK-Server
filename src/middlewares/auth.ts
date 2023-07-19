@@ -12,8 +12,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   console.log(req.headers.authorization);
   console.log(token);
 
+  // 내 근처 카페 전체 조회 - accesstoken이 undefined인 경우도 허용
   if (token === undefined && req.route.path === "/store") {
-    console.log("here");
+    console.log("here for /store");
+    req.user = undefined;
+    next();
+    return;
+  }
+
+  // 햄버거 버튼에서 키워드로 카페 검색 - accesstoken이 undefined인 경우도 허용
+  if (token === undefined && req.route.path === "/") {
+    console.log("here for /");
     req.user = undefined;
     next();
     return;
@@ -52,7 +61,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     req.body.id = id;
     let foundUser;
     if (req.originalUrl.includes("/main")) {
+      console.log("originalUrl includes main");
       foundUser = await customerService.findCustomerById(id);
+      console.log("foundUser: ", foundUser);
     }
 
     if (req.originalUrl.includes("/customer")) {

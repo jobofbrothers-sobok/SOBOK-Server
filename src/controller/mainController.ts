@@ -9,19 +9,27 @@ import axios from "axios";
 
 // 카페 검색
 const getCafeByKeyword = async (req: Request, res: Response) => {
+  console.log("getCafeByKeyWord Controller");
   // 유저 현위치 x, y 좌표
   const x = req.body.x;
   const y = req.body.y;
   const keyword = req.body.keyword;
-  if (req.user) {
-    const customerId = req.user.id;
-    return customerId;
-  }
+
   if (!x || !y || !keyword) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
+  let customerId;
+  if (req.user === undefined) {
+    console.log("req user is undefined");
+    customerId = 77777;
+  }
+  if (req.user) {
+    console.log("req user exists");
+    customerId = req.user.id;
+    console.log("customerId: ", customerId);
+  }
   try {
-    const data = await mainService.getCafeByKeyword(x, y, keyword);
+    const data = await mainService.getCafeByKeyword(customerId, x, y, keyword);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)
