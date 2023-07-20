@@ -126,6 +126,7 @@ const sortType = {
 // 최고관리자 담당자(점주) 정보 전체 조회
 const getAllOwner = async (req: Request, res: Response) => {
   const sort = req.query.sort as string;
+  const ownerName = req.body.ownerName;
   if (!sort) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
@@ -139,7 +140,7 @@ const getAllOwner = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
   try {
-    const data = await managerService.getAllOwner(sort);
+    const data = await managerService.getAllOwner(sort, ownerName);
     if (!data) {
       return res
         .status(sc.NOT_FOUND)
