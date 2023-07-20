@@ -75,7 +75,7 @@ const findManagerById = async (id: number) => {
 const getAllOwner = async (sort: string, ownerName: string) => {
   if (sort === "all") {
     const data = await prisma.store_Owner.findMany();
-    if (ownerName !== null) {
+    if (ownerName) {
       const data = await prisma.store_Owner.findMany({
         where: {
           director: { contains: ownerName },
@@ -94,7 +94,7 @@ const getAllOwner = async (sort: string, ownerName: string) => {
             authorized: true,
           },
         });
-        if (ownerName !== null) {
+        if (ownerName) {
           const data = await prisma.store_Owner.findMany({
             where: {
               director: { contains: ownerName },
@@ -110,7 +110,7 @@ const getAllOwner = async (sort: string, ownerName: string) => {
             authorized: false,
           },
         });
-        if (ownerName !== null) {
+        if (ownerName) {
           const data = await prisma.store_Owner.findMany({
             where: {
               director: { contains: ownerName },
@@ -135,8 +135,18 @@ const getOwnerById = async (ownerId: number) => {
 };
 
 // 최고관리자 고객 정보 전체 조회
-const getAllCustomer = async () => {
+const getAllCustomer = async (customerName: string) => {
   const data = await prisma.customer.findMany();
+
+  if (customerName) {
+    const data = await prisma.customer.findMany({
+      where: {
+        name: { contains: customerName },
+      },
+    });
+    return data;
+  }
+
   return data;
 };
 

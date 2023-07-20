@@ -185,8 +185,9 @@ const getOwnerById = async (req: Request, res: Response) => {
 
 // 최고관리자 고객 정보 전체 조회
 const getAllCustomer = async (req: Request, res: Response) => {
+  const customerName = req.body.customerName;
   try {
-    const data = await managerService.getAllCustomer();
+    const data = await managerService.getAllCustomer(customerName);
     if (!data) {
       return res
         .status(sc.NOT_FOUND)
