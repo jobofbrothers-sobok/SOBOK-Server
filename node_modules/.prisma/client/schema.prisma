@@ -218,7 +218,7 @@ model Inquiry {
   id          Int          @id @default(autoincrement())
   title       String       @db.VarChar(100)
   content     String       @db.VarChar(500)
-  timestamp   DateTime     @db.Date
+  timestamp   DateTime     @db.Timestamp(6)
   customerId  Int?
   ownerId     Int?
   Customer    Customer?    @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customerId")
