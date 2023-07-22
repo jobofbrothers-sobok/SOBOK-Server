@@ -515,6 +515,39 @@ const createNotice = async (
   });
   return data;
 };
+
+// 최고관리자 문의사항 전체 조회
+const getAllInquiry = async () => {
+  const data = await prisma.inquiry.findMany();
+  console.log("getAllInquiry");
+  for (let i = 0; i < data.length; i++) {
+    // 고객 유저의 문의사항일 경우
+    if (data[i].customerId && data[i].ownerId === null) {
+      console.log("customer");
+      const customer = await prisma.customer.findUnique({
+        where: {
+          id: data[i].customerId,
+        },
+      });
+      data[i].who = "일반";
+      data[i].name = customer?.name;
+      data[i].phone = customer?.phone;
+    }
+    if (data[i].ownerId && data[i].customerId === null) {
+      console.log("owner");
+
+      const owner = await prisma.store_Owner.findUnique({
+        where: {
+          id: data[i].ownerId,
+        },
+      });
+      data[i].who = "점주";
+      data[i].name = owner?.director;
+      data[i].phone = owner?.phone;
+    }
+  }
+  return data;
+};
 const managerService = {
   managerSignup,
   managerSignIn,
@@ -537,6 +570,7 @@ const managerService = {
   sendMessage,
   sendKakao,
   createNotice,
+  getAllInquiry,
 };
 
 export default managerService;

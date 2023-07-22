@@ -7,6 +7,7 @@ import jwtHandler from "../modules/jwtHandler";
 import { customerService, managerService, ownerService } from "../service";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
+  console.log("originalUrl: ", req.originalUrl);
   console.log("authorization: ", req.headers.authorization);
   const token = req.headers.authorization?.split(" ").reverse()[0]; //? Bearer ~~ 에서 토큰만 파싱
   // Bearer 얄랴야얄
@@ -67,7 +68,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       foundUser = await customerService.findCustomerById(id);
       console.log("foundUser: ", foundUser);
     }
-
     if (req.originalUrl.includes("/customer")) {
       foundUser = await customerService.findCustomerById(id);
     }
@@ -76,6 +76,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
     if (req.originalUrl.includes("/manager")) {
       foundUser = await customerService.findCustomerById(id);
+    }
+    if (req.originalUrl === "/api/main/inquiry?user=customer") {
+      console.log("inquiry by customer");
+      foundUser = await customerService.findCustomerById(id);
+      console.log("foundUser: ", foundUser);
+    }
+
+    if (req.originalUrl === "/api/main/inquiry?user=owner") {
+      console.log("inquiry by owner");
+      foundUser = await ownerService.findOwnerById(id);
+      console.log("foundUser: ", foundUser);
     }
 
     // const foundUser = await ownerService.findOwnerById(id);

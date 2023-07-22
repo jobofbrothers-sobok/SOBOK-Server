@@ -1,3 +1,4 @@
+import { CreateInquiryDTO } from "./../interfaces/user/createInquiryDTO";
 import { CreateStoreReviewDTO } from "./../interfaces/store/createStoreReviewDTO";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
@@ -580,6 +581,58 @@ const findNoticeById = async (req: Request, res: Response) => {
   }
 };
 
+const userType = {
+  CUSTOMER: "customer",
+  OWNER: "owner",
+};
+// 문의사항 작성
+const createInquiry = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+  const user = req.query.user as string;
+  const userId = req.user.id;
+  const createInquiryDTO: CreateInquiryDTO = req.body;
+  // 현시각보다 9시간 느려서 가산
+  const now = new Date().getTime() + 1 * 60 * 60 * 9 * 1000;
+  const date = new Date(now);
+
+  if (!user) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  if (user !== userType.CUSTOMER && user !== userType.OWNER) {
+    return res
+      .status(sc.BAD_REQUEST)
+      .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  try {
+    const data = await mainService.createInquiry(
+      user,
+      userId,
+      createInquiryDTO,
+      date
+    );
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.CREATE_INQUIRY_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.CREATE_INQUIRY_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   getCafeByKeyword,
   createLikeCafe,
@@ -600,5 +653,6 @@ const mainController = {
   deleteCafeProductById,
   getAllNotice,
   findNoticeById,
+  createInquiry,
 };
 export default mainController;
