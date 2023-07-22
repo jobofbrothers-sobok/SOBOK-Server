@@ -80,7 +80,12 @@ router.get("/notice/:noticeId", mainController.findNoticeById);
 router.get("/notice", mainController.getAllNotice);
 
 // 문의사항 작성
-// router.post("/inquiry", auth, mainController.createInquiry);
+router.post(
+  "/inquiry",
+  auth,
+  [body("title").trim().notEmpty(), body("content").trim().notEmpty()],
+  mainController.createInquiry
+);
 
 // 카페 검색
 router.get("/", auth, mainController.getCafeByKeyword);
