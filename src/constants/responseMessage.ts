@@ -151,6 +151,10 @@ export default {
   // 공지사항, 문의사항
   CREATE_NOTICE_SUCCESS: "공지사항 생성 성공",
   cREATE_NOTICE_FAIL: "공지사항 생성 실패",
-  CREATE_INQUIRY_SUCCESS: "공지사항 생성 성공",
-  cREATE_INQUIRY_FAIL: "공지사항 생성 실패",
+  GET_ALL_NOTICE_SUCCESS: "공지사항 전체 조회 성공",
+  GET_ALL_NOTICE_FAIL: "공지사항 전체 조회 실패",
+  GET_NOTICE_SUCCESS: "공지사항 개별 조회 성공",
+  GET_NOTICE_FAIL: "공지사항 개별 조회 실패",
+  CREATE_INQUIRY_SUCCESS: "문의사항 생성 성공",
+  cREATE_INQUIRY_FAIL: "문의사항 생성 실패",
 };
