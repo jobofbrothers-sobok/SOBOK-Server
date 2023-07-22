@@ -157,4 +157,6 @@ export default {
   GET_NOTICE_FAIL: "공지사항 개별 조회 실패",
   CREATE_INQUIRY_SUCCESS: "문의사항 생성 성공",
   CREATE_INQUIRY_FAIL: "문의사항 생성 실패",
+  GET_ALL_INQUIRY_SUCCESS: "문의사항 전체 조회 성공",
+  GET_ALL_INQUIRY_FAIL: "문의사항 전체 조회 실패",
 };
