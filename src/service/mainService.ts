@@ -3,6 +3,7 @@ import { Customer, PrismaClient, Stamp, Store } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import axios from "axios";
+import { CreateInquiryDTO } from "../interfaces/user/createInquiryDTO";
 
 const prisma = new PrismaClient();
 
@@ -602,6 +603,39 @@ const findNoticeById = async (noticeId: number) => {
   return data;
 };
 
+// 문의사항 작성
+const createInquiry = async (
+  user: string,
+  userId: number,
+  createInquiryDTO: CreateInquiryDTO,
+  date: Date
+) => {
+  console.log("Service");
+  console.log("user: ", user);
+  if (user === "customer") {
+    const data = await prisma.inquiry.create({
+      data: {
+        title: createInquiryDTO.title,
+        content: createInquiryDTO.content,
+        timestamp: date,
+        customerId: userId,
+      },
+    });
+    return data;
+  }
+  if (user === "owner") {
+    const data = await prisma.inquiry.create({
+      data: {
+        title: createInquiryDTO.title,
+        content: createInquiryDTO.content,
+        timestamp: date,
+        ownerId: userId,
+      },
+    });
+    return data;
+  }
+};
+
 const mainService = {
   getCafeByKeyword,
   createLikeCafe,
@@ -622,5 +656,6 @@ const mainService = {
   deleteCafeProductById,
   getAllNotice,
   findNoticeById,
+  createInquiry,
 };
 export default mainService;
