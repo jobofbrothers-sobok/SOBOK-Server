@@ -420,8 +420,9 @@ const getAllTour = async (req: Request, res: Response) => {
 
 // 최고관리자 소복 매니저 신청 리스트 전체 조회
 const getAllAlimRequest = async (req: Request, res: Response) => {
+  const keyword = req.body.keyword;
   try {
-    const data = await managerService.getAllAlimRequest();
+    const data = await managerService.getAllAlimRequest(keyword);
     if (!data) {
       return res
         .status(sc.NOT_FOUND)

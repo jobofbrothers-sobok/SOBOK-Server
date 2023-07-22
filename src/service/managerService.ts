@@ -306,8 +306,23 @@ const getAllTour = async (keyword: string) => {
 };
 
 // 최고관리자 소복 매니저 신청 리스트 전체 조회
-const getAllAlimRequest = async () => {
-  const data = await prisma.alim_Request.findMany();
+const getAllAlimRequest = async (keyword: string) => {
+  const data: any = await prisma.alim_Request.findMany();
+  for (let i = 0; i < data.length; i++) {
+    const store = await prisma.store.findUnique({
+      where: {
+        ownerId: data[i].writerId,
+      },
+    });
+    data[i].title = `${store?.storeName} 문자서비스 신청`;
+  }
+  // if(keyword !== null) {
+  //   const data = await prisma.alim_Request.findMany({
+  //     where: {
+
+  //     }
+  //   })
+  // }
   return data;
 };
 
