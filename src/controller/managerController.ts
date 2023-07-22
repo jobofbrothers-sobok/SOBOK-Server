@@ -358,8 +358,9 @@ const getStoreByStoreName = async (req: Request, res: Response) => {
 
 // 최고관리자 배송신청 리스트 전체 조회
 const getAllDeliveryRequest = async (req: Request, res: Response) => {
+  const keyword = req.body.keyword;
   try {
-    const data = await managerService.getAllDeliveryRequest();
+    const data = await managerService.getAllDeliveryRequest(keyword);
     if (!data || data.length === 0) {
       return res
         .status(sc.NOT_FOUND)
