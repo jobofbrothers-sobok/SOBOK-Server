@@ -399,8 +399,9 @@ const getDeliveryRequestById = async (req: Request, res: Response) => {
 
 // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
 const getAllTour = async (req: Request, res: Response) => {
+  const keyword = req.body.keyword;
   try {
-    const data = await managerService.getAllTour();
+    const data = await managerService.getAllTour(keyword);
     if (!data) {
       return res
         .status(sc.NOT_FOUND)

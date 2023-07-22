@@ -292,8 +292,16 @@ const stampSignInGrant = async (ownerId: number) => {
 };
 
 // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
-const getAllTour = async () => {
+const getAllTour = async (keyword: string) => {
   const data = await prisma.tour.findMany();
+  if (keyword !== null) {
+    const data = await prisma.tour.findMany({
+      where: {
+        title: { contains: keyword },
+      },
+    });
+    return data;
+  }
   return data;
 };
 

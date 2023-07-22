@@ -48,7 +48,7 @@ app.use("/uploads/customer", express.static(__dirname + "/uploads/customer"));
 app.use("/uploads/owner", express.static(__dirname + "/uploads/owner"));
 app.use("/uploads/manager", express.static(__dirname + "/uploads/manager"));
 
-console.log("*****__dirname: ", __dirname + app.resource);
+console.log("*****__dirname: ", __dirname);
 // /uploads/owner
 // /uploads/customer
 
