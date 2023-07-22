@@ -538,6 +538,48 @@ const deleteCafeProductById = async (req: Request, res: Response) => {
   }
 };
 
+// 공지사항 전체 조회
+const getAllNotice = async (req: Request, res: Response) => {
+  try {
+    const data = await mainService.getAllNotice();
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_NOTICE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_NOTICE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+// 공지사항 개별 조회
+const findNoticeById = async (req: Request, res: Response) => {
+  const noticeId = req.params.noticeId;
+  if (!noticeId) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+  try {
+    const data = await mainService.findNoticeById(+noticeId);
+    if (!data) {
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_NOTICE_FAIL));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.GET_NOTICE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 const mainController = {
   getCafeByKeyword,
   createLikeCafe,
@@ -556,5 +598,7 @@ const mainController = {
   deleteCafeMenuById,
   deleteCafeReviewById,
   deleteCafeProductById,
+  getAllNotice,
+  findNoticeById,
 };
 export default mainController;

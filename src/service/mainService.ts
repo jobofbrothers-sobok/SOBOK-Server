@@ -586,6 +586,22 @@ const deleteCafeProductById = async (productId: number) => {
   return data;
 };
 
+// 공지사항 전체 조회
+const getAllNotice = async () => {
+  const data = await prisma.notice.findMany({});
+  return data;
+};
+
+// 공지사항 개별 조회
+const findNoticeById = async (noticeId: number) => {
+  const data = await prisma.notice.findUnique({
+    where: {
+      id: noticeId,
+    },
+  });
+  return data;
+};
+
 const mainService = {
   getCafeByKeyword,
   createLikeCafe,
@@ -604,5 +620,7 @@ const mainService = {
   deleteCafeMenuById,
   deleteCafeReviewById,
   deleteCafeProductById,
+  getAllNotice,
+  findNoticeById,
 };
 export default mainService;

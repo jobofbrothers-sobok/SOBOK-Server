@@ -73,6 +73,15 @@ router.get("/notice/all", mainController.getAllCafeNotice);
 // 찜한 카페 소식 모아보기
 router.get("/notice/like", auth, mainController.getAllLikeCafeNotice);
 
+// 공지사항 개별 조회
+router.get("/notice/:noticeId", mainController.findNoticeById);
+
+// 공지사항 전체 조회
+router.get("/notice", mainController.getAllNotice);
+
+// 문의사항 작성
+// router.post("/inquiry", auth, mainController.createInquiry);
+
 // 카페 검색
 router.get("/", auth, mainController.getCafeByKeyword);
 
