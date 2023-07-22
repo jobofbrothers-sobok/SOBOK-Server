@@ -540,6 +540,26 @@ const createNotice = async (req: Request, res: Response) => {
       .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
+
+// 최고관리자 문의사항 전체 조회
+const getAllInquiry = async (req: Request, res: Response) => {
+  try {
+    const data = await managerService.getAllInquiry();
+    if (!data) {
+      return res
+        .status(sc.NOT_FOUND)
+        .send(fail(sc.NOT_FOUND, rm.GET_ALL_INQUIRY_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_INQUIRY_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 const managerController = {
   managerSignup,
   managerSignin,
@@ -561,6 +581,7 @@ const managerController = {
   sendMessage,
   sendKakao,
   createNotice,
+  getAllInquiry,
 };
 
 export default managerController;

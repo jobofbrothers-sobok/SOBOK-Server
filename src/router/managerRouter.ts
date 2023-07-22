@@ -76,6 +76,9 @@ router.get("/message", auth, managerController.sendMessage);
 // 최고관리자 소복 매니저 카카오톡 일괄전송(친구톡)
 router.get("/kakao", auth, managerController.sendKakao);
 
+// 최고관리자 문의사항 조회
+router.get("/inquiry", auth, managerController.getAllInquiry);
+
 // 최고관리자 공지글 작성
 router.post(
   "/",
