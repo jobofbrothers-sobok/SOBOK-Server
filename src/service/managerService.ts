@@ -1,7 +1,7 @@
 import { CreateNoticeDTO } from "./../interfaces/manager/createNoticeDTO";
 import { CreateTourIdForStoreDTO } from "./../interfaces/manager/createTourIdForStoreDTO";
 import { ManagerCreateDTO } from "./../interfaces/user/managerCreateDTO";
-import { PrismaClient } from "@prisma/client";
+import { Alim_Request, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { UserSignInDTO } from "../interfaces/user/userSignInDTO";
@@ -308,6 +308,7 @@ const getAllTour = async (keyword: string) => {
 // 최고관리자 소복 매니저 신청 리스트 전체 조회
 const getAllAlimRequest = async (keyword: string) => {
   const data: any = await prisma.alim_Request.findMany();
+  const keywordData: Array<Alim_Request> = [];
   for (let i = 0; i < data.length; i++) {
     const store = await prisma.store.findUnique({
       where: {
@@ -315,24 +316,37 @@ const getAllAlimRequest = async (keyword: string) => {
       },
     });
     data[i].title = `${store?.storeName} 문자서비스 신청`;
+    if (keyword !== null) {
+      console.log("hereee");
+      if (data[i].title.includes(keyword)) {
+        keywordData.push(data[i]);
+        console.log(keywordData);
+      }
+    }
   }
-  // if(keyword !== null) {
-  //   const data = await prisma.alim_Request.findMany({
-  //     where: {
 
-  //     }
-  //   })
-  // }
-  return data;
+  if (keywordData.length >= 1) {
+    return keywordData;
+  }
+  if (keywordData.length === 0) {
+    return data;
+  }
 };
 
 // 최고관리자 소복 매니저 신청 리스트 개별 조회
 const getAlimRequestById = async (id: number) => {
-  const data = await prisma.alim_Request.findUnique({
+  const data: any = await prisma.alim_Request.findUnique({
     where: {
       id: id,
     },
   });
+  const store = await prisma.store.findUnique({
+    where: {
+      ownerId: data?.writerId,
+    },
+  });
+
+  data.title = `${store?.storeName} 문자서비스 신청`;
   return data;
 };
 
