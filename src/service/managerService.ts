@@ -518,7 +518,7 @@ const createNotice = async (
 
 // 최고관리자 문의사항 전체 조회
 const getAllInquiry = async () => {
-  const data = await prisma.inquiry.findMany();
+  const data: any = await prisma.inquiry.findMany();
   console.log("getAllInquiry");
   for (let i = 0; i < data.length; i++) {
     // 고객 유저의 문의사항일 경우
