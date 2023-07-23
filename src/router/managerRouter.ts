@@ -39,7 +39,7 @@ router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 router.get("/delivery", auth, managerController.getAllDeliveryRequest);
 
 // 최고관리자 투어 추가 시 매장 검색
-router.get("/tour/search", auth, managerController.getStoreByStoreName);
+router.post("/tour/search", auth, managerController.getStoreByStoreName);
 
 // 최고관리자 투어 추가
 router.post(
@@ -71,10 +71,10 @@ router.get("/alim/:id", auth, managerController.getAlimRequestById);
 router.get("/alim", auth, managerController.getAllAlimRequest);
 
 // 최고관리자 소복 매니저 문자 일괄전송
-router.get("/message", auth, managerController.sendMessage);
+router.post("/message", auth, managerController.sendMessage);
 
 // 최고관리자 소복 매니저 카카오톡 일괄전송(친구톡)
-router.get("/kakao", auth, managerController.sendKakao);
+router.post("/kakao", auth, managerController.sendKakao);
 
 // 최고관리자 문의사항 조회
 router.get("/inquiry", auth, managerController.getAllInquiry);

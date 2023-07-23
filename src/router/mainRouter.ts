@@ -88,6 +88,6 @@ router.post(
 );
 
 // 카페 검색
-router.get("/", auth, mainController.getCafeByKeyword);
+router.post("/", auth, mainController.getCafeByKeyword);
 
 export default router;
