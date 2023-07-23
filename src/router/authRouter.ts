@@ -22,7 +22,7 @@ router.post(
 );
 
 // 회원가입 시 유저 아이디 중복확인
-router.get("/signup/check", authController.checkLoginId);
+router.post("/signup/check", authController.checkLoginId);
 
 // 점주 유저 회원가입 1 (loginId, 사진)
 router.post(
