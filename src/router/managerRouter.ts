@@ -5,8 +5,27 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const tourUpload = multer({ dest: "uploads/manager/tour" });
-const noticeUpload = multer({ dest: "uploads/manager/notice" });
+const tourUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/manager/tour");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
+
+const noticeUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/manager/notice");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 
 // 점주 회원가입 승인
 router.post("/grant/:id", auth, managerController.grantOwnerSignUp);

@@ -7,7 +7,17 @@ import multer from "multer";
 import path from "path";
 
 const router: Router = Router();
-const customerUpload = multer({ dest: "uploads/customer/" });
+const customerUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/customer/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
+
 const ownerUpload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {

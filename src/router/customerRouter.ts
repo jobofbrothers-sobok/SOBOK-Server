@@ -5,7 +5,6 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const upload = multer({ dest: "uploads/customer/" });
 
 // 고객 스탬프 사용신청 = POST ~/customer/delivery
 router.post(

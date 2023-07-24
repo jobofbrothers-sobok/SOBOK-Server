@@ -15,9 +15,37 @@ const storeUpload = multer({
     },
   }),
 });
-const noticeUpload = multer({ dest: "uploads/owner/store/notice/" });
-const menuUpload = multer({ dest: "uploads/owner/store/menu/" });
-const productUpload = multer({ dest: "uploads/owner/store/product/" });
+const noticeUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/owner/store/notice/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
+const menuUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/owner/store/menu/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
+
+const productUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/owner/store/product/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 
 // 점주 매장소식 등록 - POST ~/owner/store/notice/:id
 router.post(
