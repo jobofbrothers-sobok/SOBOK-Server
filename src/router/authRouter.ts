@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authController } from "../controller";
 import { body } from "express-validator";
 import { auth } from "../middlewares";
-import { upload } from "../middlewares";
+// import { upload } from "../middlewares";
 import multer from "multer";
 import path from "path";
 
