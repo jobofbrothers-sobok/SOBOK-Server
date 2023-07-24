@@ -41,7 +41,7 @@ router.delete("/store/:storeId", auth, mainController.deleteLikeCafe);
 router.post("/store", auth, mainController.getAllCafe);
 
 // 고객 유저 마이페이지 조회
-router.get("/mypage", auth, mainController.getCustomerMyPage);
+router.post("/mypage", auth, mainController.getCustomerMyPage);
 
 // 최고관리자 | 개별 업체 소식 삭제
 router.delete(
