@@ -312,7 +312,7 @@ const ownerSignIn = async (req: Request, res: Response) => {
         .status(sc.UNAUTHORIZED)
         .send(fail(sc.UNAUTHORIZED, rm.INVALID_PASSWORD));
 
-    const tokenUser = user as Store_Owner;
+    const tokenUser = user as Store_Owner | any;
     const accessToken = jwtHandler.sign(tokenUser.id);
 
     const result = {
@@ -324,6 +324,7 @@ const ownerSignIn = async (req: Request, res: Response) => {
       director: tokenUser.director,
       authorized: tokenUser.authorized,
       stampAuthorized: tokenUser.stampAuthorized,
+      pending: tokenUser.pending,
       accessToken,
     };
 

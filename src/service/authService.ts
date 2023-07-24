@@ -1,6 +1,6 @@
 // import { session } from "express-session";
 import { CreateDeliveryRequestDTO } from "./../interfaces/delivery/createDeliveryRequestDTO";
-import { PrismaClient, Stamp } from "@prisma/client";
+import { PrismaClient, Stamp, Store_Owner } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { CustomerCreateDTO } from "../interfaces/user/customerCreateDTO";
@@ -153,9 +153,23 @@ const customerSignIn = async (userSignInDTO: UserSignInDTO) => {
 };
 
 // 점주 유저 로그인
+
+/* 스탬프 사용 신청 전이면 
+stampAuthorized: false
+pending: false
+
+신청 후 승인 기다리는중이면
+stampAuthorized: false
+pending: true
+
+신청 후 승인된 상태면
+stampAuthorized: true
+pending: false
+*/
+
 const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
   try {
-    const user = await prisma.store_Owner.findUnique({
+    const user: Store_Owner | null | any = await prisma.store_Owner.findUnique({
       where: {
         loginId: userSignInDTO.loginId,
       },
@@ -169,7 +183,23 @@ const ownerSignIn = async (userSignInDTO: UserSignInDTO) => {
       user.password as string
     );
     if (!isMatch) return sc.UNAUTHORIZED;
-
+    const stampRequest = await prisma.stamp_Request.findUnique({
+      where: {
+        ownerId: user.id,
+      },
+    });
+    // 스탬프 사용 신청 전일 경우
+    if (user.stampAuthorized === false && !stampRequest) {
+      user.pending = false;
+    }
+    // 스탬프 사용 신청 후 승인 대기중일 경우
+    if (user.stampAuthorized === false && stampRequest !== null) {
+      user.pending = true;
+    }
+    // 스탬프 사용 신청 후 승인된 경우
+    if (user.stampAuthorized === true) {
+      user.pending = false;
+    }
     return user;
   } catch (error) {
     console.log(error);
