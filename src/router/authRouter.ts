@@ -14,7 +14,10 @@ const ownerUpload = multer({
       cb(null, "uploads/owner/");
     },
     filename: function (req, file, cb) {
-      cb(null, `${Date.now()}_${path.extname(file.originalname)}`);
+      cb(
+        null,
+        `${Date.now()}_${file.originalname}.${path.extname(file.originalname)}`
+      );
     },
   }),
 });
