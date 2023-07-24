@@ -5,7 +5,16 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const storeUpload = multer({ dest: "uploads/owner/store/" });
+const storeUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/owner/store/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 const noticeUpload = multer({ dest: "uploads/owner/store/notice/" });
 const menuUpload = multer({ dest: "uploads/owner/store/menu/" });
 const productUpload = multer({ dest: "uploads/owner/store/product/" });
