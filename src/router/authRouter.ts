@@ -2,11 +2,22 @@ import { Router } from "express";
 import { authController } from "../controller";
 import { body } from "express-validator";
 import { auth } from "../middlewares";
+import { upload } from "../middlewares";
 import multer from "multer";
+import path from "path";
 
 const router: Router = Router();
 const customerUpload = multer({ dest: "uploads/customer/" });
-const ownerUpload = multer({ dest: "uploads/owner/" });
+const ownerUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/owner/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${path.extname(file.originalname)}`);
+    },
+  }),
+});
 
 // 고객 유저 회원가입
 router.post(
