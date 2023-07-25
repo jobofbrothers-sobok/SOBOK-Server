@@ -22,37 +22,25 @@ app.use(
 // 이미지 폴더 접근 권한 허용
 app.use(
   "/uploads/owner/store/menu",
-  express.static(__dirname + "/uploads/owner/store/menu")
+  express.static("/uploads/owner/store/menu")
 );
 app.use(
   "/uploads/owner/store/notice",
-  express.static(__dirname + "/uploads/owner/store/notice")
+  express.static("/uploads/owner/store/notice")
 );
 app.use(
   "/uploads/owner/store/product",
-  express.static(__dirname + "/uploads/owner/store/product")
+  express.static("/uploads/owner/store/product")
 );
-app.use(
-  "/uploads/owner/store",
-  express.static(__dirname + "/uploads/owner/store")
-);
-app.use(
-  "/uploads/customer/review",
-  express.static(__dirname + "/uploads/customer/review")
-);
-app.use(
-  "/uploads/manager/notice",
-  express.static(__dirname + "/uploads/manager/notice")
-);
-app.use(
-  "/uploads/manager/tour",
-  express.static(__dirname + "/uploads/manager/tour")
-);
+app.use("/uploads/owner/store", express.static("/uploads/owner/store"));
+app.use("/uploads/customer/review", express.static("/uploads/customer/review"));
+app.use("/uploads/manager/notice", express.static("/uploads/manager/notice"));
+app.use("/uploads/manager/tour", express.static("/uploads/manager/tour"));
 
-app.use("/uploads/customer", express.static(__dirname + "/uploads/customer"));
-app.use("/uploads/owner", express.static(__dirname + "/uploads/owner"));
-app.use("/uploads/manager", express.static(__dirname + "/uploads/manager"));
-app.use("/uploads", express.static(__dirname + "/uploads"));
+app.use("/uploads/customer", express.static("/uploads/customer"));
+app.use("/uploads/owner", express.static("/uploads/owner"));
+app.use("/uploads/manager", express.static("/uploads/manager"));
+app.use("/uploads", express.static("/uploads"));
 
 console.log("*****__dirname: ", __dirname);
 // /uploads/owner
