@@ -76,6 +76,8 @@ const createOwner = async (req: Request, res: Response) => {
 
   try {
     const image: Express.Multer.File = req.file as Express.Multer.File;
+    console.log("req.file : ", req.file);
+    console.log("typeof req.file : ", typeof req.file);
     const path = image.path;
     console.log(path);
     const ownerCreateDTO: OwnerCreateDTO = req.body;

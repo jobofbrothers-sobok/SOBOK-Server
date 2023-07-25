@@ -2,7 +2,12 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 
 const app = express();
-const originList = ["http://localhost:3000", "http://localhost:3001"];
+
+const originList = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://58.225.75.202:3002/",
+];
 
 app.use(express.json()); // bodyParser가 express 최근 버전에서 deprecated되어서 다음과 같이 처리해줘야함
 app.use(express.urlencoded({ extended: false }));
@@ -47,6 +52,7 @@ app.use(
 app.use("/uploads/customer", express.static(__dirname + "/uploads/customer"));
 app.use("/uploads/owner", express.static(__dirname + "/uploads/owner"));
 app.use("/uploads/manager", express.static(__dirname + "/uploads/manager"));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 console.log("*****__dirname: ", __dirname);
 // /uploads/owner
