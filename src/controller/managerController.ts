@@ -231,6 +231,7 @@ const getCustomerById = async (req: Request, res: Response) => {
 // 최고관리자 스탬프 서비스 사용 신청 담당자 전체 조회
 const getAllStampSignInRequest = async (req: Request, res: Response) => {
   const sort = req.query.sort as string;
+  const keyword = req.body.keyword;
   if (!sort) {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   }
@@ -240,7 +241,7 @@ const getAllStampSignInRequest = async (req: Request, res: Response) => {
       .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
   }
   try {
-    const data = await managerService.getAllStampSignInRequest(sort);
+    const data = await managerService.getAllStampSignInRequest(sort, keyword);
     if (!data) {
       return res
         .status(sc.BAD_REQUEST)
