@@ -37,7 +37,6 @@ app.use(
   "/uploads/owner/store",
   express.static(path.join("/home/sobok/SOBOK-SERVER", "src"))
 );
-console.log(path);
 
 app.use("/uploads/customer/review", express.static("/uploads/customer/review"));
 app.use("/uploads/manager/notice", express.static("/uploads/manager/notice"));
@@ -46,7 +45,7 @@ app.use("/uploads/manager/tour", express.static("/uploads/manager/tour"));
 app.use("/uploads/customer", express.static("/uploads/customer"));
 app.use("/uploads/owner", express.static(path.join(__dirname, "src")));
 app.use("/uploads/manager", express.static("/uploads/manager"));
-app.use("/uploads", express.static(path.join(__dirname, "src")));
+app.use("/uploads", express.static("src"));
 
 console.log("*****__dirname: ", __dirname);
 // /uploads/owner

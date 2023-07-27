@@ -272,15 +272,12 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
   const randNum = req.body.randNum;
 
   const store = await ownerService.getStorebyOwnerId(userId);
-  console.log(store);
 
   const storeId = store?.id;
 
   const storeName = store?.storeName;
-  console.log(storeName);
 
   const tourId = store?.tourId;
-  console.log(tourId);
 
   const tour = await ownerService.getTourByTourId(tourId as number);
   const tourTitle = tour?.title;
