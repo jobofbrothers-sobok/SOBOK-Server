@@ -234,8 +234,8 @@ const grantStampByRandNum = async (
   console.log("totalStampCount: ", totalStampCount.length);
   console.log("----------");
 
-  if (totalStampCount.length >= 10) {
-    console.log("totalStampCount.length >= 10");
+  if (totalStampCount.length >= 9) {
+    console.log("totalStampCount.length >= 9");
     return;
   } else {
     // 스탬프 적립 승낙
@@ -269,8 +269,8 @@ const grantStampByRandNum = async (
 
     console.log("tourId: ", tourId);
 
-    // 해당 투어에서의 적립한 스탬프 개수가 10의 배수이면 쿠폰 개수 증가
-    // 현재 10개를 넘게 적립이 불가하기 때문에 사실상 투어 스탬프 개수가 10개이면 쿠폰 개수가 증가하지 않음
+    // 해당 투어에서의 적립한 스탬프 개수가 9의 배수이면 쿠폰 개수 증가
+    // 현재 9개를 넘게 적립이 불가
     const tourStamp = await prisma.stamp.findMany({
       where: {
         customerId: customerId,
@@ -281,7 +281,7 @@ const grantStampByRandNum = async (
     const tourStampCount = tourStamp.length;
     console.log("customer", customerId, "'s tourstampcount: ", tourStampCount);
 
-    if (tourStampCount % 10 === 0 && tourStampCount >= 0) {
+    if (tourStampCount % 9 === 0 && tourStampCount >= 0) {
       const addTourStampCount = await prisma.customer.update({
         where: {
           id: customerId,
