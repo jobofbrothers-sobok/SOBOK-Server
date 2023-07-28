@@ -7,6 +7,7 @@ const app = express();
 const originList = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://sobok.co.kr/",
   "http://58.225.75.202:3002/",
 ];
 
