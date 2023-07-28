@@ -6,7 +6,7 @@ import fileStore from "session-file-store";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-const PORT = 3002; // 사용할 port를 3000번으로 설정
+const PORT = 5000; // 사용할 port를 3000번으로 설정
 
 app.use(express.json()); // express 에서 request body를 json 으로 받아오겠다.
 
