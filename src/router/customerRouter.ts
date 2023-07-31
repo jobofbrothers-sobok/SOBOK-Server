@@ -5,7 +5,16 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const upload = multer({ dest: "uploads/customer/" });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 
 // 고객 스탬프 사용신청 = POST ~/customer/delivery
 router.post(

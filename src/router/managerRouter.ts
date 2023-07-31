@@ -5,8 +5,18 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const tourUpload = multer({ dest: "uploads/manager/tour" });
-const noticeUpload = multer({ dest: "uploads/manager/notice" });
+
+// upload 미들웨어
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 
 // 점주 회원가입 승인
 router.post("/grant/:id", auth, managerController.grantOwnerSignUp);
@@ -45,7 +55,7 @@ router.post("/tour/search", auth, managerController.getStoreByStoreName);
 router.post(
   "/tour",
   auth,
-  tourUpload.single("file"),
+  upload.single("file"),
   [
     body("keyword").trim().notEmpty(),
     body("title").trim().notEmpty(),
@@ -80,11 +90,6 @@ router.post("/kakao", auth, managerController.sendKakao);
 router.get("/inquiry", auth, managerController.getAllInquiry);
 
 // 최고관리자 공지글 작성
-router.post(
-  "/",
-  auth,
-  noticeUpload.single("file"),
-  managerController.createNotice
-);
+router.post("/", auth, upload.single("file"), managerController.createNotice);
 
 export default router;

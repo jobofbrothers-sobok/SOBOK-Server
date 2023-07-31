@@ -5,7 +5,7 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const reviewUpload = multer({
+const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, "uploads/");
@@ -32,7 +32,7 @@ router.get("/store/review/:storeId", mainController.getCafeReviewById);
 router.post(
   "/store/review/:storeId",
   auth,
-  reviewUpload.single("file"),
+  upload.single("file"),
   [body("title").trim().notEmpty(), body("content").trim().notEmpty()],
   mainController.createCafeReviewById
 );

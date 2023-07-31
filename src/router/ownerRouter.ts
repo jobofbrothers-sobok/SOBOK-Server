@@ -5,8 +5,8 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-// 매장정보등록 및 수정 시 upload 미들웨어
-const storeUpload = multer({
+// upload 미들웨어
+const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, "uploads/");
@@ -16,15 +16,11 @@ const storeUpload = multer({
     },
   }),
 });
-const noticeUpload = multer({ dest: "uploads/owner/store/notice/" });
-const menuUpload = multer({ dest: "uploads/owner/store/menu/" });
-const productUpload = multer({ dest: "uploads/owner/store/product/" });
-
 // 점주 매장소식 등록 - POST ~/owner/store/notice/:id
 router.post(
   "/store/notice/:id",
   auth,
-  noticeUpload.single("file"),
+  upload.single("file"),
   [
     body("category").trim().notEmpty(),
     body("title").trim().notEmpty(),
@@ -37,7 +33,7 @@ router.post(
 router.post(
   "/store/menu/:id",
   auth,
-  menuUpload.single("file"),
+  upload.single("file"),
   [body("title").trim().notEmpty(), body("content").trim().notEmpty()],
   ownerController.createStoreMenu
 );
@@ -46,7 +42,7 @@ router.post(
 router.post(
   "/store/product/:id",
   auth,
-  productUpload.single("file"),
+  upload.single("file"),
   [
     body("category").trim().notEmpty(),
     body("name").trim().notEmpty(),
@@ -60,7 +56,7 @@ router.post(
 router.post(
   "/store",
   auth,
-  storeUpload.single("file"),
+  upload.single("file"),
   [
     body("storeName").trim().notEmpty(),
     body("description").trim().notEmpty(),

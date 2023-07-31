@@ -241,11 +241,6 @@ const getCafeReviewById = async (req: Request, res: Response) => {
   }
   try {
     const data = await mainService.getCafeReviewById(+storeId);
-    if (!data) {
-      return res
-        .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.GET_CAFE_REVIEW_FAIL));
-    }
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.GET_CAFE_REVIEW_SUCCESS, data));

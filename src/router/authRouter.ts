@@ -7,11 +7,11 @@ import multer from "multer";
 import path from "path";
 
 const router: Router = Router();
-const customerUpload = multer({ dest: "uploads/customer/" });
-const ownerUpload = multer({
+// upload 미들웨어
+const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "uploads/owner/");
+      cb(null, "uploads/");
     },
     filename: function (req, file, cb) {
       cb(null, `${Date.now()}_${file.originalname}`);
@@ -39,7 +39,7 @@ router.post("/signup/check", authController.checkLoginId);
 router.post(
   "/signup/owner",
   // [body("loginId").notEmpty()],
-  ownerUpload.single("file"),
+  upload.single("file"),
   authController.createOwner
 );
 
@@ -63,7 +63,7 @@ router.patch(
 router.post(
   "/update/customer",
   auth,
-  customerUpload.single("file"),
+  upload.single("file"),
   [
     body("password").trim().notEmpty(),
     body("email").trim().notEmpty(),
@@ -76,7 +76,7 @@ router.post(
 router.post(
   "/update/owner",
   auth,
-  ownerUpload.fields([{ name: "file1" }, { name: "file2" }]),
+  upload.fields([{ name: "file1" }, { name: "file2" }]),
   [
     body("password").trim().notEmpty(),
     body("director").trim().notEmpty(),
