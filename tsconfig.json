@@ -21,7 +21,7 @@
   },
   "include": [
     "./src/**/*", //? build 시 포함
-    "./src/uploads"
+    "./uploads/**/*"
   ],
   "exclude": [
     "node_modules", //? build 시 제외
