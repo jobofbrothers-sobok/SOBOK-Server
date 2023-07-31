@@ -46,9 +46,12 @@ app.use("/uploads/manager/tour", express.static("/uploads/manager/tour"));
 app.use("/uploads/customer", express.static("/uploads/customer"));
 app.use("/uploads/owner", express.static(path.join(__dirname, "src")));
 app.use("/uploads/manager", express.static("/uploads/manager"));
-app.use("/uploads", express.static("src"));
+
+// 매장정보 등록 및 수정 시 express.static 사용
+app.use("/uploads", express.static(__dirname + "/src"));
 
 console.log("*****__dirname: ", __dirname);
+// /home/sobok/SOBOK-SERVER/dist
 // /uploads/owner
 // /uploads/customer
 
