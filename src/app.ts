@@ -3,12 +3,12 @@ import express, { Request, Response } from "express";
 import path from "path";
 
 const app = express();
-
+app.set('trust proxy', true); // 프록시 헤더 신뢰 설정
 const originList = [
   "http://localhost:3000",
   "http://localhost:3001",
-  "https://sobok.co.kr/",
-  "http://58.225.75.202:3002/",
+  "https://sobok.co.kr",
+  "http://58.225.75.202:3002",
 ];
 
 app.use(express.json()); // bodyParser가 express 최근 버전에서 deprecated되어서 다음과 같이 처리해줘야함
@@ -18,6 +18,7 @@ app.use(
     origin: originList,
     credentials: true,
     optionsSuccessStatus: 200,
+    methods: ['GET','PATCH', 'POST','DELETE', 'OPTIONS'],
   })
 );
 
@@ -49,8 +50,6 @@ app.use(
 
 // 매장정보 등록 및 수정 시 express.static 사용
 app.use("/uploads", express.static("/home/sobok/SOBOK-SERVER/uploads"));
-// src 내부에 upload 폴더를 위치시켜 빌드에 성공할 경우
-// app.use("/uploads", express.static(__dirname + "/src"));
 
 console.log("*****__dirname: ", __dirname);
 // /home/sobok/SOBOK-SERVER/dist

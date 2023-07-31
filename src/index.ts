@@ -5,6 +5,7 @@ import expressSession from "express-session";
 import fileStore from "session-file-store";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+app.set('trust proxy', true); // 프록시 헤더 신뢰 설정
 
 const PORT = 5000; // 사용할 port를 3000번으로 설정
 
