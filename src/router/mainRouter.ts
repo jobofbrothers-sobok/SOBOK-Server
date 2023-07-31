@@ -5,7 +5,16 @@ import { auth } from "../middlewares";
 import multer from "multer";
 
 const router: Router = Router();
-const reviewUpload = multer({ dest: "uploads/customer/review/" });
+const reviewUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  }),
+});
 
 // 유저 근처 카페 개별 업체 정보 조회
 router.get("/store/info/:storeId", mainController.getCafeById);

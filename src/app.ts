@@ -49,6 +49,8 @@ app.use(
 
 // 매장정보 등록 및 수정 시 express.static 사용
 app.use("/uploads", express.static("/home/sobok/SOBOK-SERVER/uploads"));
+// src 내부에 upload 폴더를 위치시켜 빌드에 성공할 경우
+// app.use("/uploads", express.static(__dirname + "/src"));
 
 console.log("*****__dirname: ", __dirname);
 // /home/sobok/SOBOK-SERVER/dist
