@@ -345,7 +345,7 @@ const getCafeMenuById = async (storeId: number) => {
 
 // 유저 근처 카페 개별 업체 피드 조회
 const getCafeReviewById = async (storeId: number) => {
-  const data = await prisma.store_Review.findMany({
+  const data = await prisma.store_Review.findUnique({
     where: {
       storeId: storeId,
     },
