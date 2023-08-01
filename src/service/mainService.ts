@@ -345,12 +345,12 @@ const getCafeMenuById = async (storeId: number) => {
 
 // 유저 근처 카페 개별 업체 피드 조회
 const getCafeReviewById = async (storeId: number) => {
-  const data = await prisma.store_Review.findUnique({
+  const data = await prisma.store_Review.findMany({
     where: {
       storeId: storeId,
     },
   });
-  return [data];
+  return data;
 };
 
 // 유저 근처 카페 개별 업체 피드 작성
