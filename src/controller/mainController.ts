@@ -131,15 +131,7 @@ const getAllCafe = async (req: Request, res: Response) => {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.GET_ALL_NEAR_CAFE_FAIL));
-    } else {
-      return res
-        .status(sc.OK)
-        .send(success(sc.OK, rm.GET_ALL_NEAR_CAFE_SUCCESS, data));
-    } //   console.log("bad request");
-    //   return res
-    //     .status(sc.BAD_REQUEST)
-    //     .send(fail(sc.BAD_REQUEST, rm.GET_ALL_NEAR_CAFE_FAIL));
-    // }
+    }
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.GET_ALL_NEAR_CAFE_SUCCESS, data));
