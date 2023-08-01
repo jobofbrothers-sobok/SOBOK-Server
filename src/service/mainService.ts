@@ -350,7 +350,7 @@ const getCafeReviewById = async (storeId: number) => {
       storeId: storeId,
     },
   });
-  return data;
+  return [data];
 };
 
 // 유저 근처 카페 개별 업체 피드 작성
