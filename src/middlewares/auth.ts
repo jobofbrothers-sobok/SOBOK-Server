@@ -68,28 +68,33 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       foundUser = await customerService.findCustomerById(id);
       console.log("foundUser: ", foundUser);
     }
+
     if (req.originalUrl.includes("/customer")) {
       foundUser = await customerService.findCustomerById(id);
     }
+
     if (req.originalUrl.includes("/owner")) {
       foundUser = await ownerService.findOwnerById(id);
     }
+
     if (req.originalUrl.includes("/manager")) {
       foundUser = await customerService.findCustomerById(id);
     }
+
     if (req.originalUrl === "/api/main/inquiry?user=customer") {
       console.log("inquiry by customer");
       foundUser = await customerService.findCustomerById(id);
       console.log("foundUser: ", foundUser);
     }
 
-    if (req.originalUrl === "/api/main/inquiry?user=owner") {
+    if (
+      req.originalUrl === "/api/main/inquiry?user=owner" ||
+      req.originalUrl === "/api/main/store/owner"
+    ) {
       console.log("inquiry by owner");
       foundUser = await ownerService.findOwnerById(id);
       console.log("foundUser: ", foundUser);
     }
-
-    // const foundUser = await ownerService.findOwnerById(id);
 
     if (!foundUser) {
       return res

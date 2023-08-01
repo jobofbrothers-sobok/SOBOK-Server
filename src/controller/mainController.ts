@@ -101,6 +101,39 @@ const deleteLikeCafe = async (req: Request, res: Response) => {
   }
 };
 
+// 점주 유저 근처 카페 전체 조회
+const getAllCafeForOwner = async (req: Request, res: Response) => {
+  console.log("req.body.id: ", req.body.id);
+  // 유저 현위치 x, y 좌표
+  const ownerId = req.user.id;
+  const x = req.body.x;
+  const y = req.body.y;
+  const category = req.body.category;
+  if (!x || !y || !category) {
+    console.log("null value");
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+  }
+
+  try {
+    console.log("ownerId: ", ownerId);
+    const data = await mainService.getAllCafeForOwner(x, y, category);
+    if (!data) {
+      console.log("bad request");
+      return res
+        .status(sc.BAD_REQUEST)
+        .send(fail(sc.BAD_REQUEST, rm.GET_ALL_NEAR_CAFE_FAIL));
+    }
+    return res
+      .status(sc.OK)
+      .send(success(sc.OK, rm.GET_ALL_NEAR_CAFE_SUCCESS, data));
+  } catch (error) {
+    console.log(error);
+    res
+      .status(sc.INTERNAL_SERVER_ERROR)
+      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
 // 유저 근처 카페 전체 조회
 const getAllCafe = async (req: Request, res: Response) => {
   console.log("req.body.id: ", req.body.id);
@@ -631,6 +664,7 @@ const mainController = {
   getCafeByKeyword,
   createLikeCafe,
   deleteLikeCafe,
+  getAllCafeForOwner,
   getAllCafe,
   getCafeById,
   getCafeNoticeById,

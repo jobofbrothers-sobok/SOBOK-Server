@@ -179,7 +179,7 @@ const deleteLikeCafe = async (storeId: number, customerId: number) => {
   return data;
 };
 
-// 유저 근처 카페 전체 조회
+// 고객, 최고관리자 유저 근처 카페 전체 조회
 const getAllCafe = async (
   customerId: number,
   x: number,
@@ -277,6 +277,47 @@ const getAllCafe = async (
     );
     return sortAllTourCafe;
   }
+};
+
+// 점주 유저 근처 카페 전체 조회
+const getAllCafeForOwner = async (
+  x: number,
+  y: number,
+  category: Array<string>
+) => {
+  // 전제 1: 투어에 포함된 카페 전체 조회
+  const allTourCafe: any = await prisma.store.findMany({
+    where: {
+      tourId: { not: null },
+      category: { hasEvery: category },
+    },
+  });
+
+  // 현위치 좌표와 카페 좌표 사이의 거리 계산
+  for (let i = 0; i < allTourCafe.length; i++) {
+    // 전제 2: 카페의 도로명 주소가 정확히 기입되어 x, y 좌표가 등록된 상태
+    if (
+      allTourCafe !== null &&
+      allTourCafe[i].x !== null &&
+      allTourCafe[i].y !== null
+    ) {
+      let cafeX = allTourCafe[i].x;
+      let cafeY = allTourCafe[i].y;
+      // 좌표평면상 두 좌표 사이의 거리
+      let distance = Math.sqrt(
+        Math.pow(+x - parseFloat(cafeX as string), 2) +
+          Math.pow(+y - parseFloat(cafeY as string), 2)
+      );
+      allTourCafe[i].distance = distance * 100000; // m 단위에 맞게 곱셈하여 추가
+    }
+  }
+  console.log(allTourCafe);
+
+  // sort 함수로 정렬
+  const sortAllTourCafe = allTourCafe.sort(
+    (a: { distance: any }, b: { distance: any }) => a.distance - b.distance
+  );
+  return sortAllTourCafe;
 };
 
 // 유저 근처 카페 개별 업체 정보 조회
@@ -641,6 +682,7 @@ const mainService = {
   createLikeCafe,
   deleteLikeCafe,
   getAllCafe,
+  getAllCafeForOwner,
   getCafeById,
   getCafeNoticeById,
   getCafeMenuById,
