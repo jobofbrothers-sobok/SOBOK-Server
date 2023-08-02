@@ -296,6 +296,7 @@ const grantStampByRandNum = async (req: Request, res: Response) => {
       tourId as number
     );
     if (!data) {
+      console.log("here...?");
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.GRANT_STAMP_FAIL));

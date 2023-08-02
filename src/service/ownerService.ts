@@ -294,9 +294,9 @@ const grantStampByRandNum = async (
       });
       console.log("coupontCount: ", addTourStampCount.couponCount);
       return data;
-    } else {
-      console.log("if문 탈출: ");
     }
+
+    return data;
   }
 };
 
