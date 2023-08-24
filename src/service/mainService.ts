@@ -232,7 +232,7 @@ const getAllCafe = async (
 
     const allLikeCafeId: Array<number> = [];
     for (let i = 0; i < allLikeCafe.length; i++) {
-      allLikeCafeId.push(allLikeCafe[i].id);
+      allLikeCafeId.push(allLikeCafe[i].storeId);
     }
 
     // 전제 1: 투어에 포함된 카페 전체 조회
