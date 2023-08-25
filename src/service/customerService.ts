@@ -42,50 +42,71 @@ const createStampNumber = async (id: number, randNum: string) => {
 
 // 고객 스탬프 전체 조회
 const getAllStamp = async (sort: string, id: number) => {
+  const inquiry = await prisma.delivery.findMany({
+    where: {
+      customerId: id,
+    },
+  });
+  const inquiryCount = inquiry.length;
+
   if (sort !== "all") {
     switch (sort) {
       case "hoegi":
-        const hoegi = await prisma.stamp.findMany({
+        const hoegi: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
             tour: { contains: "회기" },
           },
         });
+        for (let i = 0; i < hoegi.length; i++) {
+          hoegi[i].inquiryCount = inquiryCount;
+        }
         return hoegi;
       case "sookmyung":
-        const sookmyung = await prisma.stamp.findMany({
+        const sookmyung: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
             tour: { contains: "숙대" },
           },
         });
+        for (let i = 0; i < sookmyung.length; i++) {
+          sookmyung[i].inquiryCount = inquiryCount;
+        }
         return sookmyung;
       case "halloween":
-        const halloween = await prisma.stamp.findMany({
+        const halloween: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
             tour: { contains: "할로윈" },
           },
         });
-        console.log(halloween);
+        for (let i = 0; i < halloween.length; i++) {
+          halloween[i].inquiryCount = inquiryCount;
+        }
         return halloween;
       case "xmas":
-        const xmas = await prisma.stamp.findMany({
+        const xmas: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
             tour: { contains: "크리스마스" },
           },
         });
+        for (let i = 0; i < xmas.length; i++) {
+          xmas[i].inquiryCount = inquiryCount;
+        }
         return xmas;
     }
   }
 
   if (sort === "all") {
-    const data = await prisma.stamp.findMany({
+    const data: any = await prisma.stamp.findMany({
       where: {
         customerId: id,
       },
     });
+    for (let i = 0; i < data.length; i++) {
+      data[i].inquiryCount = inquiryCount;
+    }
     return data;
   }
 };
