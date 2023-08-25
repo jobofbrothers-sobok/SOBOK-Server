@@ -25,7 +25,7 @@ router.post("/grant/:id", auth, managerController.grantOwnerSignUp);
 router.get("/owner/:id", auth, managerController.getOwnerById);
 
 // 최고관리자 담당자(점주) 정보 전체 조회
-router.get("/owner", auth, managerController.getAllOwner);
+router.post("/owner", auth, managerController.getAllOwner);
 
 // 최고관리자 스탬프 사용 신청 담당자 개별 조회
 router.get("/stamp/:id", auth, managerController.getStampSignInRequest);
@@ -34,19 +34,19 @@ router.get("/stamp/:id", auth, managerController.getStampSignInRequest);
 router.post("/stamp/:id", auth, managerController.stampSignInGrant);
 
 // 최고관리자 스탬프 사용 신청 담당자 전체 조회
-router.get("/stamp", auth, managerController.getAllStampSignInRequest);
+router.post("/stamp", auth, managerController.getAllStampSignInRequest);
 
 // 최고관리자 고객 정보 개별 조회
 router.get("/client/:id", auth, managerController.getCustomerById);
 
 // 최고관리자 고객 정보 전체 조회
-router.get("/client", auth, managerController.getAllCustomer);
+router.post("/client", auth, managerController.getAllCustomer);
 
 // 최고관리자 배송신청 리스트 개별 조회
 router.get("/delivery/:id", auth, managerController.getDeliveryRequestById);
 
 // 최고관리자 배송신청 리스트 전체 조회
-router.get("/delivery", auth, managerController.getAllDeliveryRequest);
+router.post("/delivery", auth, managerController.getAllDeliveryRequest);
 
 // 최고관리자 투어 추가 시 매장 검색
 router.post("/tour/search", auth, managerController.getStoreByStoreName);
@@ -66,7 +66,7 @@ router.post(
 );
 
 // 최고관리자 스탬프 정보 조회 (스템프 정보 리스트 조회)
-router.get("/tour", auth, managerController.getAllTour);
+router.post("/tour", auth, managerController.getAllTour);
 
 // // 최고관리자 회원가입
 // router.post("/signup", managerController.managerSignup);
@@ -78,7 +78,7 @@ router.get("/tour", auth, managerController.getAllTour);
 router.get("/alim/:id", auth, managerController.getAlimRequestById);
 
 // 최고관리자 소복 매니저 신청 리스트 전체 조회
-router.get("/alim", auth, managerController.getAllAlimRequest);
+router.post("/alim", auth, managerController.getAllAlimRequest);
 
 // 최고관리자 소복 매니저 문자 일괄전송
 router.post("/message", auth, managerController.sendMessage);
