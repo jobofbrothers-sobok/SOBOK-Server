@@ -505,21 +505,21 @@ const getCafeStoreProducts = async (sort: string) => {
       case "cookie":
         const cookie = await prisma.store_Product.findMany({
           where: {
-            category: "수제 쿠키",
+            category: "수제쿠키",
           },
         });
         return cookie;
       case "cake":
         const cake = await prisma.store_Product.findMany({
           where: {
-            category: "수제 케이크",
+            category: "수제케이크",
           },
         });
         return cake;
       case "bean":
         const bean = await prisma.store_Product.findMany({
           where: {
-            category: "원두",
+            category: "커피원두",
           },
         });
         return bean;
