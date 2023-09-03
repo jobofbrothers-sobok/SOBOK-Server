@@ -346,7 +346,7 @@ const getStoreByStoreName = async (req: Request, res: Response) => {
         .send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
     }
     const data = await managerService.getStoreByStoreName(store);
-    if (!data || data.length === 0) {
+    if (!data) {
       return res
         .status(sc.NOT_FOUND)
         .send(success(sc.NOT_FOUND, rm.GET_STORE_BY_STORENAME_FAIL, data));
@@ -367,10 +367,15 @@ const getAllDeliveryRequest = async (req: Request, res: Response) => {
   const keyword = req.body.keyword;
   try {
     const data = await managerService.getAllDeliveryRequest(keyword);
-    if (!data || data.length === 0) {
+    if (!data) {
       return res
         .status(sc.NOT_FOUND)
         .send(success(sc.NOT_FOUND, rm.GET_ALL_DELIVERY_REQUEST_FAIL, data));
+    }
+    if (data.length === 0) {
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.NO_DELIVERY_REQUEST_YET, data));
     }
     return res
       .status(sc.OK)

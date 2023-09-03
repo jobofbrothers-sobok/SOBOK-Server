@@ -123,6 +123,7 @@ export default {
   STAMP_COUNT_NOT_ENOUGH: "스탬프가 10개 미만입니다",
   GET_ALL_DELIVERY_REQUEST_SUCCESS: "스탬프 배송신청 리스트 전체 조회 성공",
   GET_ALL_DELIVERY_REQUEST_FAIL: "스탬프 배송신청 리스트 전체 조회 실패",
+  NO_DELIVERY_REQUEST_YET: "스탬프 배송신청이 아직 없습니다.",
   GET_DELIVERY_REQUEST_SUCCESS: "스탬프 배송신청 리스트 개별 조회 성공",
   GET_DELIVERY_REQUEST_FAIL: "스탬프 배송신청 리스트 개별 조회 실패",
 
