@@ -347,10 +347,16 @@ const getAllCafeNotice = async (req: Request, res: Response) => {
   }
   try {
     const data = await mainService.getAllCafeNotice(query);
-    if (!data || data.length === 0) {
+    if (!data) {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.GET_ALL_CAFE_NOTICE_FAIL));
+    }
+
+    if (data.length === 0) {
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.NO_CAFE_NOTICE_YET, data));
     }
     return res
       .status(sc.OK)
