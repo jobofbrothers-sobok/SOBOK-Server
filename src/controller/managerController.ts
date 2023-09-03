@@ -193,6 +193,11 @@ const getAllCustomer = async (req: Request, res: Response) => {
         .status(sc.NOT_FOUND)
         .send(success(sc.NOT_FOUND, rm.GET_ALL_CUSTOMER_FAIL, data));
     }
+
+    if (data.length === 0 && data != null) {
+      return res.status(sc.OK).send(success(sc.OK, rm.NO_OWNER_YET, data));
+    }
+
     return res
       .status(sc.OK)
       .send(success(sc.OK, rm.GET_ALL_CUSTOMER_SUCCESS, data));

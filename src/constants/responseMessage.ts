@@ -35,6 +35,7 @@ export default {
   NO_OWNER_YET: "아직 해당 분류의 개별 담당자 정보가 없습니다.",
   GET_ALL_CUSTOMER_SUCCESS: "전체 고객 정보 조회 성공",
   GET_ALL_CUSTOMER_FAIL: "전체 고객 정보 조회 실패",
+  NO_CUSTOMER_YET: "아직 해당 분류의 고객 정보가 없습니다.",
   GET_CUSTOMER_SUCCESS: "개별 고객 정보 조회 성공",
   GET_CUSTOMER_FAIL: "개별 고객 정보 조회 실패",
   GET_CUSTOMER_BY_EMAIL_FAIL: "이메일을 통한 고객 조회 실패",
