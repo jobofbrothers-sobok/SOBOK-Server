@@ -144,10 +144,15 @@ const getAllTourStore = async (req: Request, res: Response) => {
 
   try {
     const data = await customerService.getAllTourStore(sort);
-    if (!data || data.length === 0) {
+    if (!data) {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.GET_ALL_TOUR_STORE_FAIL));
+    }
+    if (data.length === 0) {
+      return res
+        .status(sc.OK)
+        .send(success(sc.OK, rm.GET_ALL_TOUR_STORE_NONE, data));
     }
     return res
       .status(sc.CREATED)
