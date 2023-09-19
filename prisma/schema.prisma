@@ -31,12 +31,12 @@ model Customer {
 
 model Delivery {
   id            Int      @id @unique @default(autoincrement())
-  reward        String   @db.VarChar(30)
+  reward        String   @db.VarChar(50)
   customer      String   @db.VarChar(30)
   phone         String   @db.VarChar(20)
   address       String   @db.VarChar(50)
   detailAddress String?  @db.VarChar(50)
-  message       String   @db.VarChar(200)
+  message       String   @db.VarChar(1000)
   isGrant       Boolean? @default(false)
   customerId    Int
   Customer      Customer @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customerId")
@@ -54,9 +54,9 @@ model Stamp {
   timestamp  DateTime? @db.Timestamp(6)
   customerId Int?
   storeId    Int?
-  store      String?   @db.VarChar(30)
+  store      String?   @db.VarChar
   tourId     Int?
-  tour       String?   @db.VarChar(30)
+  tour       String?   @db.VarChar
   Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customerId")
   Store      Store?    @relation(fields: [storeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "storeId")
   Tour       Tour?     @relation(fields: [tourId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tourId")
@@ -68,16 +68,16 @@ model Store {
   description                            String?         @db.VarChar(300)
   officeHour                             String?         @db.VarChar(300)
   dayOff                                 String?         @db.VarChar(300)
-  homepage                               String?         @db.VarChar(300)
-  image                                  String?         @db.VarChar(300)
+  homepage                               String?         @db.VarChar(1000)
+  image                                  String?         @db.VarChar(500)
   category                               String[]
-  ownerId                                Int             @unique
+  ownerId                                Int?            @unique
   tourId                                 Int?
   x                                      String?         @db.VarChar(100)
   y                                      String?         @db.VarChar(100)
   Customer                               Customer[]
   Stamp                                  Stamp[]
-  Store_Owner_Store_ownerIdToStore_Owner Store_Owner     @relation("Store_ownerIdToStore_Owner", fields: [ownerId], references: [id], onDelete: NoAction, map: "ownerId")
+  Store_Owner_Store_ownerIdToStore_Owner Store_Owner?    @relation("Store_ownerIdToStore_Owner", fields: [ownerId], references: [id], onDelete: NoAction, map: "ownerId")
   Tour                                   Tour?           @relation(fields: [tourId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tourId")
   Store_Like                             Store_Like[]
   Store_Menu                             Store_Menu[]
@@ -90,8 +90,8 @@ model Store {
 model Store_Menu {
   id      Int     @id @default(autoincrement())
   title   String? @db.VarChar(30)
-  content String? @db.VarChar(300)
-  image   String? @db.VarChar(300)
+  content String? @db.VarChar(500)
+  image   String? @db.VarChar(500)
   storeId Int?
   Store   Store?  @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
@@ -100,8 +100,8 @@ model Store_Notice {
   id          Int       @id @unique @default(autoincrement())
   category    String?   @db.VarChar(30)
   title       String?   @db.VarChar(100)
-  content     String?   @db.VarChar(200)
-  image       String?   @db.VarChar(300)
+  content     String?   @db.VarChar(500)
+  image       String?   @db.VarChar(500)
   storeId     Int?
   createdTime DateTime? @db.Timestamp(6)
   Store       Store?    @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
@@ -118,7 +118,7 @@ model Store_Owner {
   address                          String?        @db.VarChar(30)
   detailAddress                    String?        @db.VarChar(30)
   licenseNumber                    String?        @db.VarChar(20)
-  licenseImage                     String         @db.VarChar(200)
+  licenseImage                     String         @db.VarChar(800)
   authorized                       Boolean?       @default(false)
   termsAgree                       Boolean?
   marketingAgree                   Boolean?
@@ -138,8 +138,8 @@ model Store_Product {
   name          String? @db.VarChar(30)
   price         String? @db.VarChar(30)
   discountPrice String? @db.VarChar(30)
-  url           String? @db.VarChar(300)
-  image         String? @db.VarChar(300)
+  url           String? @db.VarChar(1000)
+  image         String? @db.VarChar(800)
   storeId       Int?
   Store         Store?  @relation(fields: [storeId], references: [id], onDelete: NoAction, map: "storeId")
 }
@@ -158,8 +158,8 @@ model Tour {
 model Store_Review {
   id         Int      @unique @default(autoincrement())
   title      String?  @db.VarChar(100)
-  content    String   @db.VarChar(200)
-  image      String?  @db.VarChar(300)
+  content    String   @db.VarChar(500)
+  image      String?  @db.VarChar(800)
   timestamp  DateTime @db.Timestamp(6)
   writerId   Int
   storeId    Int      @unique
@@ -172,7 +172,7 @@ model Notice {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(100)
   content   String   @db.VarChar(500)
-  image     String?  @db.VarChar(300)
+  image     String?  @db.VarChar(500)
   timestamp DateTime @db.Timestamp(6)
 }
 
