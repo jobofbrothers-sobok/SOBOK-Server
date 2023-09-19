@@ -71,10 +71,10 @@ const createStampNumber = async (req: Request, res: Response) => {
 
 const sortType = {
   ALL: "all",
-  HOEGI: "hoegi",
-  HALLOWEEN: "halloween",
   SOOKMYUNG: "sookmyung",
-  XMAS: "xmas",
+  ITAEWON: "itaewon",
+  KYUNGHEE: "kyunghee",
+  CHUNGANG: "chungang",
 };
 
 // 고객 스탬프 적립 내역 전체 조회
@@ -88,10 +88,10 @@ const getAllStamp = async (req: Request, res: Response) => {
 
   if (
     sort !== sortType.ALL &&
-    sort !== sortType.HOEGI &&
     sort !== sortType.SOOKMYUNG &&
-    sort !== sortType.HALLOWEEN &&
-    sort !== sortType.XMAS
+    sort !== sortType.ITAEWON &&
+    sort !== sortType.KYUNGHEE &&
+    sort !== sortType.CHUNGANG
   ) {
     return res
       .status(sc.BAD_REQUEST)
@@ -132,10 +132,10 @@ const getAllTourStore = async (req: Request, res: Response) => {
 
   if (
     sort !== sortType.ALL &&
-    sort !== sortType.HOEGI &&
     sort !== sortType.SOOKMYUNG &&
-    sort !== sortType.HALLOWEEN &&
-    sort !== sortType.XMAS
+    sort !== sortType.ITAEWON &&
+    sort !== sortType.KYUNGHEE &&
+    sort !== sortType.CHUNGANG
   ) {
     return res
       .status(sc.BAD_REQUEST)

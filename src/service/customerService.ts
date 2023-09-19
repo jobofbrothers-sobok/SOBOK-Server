@@ -51,50 +51,50 @@ const getAllStamp = async (sort: string, id: number) => {
 
   if (sort !== "all") {
     switch (sort) {
-      case "hoegi":
-        const hoegi: any = await prisma.stamp.findMany({
-          where: {
-            customerId: id,
-            tour: { contains: "회기" },
-          },
-        });
-        for (let i = 0; i < hoegi.length; i++) {
-          hoegi[i].inquiryCount = inquiryCount;
-        }
-        return hoegi;
       case "sookmyung":
         const sookmyung: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: { contains: "숙대" },
+            tour: { contains: "숙명" },
           },
         });
         for (let i = 0; i < sookmyung.length; i++) {
           sookmyung[i].inquiryCount = inquiryCount;
         }
         return sookmyung;
-      case "halloween":
-        const halloween: any = await prisma.stamp.findMany({
+      case "itaewon":
+        const itaewon: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: { contains: "할로윈" },
+            tour: { contains: "이태원" },
           },
         });
-        for (let i = 0; i < halloween.length; i++) {
-          halloween[i].inquiryCount = inquiryCount;
+        for (let i = 0; i < itaewon.length; i++) {
+          itaewon[i].inquiryCount = inquiryCount;
         }
-        return halloween;
-      case "xmas":
-        const xmas: any = await prisma.stamp.findMany({
+        return itaewon;
+      case "kyunghee":
+        const kyunghee: any = await prisma.stamp.findMany({
           where: {
             customerId: id,
-            tour: { contains: "크리스마스" },
+            tour: { contains: "경희" },
           },
         });
-        for (let i = 0; i < xmas.length; i++) {
-          xmas[i].inquiryCount = inquiryCount;
+        for (let i = 0; i < kyunghee.length; i++) {
+          kyunghee[i].inquiryCount = inquiryCount;
         }
-        return xmas;
+        return kyunghee;
+      case "chungang":
+        const chungang: any = await prisma.stamp.findMany({
+          where: {
+            customerId: id,
+            tour: { contains: "중앙" },
+          },
+        });
+        for (let i = 0; i < chungang.length; i++) {
+          chungang[i].inquiryCount = inquiryCount;
+        }
+        return chungang;
     }
   }
 
@@ -115,42 +115,42 @@ const getAllStamp = async (sort: string, id: number) => {
 const getAllTourStore = async (sort: string) => {
   let tourTitle;
   switch (sort) {
-    case "hoegi":
-      tourTitle = "회기";
-      const hoegiTour = await ownerService.getTourByTourTitle(tourTitle);
-      const hoegi = await prisma.store.findMany({
-        where: {
-          tourId: hoegiTour?.id,
-        },
-      });
-      return hoegi;
     case "sookmyung":
-      tourTitle = "숙대";
-      const sookTour = await ownerService.getTourByTourTitle(tourTitle);
+      tourTitle = "숙명";
+      const sookmyungTour = await ownerService.getTourByTourTitle(tourTitle);
       const sookmyung = await prisma.store.findMany({
         where: {
-          tourId: sookTour?.id,
+          tourId: sookmyungTour?.id,
         },
       });
       return sookmyung;
-    case "halloween":
-      tourTitle = "할로윈";
-      const halloweenTour = await ownerService.getTourByTourTitle(tourTitle);
-      const halloween = await prisma.store.findMany({
+    case "itaewon":
+      tourTitle = "이태원";
+      const itaewonTour = await ownerService.getTourByTourTitle(tourTitle);
+      const itaewon = await prisma.store.findMany({
         where: {
-          tourId: halloweenTour?.id,
+          tourId: itaewonTour?.id,
         },
       });
-      return halloween;
-    case "xmas":
-      tourTitle = "크리스마스";
-      const xmasTour = await ownerService.getTourByTourTitle(tourTitle);
-      const xmas = await prisma.store.findMany({
+      return itaewon;
+    case "kyunghee":
+      tourTitle = "경희";
+      const kyungheeTour = await ownerService.getTourByTourTitle(tourTitle);
+      const kyunghee = await prisma.store.findMany({
         where: {
-          tourId: xmasTour?.id,
+          tourId: kyungheeTour?.id,
         },
       });
-      return xmas;
+      return kyunghee;
+    case "chungang":
+      tourTitle = "중앙";
+      const chungangTour = await ownerService.getTourByTourTitle(tourTitle);
+      const chungang = await prisma.store.findMany({
+        where: {
+          tourId: chungangTour?.id,
+        },
+      });
+      return chungang;
   }
 };
 
