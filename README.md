@@ -1,4 +1,5 @@
 # SOBOK-Server
+소상공인 카페 활성화를 위한 카페 투어 생성 및 스탬프 적립 서비스 '소복'의 서버 리포지토리입니다.
 `서비스 URL` : https://sobok.co.kr/
 ## 🎨 UI 설계
 [🔗 Figma 링크](https://www.figma.com/design/kDROh7eTdNRA844dhY80q6/%EC%86%8C%EB%B3%B5-%EB%A6%AC%EB%89%B4%EC%96%BC?node-id=0-1&t=BokIk5z7JZPNsUI8-0)
