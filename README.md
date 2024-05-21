@@ -5,7 +5,7 @@
 
 ## ⛏ ERD
 [🔗 ERD 링크](https://www.erdcloud.com/d/ZLWrm3fG2zaXTwtZG)<br>
-<img alt="ERD" src="https://github.com/Team-SGBInside/SGBInside-Server/assets/82032418/43efe266-3550-41c0-894c-43fbf798e74f">
+<img alt="ERD" src="https://github.com/Team-SGBInside/SGBInside-Server/assets/82032418/7291e32b-91f3-43fd-a5fd-1544119cfabb">
 
 ## 📜 API 명세서
 [🔗 세부 명세서 링크](https://brick-rainbow-789.notion.site/API-3a62a5e4d4744d7f9db29aadb55c14f4)<br>
