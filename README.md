@@ -1,4 +1,5 @@
 # SOBOK-Server
+`서비스 URL` : https://sobok.co.kr/
 ## 🎨 UI 설계
 [🔗 Figma 링크](https://www.figma.com/design/kDROh7eTdNRA844dhY80q6/%EC%86%8C%EB%B3%B5-%EB%A6%AC%EB%89%B4%EC%96%BC?node-id=0-1&t=BokIk5z7JZPNsUI8-0)
 - '소복' 프로젝트의 기획, 디자인을 진행해주시고 전반적인 프로세스를 검수해주신 '잡오브 브라더스'의 저작물입니다.<br>
